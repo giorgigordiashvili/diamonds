@@ -14,6 +14,7 @@
   padding: 80px;
   gap: 64px;
   font-family: var(--font-geist-sans);
+  position: relative;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -106,6 +107,27 @@ a.secondary {
 
 .footer img {
   flex-shrink: 0;
+}
+
+.languageSwitch {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.languageSwitch a {
+  padding: 8px 16px;
+  border-radius: 6px;
+  background-color: var(--gray-alpha-100);
+  color: var(--foreground);
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.languageSwitch a:hover {
+  background-color: var(--gray-alpha-200);
 }
 
 /* Enable hover only on non-touch devices */
