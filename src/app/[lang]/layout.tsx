@@ -1,6 +1,7 @@
 import { i18n, type Locale } from '@/i18n-config';
 import StyledComponentsRegistry from '@/lib/registry';
 import './globals.css';
+import Header from '@/components/Header';
 
 export const metadata = {
   title: 'i18n within app router - Vercel Examples',
@@ -22,7 +23,10 @@ export default async function Root(props: {
   return (
     <html lang={params.lang}>
       <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <Header />
+          {children}
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
