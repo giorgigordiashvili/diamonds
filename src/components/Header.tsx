@@ -4,8 +4,12 @@ import styled from 'styled-components';
 import Image from 'next/image';
 
 const Styledhead = styled.div`
+  position: fixed;
+  top: 0;
+  z-index: 20;
   width: 100%;
   height: 52px;
+  margin-bottom: 52px;
   justify-content: space-between;
   display: flex;
   align-items: center;
