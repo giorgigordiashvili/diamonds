@@ -12,6 +12,12 @@
   font-family: var(--font-geist-sans);
   position: relative;
   margin-top: 52px;
+  padding-top: 60px;
+  @media screen and (max-width: 710px) {
+    margin-top: 64px;
+    padding-top: 32px;
+    padding-inline: 16px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

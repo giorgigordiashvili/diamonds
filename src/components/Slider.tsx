@@ -19,7 +19,7 @@ const Inputs = styled.div`
 `;
 
 const NumberBox = styled.input`
-  width: 100px;
+  width: 100%;
   text-align: center;
   padding: 0.5rem;
   font-size: 1rem;
@@ -156,7 +156,6 @@ const DualSlider: React.FC<Props> = ({ type, solidMin = 0, solidMax = 500 }) => 
               />
               <Unit>Min</Unit>
             </div>
-            <span>-</span>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <NumberBox
                 type="number"

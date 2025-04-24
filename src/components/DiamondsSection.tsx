@@ -10,9 +10,17 @@ import Fluorescence from './Fluorescence';
 import Certificate from './Certificate';
 import Professional from './Proffesionall';
 
-const Filters = styled.div`
+const Main = styled.div`
   width: 400px;
   height: auto;
+  @media screen and (max-width: 1000px) {
+    width: 100%;
+  }
+`;
+const Filters = styled.div`
+  @media screen and (max-width: 460px) {
+    width: 100%;
+  }
 `;
 
 const Filter = styled.div`
@@ -51,12 +59,15 @@ const Resetbutton = styled.div`
   letter-spacing: 0%;
   text-align: center;
   vertical-align: middle;
-  color: white;
-  width: 394px;
+  color: rgb(255, 255, 255);
+  width: 100%;
   height: 30px;
   padding: 8px 140px;
   border: 2px solid white;
   margin-top: 20px;
+  @media screen and (max-width: 460px) {
+    height: fit-content;
+  }
 `;
 
 const DiamondsSection = () => {
@@ -73,7 +84,7 @@ const DiamondsSection = () => {
   const [showProf, setShowProf] = useState(false);
 
   return (
-    <>
+    <Main>
       <Filters>
         {/* Shape Filter */}
         <Filter onClick={() => setShowPicker((prev) => !prev)}>
@@ -214,7 +225,7 @@ const DiamondsSection = () => {
         {showProf && <Professional />}
       </Filters>
       <Resetbutton> Reset all filters</Resetbutton>
-    </>
+    </Main>
   );
 };
 

@@ -7,6 +7,7 @@ const Container = styled.div`
   align-items: center;
   color: white;
   font-family: Arial, sans-serif;
+  gap: 4px;
 `;
 
 const InputWrapper = styled.div`
@@ -30,7 +31,7 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
-  width: 70px;
+  width: 100%;
   height: 48px;
   background-color: #333;
   border: none;
