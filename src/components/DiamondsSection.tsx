@@ -11,10 +11,11 @@ import Certificate from './Certificate';
 import Professional from './Proffesionall';
 
 const Main = styled.div`
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   height: auto;
-  @media screen and (max-width: 1000px) {
-    width: 100%;
+  @media screen and (max-width: 980px) {
+    max-width: unset;
   }
 `;
 const Filters = styled.div`
