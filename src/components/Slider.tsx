@@ -16,6 +16,9 @@ const Inputs = styled.div`
   justify-content: space-between;
   background-color: #1c1c1c;
   padding: 1rem;
+  @media screen and (max-width: 1150px) {
+    justify-content: space-evenly;
+  }
 `;
 
 const NumberBox = styled.input`
