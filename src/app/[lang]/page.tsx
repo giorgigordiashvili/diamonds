@@ -4,6 +4,10 @@ import styles from '../page.module.css';
 import DiamondsFilter from '@/components/DiamondsFilter';
 import DiamondsList from '@/components/DiamondsList';
 import styled from 'styled-components';
+import UniqueGift from '@/components/UniqueGift';
+import DiamondQuality from '@/components/DiamondQuality';
+import Certifications from '@/components/Certifications';
+import ContactForm from '@/components/ContactForm';
 
 const First = styled.div`
   display: grid;
@@ -14,12 +18,19 @@ const First = styled.div`
 `;
 export default function IndexPage() {
   return (
-    <div className={styles.page}>
-      <LanguageSwitcher />
-      <First>
-        <DiamondsFilter />
-        <DiamondsList />
-      </First>
-    </div>
+    <>
+      <div className={styles.page}>
+        <LanguageSwitcher />
+        <First>
+          <DiamondsFilter />
+          <DiamondsList />
+        </First>
+      </div>
+
+      <UniqueGift></UniqueGift>
+      <DiamondQuality></DiamondQuality>
+      <Certifications></Certifications>
+      <ContactForm></ContactForm>
+    </>
   );
 }
