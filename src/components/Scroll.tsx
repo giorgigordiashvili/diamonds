@@ -62,17 +62,13 @@ const Scroll: React.FC = () => {
   `;
 
   const PageButton = styled.button<{ isActive: boolean }>`
-    border: ${(props) => (props.isActive ? '1px solid white' : 'transparent')};
-    color: ${(props) => (props.isActive ? '#1a202c' : 'white')};
-    border: none;
+    border: ${(props) => (props.isActive ? '2px solid #fff' : 'transparent')};
+    color: ${(props) => (props.isActive ? 'white' : 'rgba(168, 168, 168, 1)')};
     font-size: 14px;
     padding: 4px 8px;
     margin: 0 2px;
+    background-color: black;
     cursor: pointer;
-    border-radius: 4px;
-    &:hover {
-      background-color: ${(props) => (props.isActive ? 'white' : '#4a5568')};
-    }
   `;
 
   const Dots = styled.span`
