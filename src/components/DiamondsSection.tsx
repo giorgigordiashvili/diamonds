@@ -62,7 +62,7 @@ const Resetbutton = styled.div`
   vertical-align: middle;
   color: rgb(255, 255, 255);
   width: 100%;
-  height: 30px;
+  height: fit-content;
   padding: 8px 140px;
   border: 2px solid white;
   margin-top: 20px;
