@@ -63,11 +63,31 @@ const Resetbutton = styled.div`
   color: rgb(255, 255, 255);
   width: 100%;
   height: fit-content;
-  padding: 8px 140px;
+  padding: 8px 0px;
   border: 2px solid white;
   margin-top: 20px;
   @media screen and (max-width: 460px) {
     height: fit-content;
+  }
+`;
+const ShowButton = styled.div`
+  display: none;
+  font-weight: 500;
+  font-size: 12.91px;
+  line-height: 14px;
+  letter-spacing: 0%;
+  text-align: center;
+  vertical-align: middle;
+  color: black;
+  width: 100%;
+  height: fit-content;
+  padding: 8px 0px;
+  border: 2px solid white;
+  margin-top: 20px;
+  background-color: white;
+
+  @media screen and (max-width: 980px) {
+    display: block;
   }
 `;
 
@@ -225,6 +245,8 @@ const DiamondsSection = () => {
         </Filter>
         {showProf && <Professional />}
       </Filters>
+      <ShowButton> Show Results</ShowButton>
+
       <Resetbutton> Reset all filters</Resetbutton>
     </Main>
   );
