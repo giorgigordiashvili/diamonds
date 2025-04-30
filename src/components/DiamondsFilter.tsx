@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DiamondsSection from './DiamondsSection';
+import MobileFilter from './MobileFilter';
 
 const Head = styled.div`
   margin-bottom: 30px;
@@ -17,18 +18,23 @@ const Head = styled.div`
     font-size: 14px;
   }
 `;
+
 const DiamondsFilter = () => {
   const [showFilter, setShowFilter] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    if (window.innerWidth <= 980) {
-      setShowFilter(false);
-    }
+    const checkMobile = () => setIsMobile(window.innerWidth <= 980);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   return (
     <div>
       <Head onClick={() => setShowFilter((prev) => !prev)}>Configure diamond</Head>
-      {showFilter && <DiamondsSection />}
+      {showFilter &&
+        (isMobile ? <MobileFilter onClose={() => setShowFilter(false)} /> : <DiamondsSection />)}
     </div>
   );
 };
