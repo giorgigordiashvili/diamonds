@@ -20,7 +20,7 @@ const Head = styled.div`
 `;
 
 const DiamondsFilter = () => {
-  const [showFilter, setShowFilter] = useState(true);
+  const [showFilter, setShowFilter] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -33,8 +33,12 @@ const DiamondsFilter = () => {
   return (
     <div>
       <Head onClick={() => setShowFilter((prev) => !prev)}>Configure diamond</Head>
-      {showFilter &&
-        (isMobile ? <MobileFilter onClose={() => setShowFilter(false)} /> : <DiamondsSection />)}
+
+      {/* On desktop, show DiamondsSection by default */}
+      {!isMobile && <DiamondsSection />}
+
+      {/* On mobile, only show MobileFilter if showFilter is true */}
+      {isMobile && showFilter && <MobileFilter onClose={() => setShowFilter(false)} />}
     </div>
   );
 };
