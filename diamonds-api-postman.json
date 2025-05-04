@@ -1,0 +1,377 @@
+{
+  "info": {
+    "name": "Diamonds API",
+    "description": "API for managing diamonds inventory and orders",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Diamonds",
+      "description": "Endpoints for diamond management",
+      "item": [
+        {
+          "name": "Get all diamonds",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds"]
+            },
+            "description": "Retrieves all diamonds with optional filtering and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get all diamonds (with filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds?shape=Emerald&minCarat=1&maxCarat=5&minPrice=1000&maxPrice=50000&color=D,E,F&clarity=VVS1,VVS2&sortBy=price&sortOrder=asc&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds"],
+              "query": [
+                {
+                  "key": "shape",
+                  "value": "Emerald"
+                },
+                {
+                  "key": "minCarat",
+                  "value": "1"
+                },
+                {
+                  "key": "maxCarat",
+                  "value": "5"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "50000"
+                },
+                {
+                  "key": "color",
+                  "value": "D,E,F"
+                },
+                {
+                  "key": "clarity",
+                  "value": "VVS1,VVS2"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "price"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Retrieves diamonds with filters for shape, carat range, price range, color, clarity, etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Get diamond by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds", "{{diamondId}}"]
+            },
+            "description": "Retrieves a single diamond by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create new diamond",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Round Brilliant Diamond\",\n  \"shape\": \"Brilliant\",\n  \"carat\": 1.5,\n  \"color\": \"D\",\n  \"clarity\": \"VVS1\",\n  \"cut\": \"Excellent\",\n  \"polish\": \"Excellent\",\n  \"symmetry\": \"Excellent\",\n  \"fluorescence\": \"None\",\n  \"certificate\": \"GIA\",\n  \"certificateNumber\": \"GIA123456789\",\n  \"price\": 15000,\n  \"description\": \"A stunning round brilliant diamond with perfect proportions and exceptional sparkle.\",\n  \"image\": \"{{imageId}}\",\n  \"featured\": true\n}"
+            },
+            "description": "Creates a new diamond in the database"
+          },
+          "response": []
+        },
+        {
+          "name": "Update diamond",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds", "{{diamondId}}"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 16500,\n  \"description\": \"Updated description for this beautiful diamond.\",\n  \"image\": \"{{imageId}}\"\n}"
+            },
+            "description": "Updates an existing diamond by ID (partial updates supported)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete diamond",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds", "{{diamondId}}"]
+            },
+            "description": "Deletes a diamond by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "description": "Endpoints for order management",
+      "item": [
+        {
+          "name": "Get all orders",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "description": "Retrieves all orders with optional filtering and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get all orders (with filters)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/orders?status=Pending&fromDate=2024-01-01&toDate=2024-12-31&email=customer@example.com&sortBy=createdAt&sortOrder=desc&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "Pending"
+                },
+                {
+                  "key": "fromDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "toDate",
+                  "value": "2024-12-31"
+                },
+                {
+                  "key": "email",
+                  "value": "customer@example.com"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Retrieves orders with filters for status, date range, customer email, etc."
+          },
+          "response": []
+        },
+        {
+          "name": "Get order by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Retrieves a single order by its ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create new order",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerName\": \"John Smith\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1234567890\",\n  \"status\": \"Pending\",\n  \"items\": [\n    {\n      \"diamondId\": \"{{diamondId}}\",\n      \"quantity\": 1,\n      \"price\": 15000\n    }\n  ],\n  \"totalAmount\": 15000,\n  \"notes\": \"Please gift wrap the purchase.\",\n  \"shippingAddress\": {\n    \"street\": \"123 Diamond Street\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postalCode\": \"10001\"\n  }\n}"
+            },
+            "description": "Creates a new order in the database"
+          },
+          "response": []
+        },
+        {
+          "name": "Update order",
+          "request": {
+            "method": "PUT",
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"Processing\",\n  \"notes\": \"Customer called to confirm delivery details.\"\n}"
+            },
+            "description": "Updates an existing order by ID (partial updates supported)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete order",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Deletes an order by ID"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "description": "Endpoints for image management",
+      "item": [
+        {
+          "name": "Upload image",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload"]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "description": "Uploads an image file to MongoDB GridFS. Supports JPEG, PNG, WebP, and GIF. Max size: 5MB."
+          },
+          "response": []
+        },
+        {
+          "name": "Get image",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/images/{{imageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "images", "{{imageId}}"]
+            },
+            "description": "Retrieves an image by its ID from MongoDB GridFS"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete image",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/images/{{imageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "images", "{{imageId}}"]
+            },
+            "description": "Deletes an image by ID from MongoDB GridFS"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "diamondId",
+      "value": "",
+      "type": "string",
+      "description": "ID of an existing diamond in the database"
+    },
+    {
+      "key": "orderId",
+      "value": "",
+      "type": "string",
+      "description": "ID of an existing order in the database"
+    },
+    {
+      "key": "imageId",
+      "value": "",
+      "type": "string",
+      "description": "ID of an uploaded image in GridFS"
+    }
+  ]
+}
