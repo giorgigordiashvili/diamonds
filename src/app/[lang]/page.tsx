@@ -16,6 +16,12 @@ const First = styled.div`
     grid-template-columns: 1fr;
   }
 `;
+const Margin = styled.div`
+  margin-top: 280px;
+  @media screen and (max-width: 1120px) {
+    margin-top: 48px;
+  }
+`;
 export default function IndexPage() {
   return (
     <>
@@ -26,7 +32,7 @@ export default function IndexPage() {
           <DiamondsList />
         </First>
       </div>
-
+      <Margin></Margin>
       <UniqueGift></UniqueGift>
       <DiamondQuality></DiamondQuality>
       <Certifications></Certifications>

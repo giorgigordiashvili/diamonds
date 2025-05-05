@@ -2,19 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 const Page = styled.div`
-  margin-top: 280px;
   width: 100%;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr 1fr;
   @media screen and (max-width: 1120px) {
-    margin-top: 48px;
-
     grid-template-rows: 1fr 1fr;
     grid-template-columns: none;
   }
 `;
 const Pic = styled.div`
-  width: 720px;
+  width: 100%;
   height: 750px;
   position: relative;
   @media screen and (max-width: 1120px) {
