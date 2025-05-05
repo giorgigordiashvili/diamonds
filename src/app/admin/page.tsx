@@ -1,5 +1,8 @@
 'use client';
+import AdminLogin from '@/components/AdminLogin';
 import ImageUploader from '@/components/ImageUploader';
+import { setCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -12,6 +15,9 @@ const AdminContainer = styled.div`
 
 const Header = styled.header`
   margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Title = styled.h1`
@@ -110,13 +116,28 @@ interface Diamond {
   description?: string;
 }
 
+interface User {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // Admin Dashboard Component
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('diamonds');
   const [diamonds, setDiamonds] = useState<Diamond[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [currentDiamond, setCurrentDiamond] = useState<Diamond | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+  const router = useRouter();
 
   // Default values for a new diamond
   const defaultDiamond = {
@@ -134,17 +155,96 @@ export default function AdminDashboard() {
     description: '',
   };
 
-  // Fetch diamonds from API
+  // Handle successful login
+  const handleLoginSuccess = (token: string) => {
+    // Store token in cookie for middleware authentication
+    setCookie('authToken', token, {
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+
+    setIsAuthenticated(true);
+    setIsAdmin(true);
+    setAuthChecking(false);
+
+    // Fetch data now that we're authenticated
+    fetchDiamonds();
+  };
+
+  // Check authentication status
   useEffect(() => {
-    if (activeTab === 'diamonds') {
-      fetchDiamonds();
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+
+        if (!token) {
+          // Don't redirect, show login form instead
+          setAuthChecking(false);
+          return;
+        }
+
+        // Store token in cookie for middleware authentication
+        setCookie('authToken', token, {
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+          path: '/',
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+        });
+
+        const response = await fetch('/api/users/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Authentication failed');
+        }
+
+        const userData = await response.json();
+        setIsAuthenticated(true);
+
+        if (userData.role !== 'admin') {
+          // Don't redirect, show unauthorized message
+          setAuthChecking(false);
+          return;
+        }
+
+        setIsAdmin(true);
+      } catch (error) {
+        console.error('Auth error:', error);
+        localStorage.removeItem('authToken');
+        // Don't redirect, show login form instead
+      } finally {
+        setAuthChecking(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // Fetch diamonds or users from API
+  useEffect(() => {
+    if (isAdmin) {
+      if (activeTab === 'diamonds') {
+        fetchDiamonds();
+      } else if (activeTab === 'users') {
+        fetchUsers();
+      }
     }
-  }, [activeTab]);
+  }, [activeTab, isAdmin]);
 
   const fetchDiamonds = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/diamonds');
+      const token = localStorage.getItem('authToken');
+      const response = await fetch('/api/diamonds', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
       setDiamonds(data.diamonds);
     } catch (error) {
@@ -154,16 +254,73 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('authToken');
+
+      // Create a custom endpoint to fetch all users (admin-only)
+      const response = await fetch('/api/users', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
+      }
+
+      const data = await response.json();
+      setUsers(data.users || []);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Delete a diamond
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this diamond?')) {
       try {
+        const token = localStorage.getItem('authToken');
         await fetch(`/api/diamonds/${id}`, {
           method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         fetchDiamonds();
       } catch (error) {
         console.error('Error deleting diamond:', error);
+      }
+    }
+  };
+
+  const handlePromoteToAdmin = async (userId: string) => {
+    if (confirm('Are you sure you want to promote this user to admin?')) {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await fetch('/api/users/promote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ userId }),
+        });
+
+        if (response.ok) {
+          // Refresh the users list
+          fetchUsers();
+          alert('User has been promoted to admin');
+        } else {
+          const errorData = await response.json();
+          alert(`Failed to promote user: ${errorData.error}`);
+        }
+      } catch (error) {
+        console.error('Error promoting user:', error);
+        alert('An error occurred while promoting the user');
       }
     }
   };
@@ -199,11 +356,13 @@ export default function AdminDashboard() {
     try {
       const method = currentDiamond.id ? 'PUT' : 'POST';
       const url = currentDiamond.id ? `/api/diamonds/${currentDiamond.id}` : '/api/diamonds';
+      const token = localStorage.getItem('authToken');
 
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(currentDiamond),
       });
@@ -543,10 +702,109 @@ export default function AdminDashboard() {
     </>
   );
 
+  // Render users table
+  const renderUsersTable = () => (
+    <>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <Table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id.slice(0, 6)}...</td>
+                <td>{`${user.firstName} ${user.lastName}`}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                <td>
+                  {user.role !== 'admin' && (
+                    <Button onClick={() => handlePromoteToAdmin(user.id)}>Make Admin</Button>
+                  )}
+                </td>
+              </tr>
+            ))}
+            {users.length === 0 && (
+              <tr>
+                <td colSpan={6} style={{ textAlign: 'center' }}>
+                  No users found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      )}
+    </>
+  );
+
+  // If still checking authentication
+  if (authChecking) {
+    return <div>Loading...</div>;
+  }
+
+  // If not authenticated, show login form
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={handleLoginSuccess} />;
+  }
+
+  // If authenticated but not admin, show unauthorized message
+  if (!isAdmin) {
+    return (
+      <div style={{ textAlign: 'center', marginTop: '100px' }}>
+        <h1>Unauthorized</h1>
+        <p>You do not have permission to access the admin dashboard.</p>
+        <button
+          onClick={() => {
+            localStorage.removeItem('authToken');
+            router.push('/');
+          }}
+          style={{
+            padding: '10px 20px',
+            background: '#333',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+            marginTop: '20px',
+          }}
+        >
+          Back to Home
+        </button>
+      </div>
+    );
+  }
+
   return (
     <AdminContainer>
       <Header>
         <Title>Diamond Admin Dashboard</Title>
+        <div style={{ marginLeft: 'auto' }}>
+          <button
+            onClick={() => {
+              localStorage.removeItem('authToken');
+              setCookie('authToken', '', { maxAge: -1 });
+              router.push('/');
+            }}
+            style={{
+              padding: '8px 12px',
+              background: '#333',
+              color: 'white',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            Logout
+          </button>
+        </div>
       </Header>
 
       <Tabs>
@@ -556,12 +814,17 @@ export default function AdminDashboard() {
         <Tab active={activeTab === 'orders'} onClick={() => setActiveTab('orders')}>
           Orders
         </Tab>
+        <Tab active={activeTab === 'users'} onClick={() => setActiveTab('users')}>
+          Users
+        </Tab>
       </Tabs>
 
       {showForm ? (
         renderDiamondForm()
       ) : activeTab === 'diamonds' ? (
         renderDiamondsTable()
+      ) : activeTab === 'users' ? (
+        renderUsersTable()
       ) : (
         <p>Orders management coming soon...</p>
       )}

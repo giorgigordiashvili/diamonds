@@ -8,13 +8,13 @@ const LanguageSwitcher = () => {
   const pathname = usePathname();
 
   // Extract the current locale from pathname
-  const currentLocale = pathname.split('/')[1];
+  const currentLocale = pathname ? pathname.split('/')[1] : '';
 
   // Determine the alternative locale
   const alternateLocale = currentLocale === 'en' ? 'ka' : 'en';
 
   // Get the path without the locale prefix
-  const pathWithoutLocale = pathname.replace(`/${currentLocale}`, '') || '/';
+  const pathWithoutLocale = pathname ? pathname.replace(`/${currentLocale}`, '') : '/';
 
   // Create the new path with the alternate locale
   const newPath = `/${alternateLocale}${pathWithoutLocale}`;

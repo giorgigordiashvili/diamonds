@@ -1,11 +1,18 @@
 import { connectToDatabase } from '@/lib/mongodb';
+import { authenticate } from '@/middleware/auth';
 import { Order } from '@/types/order';
 import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
-// GET a single order by ID
+// GET a single order by ID - accessible to admin or the order owner
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // Authenticate user (any role)
+    const authResult = await authenticate(request, false);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const { id } = await params;
     const { db } = await connectToDatabase();
 
@@ -14,7 +21,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ error: 'Invalid order ID format' }, { status: 400 });
     }
 
-    const order = await db.collection('orders').findOne({ _id: new ObjectId(id) });
+    // Build query - if admin, can access any order. If regular user, only their own orders.
+    const query: { _id: ObjectId; userId?: string } = { _id: new ObjectId(id) };
+
+    // If not admin, restrict to user's own orders
+    if (authResult.role !== 'admin') {
+      query.userId = authResult.userId;
+    }
+
+    const order = await db.collection('orders').findOne(query);
 
     if (!order) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
@@ -39,9 +54,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-// PUT/UPDATE an order
+// PUT/UPDATE an order - admin only
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const { id } = await params;
     const updateData = (await request.json()) as Partial<Order>;
     const { db } = await connectToDatabase();
@@ -118,12 +139,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   }
 }
 
-// DELETE an order
+// DELETE an order - admin only
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const { id } = await params;
     const { db } = await connectToDatabase();
 

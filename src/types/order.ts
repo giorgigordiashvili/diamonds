@@ -12,6 +12,7 @@ export interface OrderItem {
 export interface Order {
   _id?: ObjectId;
   id?: string;
+  userId?: string; // Added userId field for associating orders with users
   customerName: string;
   email: string;
   phone: string;

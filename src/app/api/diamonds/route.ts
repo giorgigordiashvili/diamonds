@@ -1,4 +1,5 @@
 import { connectToDatabase } from '@/lib/mongodb';
+import { authenticate } from '@/middleware/auth';
 import { Diamond } from '@/types/diamond';
 import { Sort } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
@@ -103,6 +104,12 @@ export async function GET(request: NextRequest) {
 // POST a new diamond
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true); // true means admin-only
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const diamond = (await request.json()) as Diamond;
     const { db } = await connectToDatabase();
 

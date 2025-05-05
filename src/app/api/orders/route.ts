@@ -1,11 +1,18 @@
 import { connectToDatabase } from '@/lib/mongodb';
+import { authenticate } from '@/middleware/auth';
 import { Order } from '@/types/order';
 import { ObjectId, Sort } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
-// GET all orders with optional filtering
+// GET all orders with optional filtering (admin only)
 export async function GET(request: NextRequest) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const { searchParams } = new URL(request.url);
     const { db } = await connectToDatabase();
 
@@ -94,11 +101,20 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST a new order
+// POST a new order (requires user authentication)
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate user (any role)
+    const authResult = await authenticate(request, false);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const orderData = (await request.json()) as Order;
     const { db } = await connectToDatabase();
+
+    // Associate the order with the authenticated user
+    orderData.userId = authResult.userId;
 
     // Validate required fields
     const requiredFields = ['customerName', 'email', 'phone', 'items', 'totalAmount'];

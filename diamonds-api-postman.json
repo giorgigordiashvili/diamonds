@@ -6,6 +6,77 @@
   },
   "item": [
     {
+      "name": "Authentication",
+      "description": "Endpoints for user authentication and management",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "register"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"securepassword\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+            },
+            "description": "Register a new user account"
+          },
+          "response": []
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"securepassword\"\n}"
+            },
+            "description": "Login with email and password to get authentication token"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "description": "Retrieves information about the currently logged-in user"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Diamonds",
       "description": "Endpoints for diamond management",
       "item": [
@@ -107,13 +178,17 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
               }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Round Brilliant Diamond\",\n  \"shape\": \"Brilliant\",\n  \"carat\": 1.5,\n  \"color\": \"D\",\n  \"clarity\": \"VVS1\",\n  \"cut\": \"Excellent\",\n  \"polish\": \"Excellent\",\n  \"symmetry\": \"Excellent\",\n  \"fluorescence\": \"None\",\n  \"certificate\": \"GIA\",\n  \"certificateNumber\": \"GIA123456789\",\n  \"price\": 15000,\n  \"description\": \"A stunning round brilliant diamond with perfect proportions and exceptional sparkle.\",\n  \"image\": \"{{imageId}}\",\n  \"featured\": true\n}"
             },
-            "description": "Creates a new diamond in the database"
+            "description": "Creates a new diamond in the database (Admin only)"
           },
           "response": []
         },
@@ -130,13 +205,17 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
               }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"price\": 16500,\n  \"description\": \"Updated description for this beautiful diamond.\",\n  \"image\": \"{{imageId}}\"\n}"
             },
-            "description": "Updates an existing diamond by ID (partial updates supported)"
+            "description": "Updates an existing diamond by ID (Admin only)"
           },
           "response": []
         },
@@ -149,7 +228,13 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "diamonds", "{{diamondId}}"]
             },
-            "description": "Deletes a diamond by ID"
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "description": "Deletes a diamond by ID (Admin only)"
           },
           "response": []
         }
@@ -168,7 +253,13 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders"]
             },
-            "description": "Retrieves all orders with optional filtering and pagination"
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "description": "Retrieves all orders with optional filtering and pagination (Admin only)"
           },
           "response": []
         },
@@ -228,7 +319,13 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders", "{{orderId}}"]
             },
-            "description": "Retrieves a single order by its ID"
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "description": "Retrieves a single order by its ID (Admin or order owner only)"
           },
           "response": []
         },
@@ -245,13 +342,17 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
               }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"customerName\": \"John Smith\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1234567890\",\n  \"status\": \"Pending\",\n  \"items\": [\n    {\n      \"diamondId\": \"{{diamondId}}\",\n      \"quantity\": 1,\n      \"price\": 15000\n    }\n  ],\n  \"totalAmount\": 15000,\n  \"notes\": \"Please gift wrap the purchase.\",\n  \"shippingAddress\": {\n    \"street\": \"123 Diamond Street\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postalCode\": \"10001\"\n  }\n}"
             },
-            "description": "Creates a new order in the database"
+            "description": "Creates a new order in the database (Authenticated users only)"
           },
           "response": []
         },
@@ -268,13 +369,17 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
               }
             ],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"Processing\",\n  \"notes\": \"Customer called to confirm delivery details.\"\n}"
             },
-            "description": "Updates an existing order by ID (partial updates supported)"
+            "description": "Updates an existing order by ID (Admin only)"
           },
           "response": []
         },
@@ -287,7 +392,13 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders", "{{orderId}}"]
             },
-            "description": "Deletes an order by ID"
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "description": "Deletes an order by ID (Admin only)"
           },
           "response": []
         }
@@ -306,6 +417,12 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "upload"]
             },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "body": {
               "mode": "formdata",
               "formdata": [
@@ -316,7 +433,7 @@
                 }
               ]
             },
-            "description": "Uploads an image file to MongoDB GridFS. Supports JPEG, PNG, WebP, and GIF. Max size: 5MB."
+            "description": "Uploads an image file to MongoDB GridFS. Supports JPEG, PNG, WebP, and GIF. Max size: 5MB. (Admin only)"
           },
           "response": []
         },
@@ -342,6 +459,12 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "images", "{{imageId}}"]
             },
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
             "description": "Deletes an image by ID from MongoDB GridFS"
           },
           "response": []
@@ -372,6 +495,12 @@
       "value": "",
       "type": "string",
       "description": "ID of an uploaded image in GridFS"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string",
+      "description": "JWT token obtained after login or registration"
     }
   ]
 }
