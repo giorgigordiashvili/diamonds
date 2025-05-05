@@ -1,7 +1,7 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticate } from '@/middleware/auth';
 import { Order } from '@/types/order';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ReturnDocument } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET a single order by ID - accessible to admin or the order owner
@@ -113,7 +113,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
         { $set: updateData },
-        { returnDocument: 'after' }
+        { returnDocument: ReturnDocument.AFTER }
       );
 
     if (!result) {

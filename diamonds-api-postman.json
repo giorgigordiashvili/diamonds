@@ -1,23 +1,17 @@
 {
   "info": {
     "name": "Diamonds API",
-    "description": "API for managing diamonds inventory and orders",
+    "description": "A complete API for managing diamonds, users, carts and orders",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
       "name": "Authentication",
-      "description": "Endpoints for user authentication and management",
       "item": [
         {
           "name": "Register User",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{baseUrl}}/api/users/register",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "register"]
-            },
             "header": [
               {
                 "key": "Content-Type",
@@ -26,21 +20,21 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"securepassword\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\"\n}"
+              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "register"]
             },
             "description": "Register a new user account"
           },
           "response": []
         },
         {
-          "name": "Login User",
+          "name": "Login",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{baseUrl}}/api/users/login",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "users", "login"]
-            },
             "header": [
               {
                 "key": "Content-Type",
@@ -49,9 +43,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"securepassword\"\n}"
+              "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}"
             },
-            "description": "Login with email and password to get authentication token"
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            },
+            "description": "Login with existing credentials"
           },
           "response": []
         },
@@ -59,148 +58,153 @@
           "name": "Get Current User",
           "request": {
             "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/api/users/me",
               "host": ["{{baseUrl}}"],
               "path": ["api", "users", "me"]
             },
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "description": "Retrieves information about the currently logged-in user"
+            "description": "Get information about the authenticated user"
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Endpoints for user authentication and management"
     },
     {
       "name": "Diamonds",
-      "description": "Endpoints for diamond management",
       "item": [
         {
-          "name": "Get all diamonds",
+          "name": "Get All Diamonds",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
-              "raw": "{{baseUrl}}/api/diamonds",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diamonds"]
-            },
-            "description": "Retrieves all diamonds with optional filtering and pagination"
-          },
-          "response": []
-        },
-        {
-          "name": "Get all diamonds (with filters)",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/diamonds?shape=Emerald&minCarat=1&maxCarat=5&minPrice=1000&maxPrice=50000&color=D,E,F&clarity=VVS1,VVS2&sortBy=price&sortOrder=asc&page=1&limit=20",
+              "raw": "{{baseUrl}}/api/diamonds?page=1&limit=20&shape=round&minCarat=1&maxCarat=2&color=D&clarity=VS1&cut=Excellent&minPrice=1000&maxPrice=20000&featured=true&sortBy=price&sortOrder=asc",
               "host": ["{{baseUrl}}"],
               "path": ["api", "diamonds"],
               "query": [
                 {
-                  "key": "shape",
-                  "value": "Emerald"
-                },
-                {
-                  "key": "minCarat",
-                  "value": "1"
-                },
-                {
-                  "key": "maxCarat",
-                  "value": "5"
-                },
-                {
-                  "key": "minPrice",
-                  "value": "1000"
-                },
-                {
-                  "key": "maxPrice",
-                  "value": "50000"
-                },
-                {
-                  "key": "color",
-                  "value": "D,E,F"
-                },
-                {
-                  "key": "clarity",
-                  "value": "VVS1,VVS2"
-                },
-                {
-                  "key": "sortBy",
-                  "value": "price"
-                },
-                {
-                  "key": "sortOrder",
-                  "value": "asc"
-                },
-                {
                   "key": "page",
-                  "value": "1"
+                  "value": "1",
+                  "description": "Page number for pagination"
                 },
                 {
                   "key": "limit",
-                  "value": "20"
+                  "value": "20",
+                  "description": "Number of results per page"
+                },
+                {
+                  "key": "shape",
+                  "value": "round",
+                  "description": "Filter by diamond shape"
+                },
+                {
+                  "key": "minCarat",
+                  "value": "1",
+                  "description": "Minimum carat weight"
+                },
+                {
+                  "key": "maxCarat",
+                  "value": "2",
+                  "description": "Maximum carat weight"
+                },
+                {
+                  "key": "color",
+                  "value": "D",
+                  "description": "Filter by color grade"
+                },
+                {
+                  "key": "clarity",
+                  "value": "VS1",
+                  "description": "Filter by clarity grade"
+                },
+                {
+                  "key": "cut",
+                  "value": "Excellent",
+                  "description": "Filter by cut grade"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "1000",
+                  "description": "Minimum price"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "20000",
+                  "description": "Maximum price"
+                },
+                {
+                  "key": "featured",
+                  "value": "true",
+                  "description": "Filter featured diamonds"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "price",
+                  "description": "Field to sort by"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "Sort direction (asc or desc)"
                 }
               ]
             },
-            "description": "Retrieves diamonds with filters for shape, carat range, price range, color, clarity, etc."
+            "description": "Retrieve a list of diamonds with optional filtering"
           },
           "response": []
         },
         {
-          "name": "Get diamond by ID",
+          "name": "Get Diamond by ID",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "diamonds", "{{diamondId}}"]
             },
-            "description": "Retrieves a single diamond by its ID"
+            "description": "Get detailed information about a specific diamond"
           },
           "response": []
         },
         {
-          "name": "Create new diamond",
+          "name": "Create Diamond (Admin)",
           "request": {
             "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Round Diamond 1.5ct\",\n    \"shape\": \"round\",\n    \"carat\": 1.5,\n    \"color\": \"D\",\n    \"clarity\": \"VS1\",\n    \"cut\": \"Excellent\",\n    \"polish\": \"Excellent\",\n    \"symmetry\": \"Excellent\",\n    \"fluorescence\": \"None\",\n    \"certificate\": \"GIA\",\n    \"price\": 10000,\n    \"image\": \"https://example.com/diamond-image.jpg\",\n    \"featured\": true\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/api/diamonds",
               "host": ["{{baseUrl}}"],
               "path": ["api", "diamonds"]
             },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Round Brilliant Diamond\",\n  \"shape\": \"Brilliant\",\n  \"carat\": 1.5,\n  \"color\": \"D\",\n  \"clarity\": \"VVS1\",\n  \"cut\": \"Excellent\",\n  \"polish\": \"Excellent\",\n  \"symmetry\": \"Excellent\",\n  \"fluorescence\": \"None\",\n  \"certificate\": \"GIA\",\n  \"certificateNumber\": \"GIA123456789\",\n  \"price\": 15000,\n  \"description\": \"A stunning round brilliant diamond with perfect proportions and exceptional sparkle.\",\n  \"image\": \"{{imageId}}\",\n  \"featured\": true\n}"
-            },
-            "description": "Creates a new diamond in the database (Admin only)"
+            "description": "Add a new diamond to the inventory (Admin only)"
           },
           "response": []
         },
         {
-          "name": "Update diamond",
+          "name": "Update Diamond (Admin)",
           "request": {
             "method": "PUT",
-            "url": {
-              "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "diamonds", "{{diamondId}}"]
-            },
             "header": [
               {
                 "key": "Content-Type",
@@ -208,163 +212,264 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "value": "Bearer {{adminToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"price\": 16500,\n  \"description\": \"Updated description for this beautiful diamond.\",\n  \"image\": \"{{imageId}}\"\n}"
+              "raw": "{\n    \"price\": 9500,\n    \"featured\": false\n}"
             },
-            "description": "Updates an existing diamond by ID (Admin only)"
-          },
-          "response": []
-        },
-        {
-          "name": "Delete diamond",
-          "request": {
-            "method": "DELETE",
             "url": {
               "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "diamonds", "{{diamondId}}"]
             },
+            "description": "Update an existing diamond (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Diamond (Admin)",
+          "request": {
+            "method": "DELETE",
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "value": "Bearer {{adminToken}}"
               }
             ],
-            "description": "Deletes a diamond by ID (Admin only)"
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds/{{diamondId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds", "{{diamondId}}"]
+            },
+            "description": "Remove a diamond from the inventory (Admin only)"
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Endpoints for managing diamonds"
     },
     {
-      "name": "Orders",
-      "description": "Endpoints for order management",
+      "name": "Cart",
       "item": [
         {
-          "name": "Get all orders",
+          "name": "Get Cart",
           "request": {
             "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/orders",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "orders"]
-            },
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "value": "Bearer {{token}}",
+                "description": "Optional: Works for both authenticated users and guests"
               }
             ],
-            "description": "Retrieves all orders with optional filtering and pagination (Admin only)"
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Retrieve the current user's shopping cart"
           },
           "response": []
         },
         {
-          "name": "Get all orders (with filters)",
+          "name": "Update Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "Optional: Works for both authenticated users and guests"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"items\": [\n        {\n            \"diamondId\": \"{{diamondId}}\",\n            \"quantity\": 1\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Create or replace the entire cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "Optional: Works for both authenticated users and guests"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart"]
+            },
+            "description": "Remove all items from the cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Merge Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"guestCartId\": \"{{guestCartId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/merge",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "merge"]
+            },
+            "description": "Merge a guest cart into the user's cart after login"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing the shopping cart"
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get All Orders (Admin)",
           "request": {
             "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
             "url": {
-              "raw": "{{baseUrl}}/api/orders?status=Pending&fromDate=2024-01-01&toDate=2024-12-31&email=customer@example.com&sortBy=createdAt&sortOrder=desc&page=1&limit=20",
+              "raw": "{{baseUrl}}/api/orders?page=1&limit=20&status=Pending&email=user@example.com&customerName=John&fromDate=2023-01-01&toDate=2023-12-31&sortBy=createdAt&sortOrder=desc",
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders"],
               "query": [
                 {
-                  "key": "status",
-                  "value": "Pending"
-                },
-                {
-                  "key": "fromDate",
-                  "value": "2024-01-01"
-                },
-                {
-                  "key": "toDate",
-                  "value": "2024-12-31"
-                },
-                {
-                  "key": "email",
-                  "value": "customer@example.com"
-                },
-                {
-                  "key": "sortBy",
-                  "value": "createdAt"
-                },
-                {
-                  "key": "sortOrder",
-                  "value": "desc"
-                },
-                {
                   "key": "page",
-                  "value": "1"
+                  "value": "1",
+                  "description": "Page number for pagination"
                 },
                 {
                   "key": "limit",
-                  "value": "20"
+                  "value": "20",
+                  "description": "Number of results per page"
+                },
+                {
+                  "key": "status",
+                  "value": "Pending",
+                  "description": "Filter by order status"
+                },
+                {
+                  "key": "email",
+                  "value": "user@example.com",
+                  "description": "Filter by customer email"
+                },
+                {
+                  "key": "customerName",
+                  "value": "John",
+                  "description": "Search by customer name"
+                },
+                {
+                  "key": "fromDate",
+                  "value": "2023-01-01",
+                  "description": "Filter orders after this date"
+                },
+                {
+                  "key": "toDate",
+                  "value": "2023-12-31",
+                  "description": "Filter orders before this date"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Field to sort by"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort direction (asc or desc)"
                 }
               ]
             },
-            "description": "Retrieves orders with filters for status, date range, customer email, etc."
+            "description": "Retrieve a list of all orders (Admin only)"
           },
           "response": []
         },
         {
-          "name": "Get order by ID",
-          "request": {
-            "method": "GET",
-            "url": {
-              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "orders", "{{orderId}}"]
-            },
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "description": "Retrieves a single order by its ID (Admin or order owner only)"
-          },
-          "response": []
-        },
-        {
-          "name": "Create new order",
+          "name": "Create Order",
           "request": {
             "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"customerName\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"+1234567890\",\n    \"items\": [\n        {\n            \"diamondId\": \"{{diamondId}}\",\n            \"quantity\": 1,\n            \"price\": 10000,\n            \"name\": \"Round Diamond 1.5ct\"\n        }\n    ],\n    \"totalAmount\": 10000,\n    \"shippingAddress\": {\n        \"street\": \"123 Main St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"postalCode\": \"10001\",\n        \"country\": \"USA\"\n    },\n    \"paymentInfo\": {\n        \"method\": \"credit_card\",\n        \"transactionId\": \"txn_123456\"\n    }\n}"
+            },
             "url": {
               "raw": "{{baseUrl}}/api/orders",
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders"]
             },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"customerName\": \"John Smith\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1234567890\",\n  \"status\": \"Pending\",\n  \"items\": [\n    {\n      \"diamondId\": \"{{diamondId}}\",\n      \"quantity\": 1,\n      \"price\": 15000\n    }\n  ],\n  \"totalAmount\": 15000,\n  \"notes\": \"Please gift wrap the purchase.\",\n  \"shippingAddress\": {\n    \"street\": \"123 Diamond Street\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postalCode\": \"10001\"\n  }\n}"
-            },
-            "description": "Creates a new order in the database (Authenticated users only)"
+            "description": "Place a new order"
           },
           "response": []
         },
         {
-          "name": "Update order",
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}"]
+            },
+            "description": "Get detailed information about a specific order"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status (Admin)",
           "request": {
             "method": "PUT",
-            "url": {
-              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "orders", "{{orderId}}"]
-            },
             "header": [
               {
                 "key": "Content-Type",
@@ -372,135 +477,117 @@
               },
               {
                 "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "value": "Bearer {{adminToken}}"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"Processing\",\n  \"notes\": \"Customer called to confirm delivery details.\"\n}"
+              "raw": "{\n    \"status\": \"Completed\",\n    \"trackingNumber\": \"TRK12345678\"\n}"
             },
-            "description": "Updates an existing order by ID (Admin only)"
-          },
-          "response": []
-        },
-        {
-          "name": "Delete order",
-          "request": {
-            "method": "DELETE",
             "url": {
               "raw": "{{baseUrl}}/api/orders/{{orderId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "orders", "{{orderId}}"]
             },
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "description": "Deletes an order by ID (Admin only)"
+            "description": "Update an order's status or other details (Admin only)"
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Endpoints for managing orders"
     },
     {
       "name": "Images",
-      "description": "Endpoints for image management",
       "item": [
         {
-          "name": "Upload image",
+          "name": "Upload Image (Admin)",
           "request": {
             "method": "POST",
-            "url": {
-              "raw": "{{baseUrl}}/api/upload",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "upload"]
-            },
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer {{authToken}}"
+                "value": "Bearer {{adminToken}}"
               }
             ],
             "body": {
               "mode": "formdata",
               "formdata": [
                 {
-                  "key": "file",
+                  "key": "image",
                   "type": "file",
-                  "src": ""
+                  "src": "/path/to/diamond-image.jpg"
                 }
               ]
             },
-            "description": "Uploads an image file to MongoDB GridFS. Supports JPEG, PNG, WebP, and GIF. Max size: 5MB. (Admin only)"
+            "url": {
+              "raw": "{{baseUrl}}/api/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload"]
+            },
+            "description": "Upload an image for a diamond (Admin only)"
           },
           "response": []
         },
         {
-          "name": "Get image",
+          "name": "Get Image",
           "request": {
             "method": "GET",
+            "header": [],
             "url": {
               "raw": "{{baseUrl}}/api/images/{{imageId}}",
               "host": ["{{baseUrl}}"],
               "path": ["api", "images", "{{imageId}}"]
             },
-            "description": "Retrieves an image by its ID from MongoDB GridFS"
-          },
-          "response": []
-        },
-        {
-          "name": "Delete image",
-          "request": {
-            "method": "DELETE",
-            "url": {
-              "raw": "{{baseUrl}}/api/images/{{imageId}}",
-              "host": ["{{baseUrl}}"],
-              "path": ["api", "images", "{{imageId}}"]
-            },
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{authToken}}"
-              }
-            ],
-            "description": "Deletes an image by ID from MongoDB GridFS"
+            "description": "Get an image by ID"
           },
           "response": []
         }
-      ]
+      ],
+      "description": "Endpoints for managing images"
     }
   ],
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3000",
-      "type": "string"
+      "value": "https://yourdomain.com",
+      "type": "string",
+      "description": "The base URL for your API"
+    },
+    {
+      "key": "token",
+      "value": "your_jwt_token",
+      "type": "string",
+      "description": "JWT token for authentication"
+    },
+    {
+      "key": "adminToken",
+      "value": "your_admin_jwt_token",
+      "type": "string",
+      "description": "JWT token for admin authentication"
     },
     {
       "key": "diamondId",
-      "value": "",
+      "value": "diamond_id",
       "type": "string",
-      "description": "ID of an existing diamond in the database"
+      "description": "ID of a diamond"
     },
     {
       "key": "orderId",
-      "value": "",
+      "value": "order_id",
       "type": "string",
-      "description": "ID of an existing order in the database"
+      "description": "ID of an order"
     },
     {
       "key": "imageId",
-      "value": "",
+      "value": "image_id",
       "type": "string",
-      "description": "ID of an uploaded image in GridFS"
+      "description": "ID of an image"
     },
     {
-      "key": "authToken",
-      "value": "",
+      "key": "guestCartId",
+      "value": "guest_cart_id",
       "type": "string",
-      "description": "JWT token obtained after login or registration"
+      "description": "ID of a guest cart"
     }
   ]
 }

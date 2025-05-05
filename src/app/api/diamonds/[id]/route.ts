@@ -1,7 +1,7 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticate } from '@/middleware/auth';
 import { Diamond } from '@/types/diamond';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ReturnDocument } from 'mongodb';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -97,7 +97,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
         { $set: updateData },
-        { returnDocument: 'after' }
+        { returnDocument: ReturnDocument.AFTER }
       );
 
     if (!result) {
