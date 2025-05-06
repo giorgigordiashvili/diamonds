@@ -81,7 +81,6 @@ export async function POST(request: NextRequest) {
     const userId = authResult instanceof NextResponse ? null : authResult.id;
 
     const data = await request.json();
-
     if (!Array.isArray(data.items)) {
       return NextResponse.json(
         { error: 'Invalid cart data. Items must be an array.' },
@@ -113,7 +112,6 @@ export async function POST(request: NextRequest) {
 
     const now = new Date();
     let cart;
-
     if (userId) {
       // For authenticated users - upsert by userId
       const result = await db.collection('carts').findOneAndUpdate(
@@ -172,6 +170,17 @@ export async function POST(request: NextRequest) {
       });
 
       return response;
+    }
+
+    // Check if cart exists before trying to access its properties
+    if (!cart) {
+      // Create a default cart object if cart is null
+      cart = {
+        items: data.items,
+        createdAt: now,
+        updatedAt: now,
+        userId: userId || undefined,
+      };
     }
 
     // If items exist, populate diamond details

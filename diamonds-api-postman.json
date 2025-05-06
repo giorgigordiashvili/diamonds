@@ -1,8 +1,10 @@
 {
   "info": {
     "name": "Diamonds API",
-    "description": "A complete API for managing diamonds, users, carts and orders",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "description": "A complete API for managing diamonds, users, carts, orders and payments",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0",
+    "updatedAt": "2025-05-06"
   },
   "item": [
     {
@@ -72,9 +74,195 @@
             "description": "Get information about the authenticated user"
           },
           "response": []
+        },
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"adminpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/admin/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "admin", "login"]
+            },
+            "description": "Login with admin credentials"
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "logout"]
+            },
+            "description": "Invalidate the current user's session"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for user authentication and management"
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users?page=1&limit=20&sortBy=createdAt&sortOrder=desc&search=john",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of results per page"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Field to sort by"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort direction (asc or desc)"
+                },
+                {
+                  "key": "search",
+                  "value": "john",
+                  "description": "Search by name or email"
+                }
+              ]
+            },
+            "description": "Get a list of all users (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            },
+            "description": "Get detailed information about a specific user (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstName\": \"John Updated\",\n    \"lastName\": \"Doe Updated\",\n    \"phone\": \"+1234567890\",\n    \"address\": {\n        \"street\": \"123 Main St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"postalCode\": \"10001\",\n        \"country\": \"USA\"\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me"]
+            },
+            "description": "Update the current user's profile"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User Password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"currentPassword\": \"password123\",\n    \"newPassword\": \"newSecurePassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me", "password"]
+            },
+            "description": "Change the current user's password"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            },
+            "description": "Delete a user account (Admin only)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing user accounts"
     },
     {
       "name": "Diamonds",
@@ -190,7 +378,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"Round Diamond 1.5ct\",\n    \"shape\": \"round\",\n    \"carat\": 1.5,\n    \"color\": \"D\",\n    \"clarity\": \"VS1\",\n    \"cut\": \"Excellent\",\n    \"polish\": \"Excellent\",\n    \"symmetry\": \"Excellent\",\n    \"fluorescence\": \"None\",\n    \"certificate\": \"GIA\",\n    \"price\": 10000,\n    \"image\": \"https://example.com/diamond-image.jpg\",\n    \"featured\": true\n}"
+              "raw": "{\n    \"name\": \"Round Diamond 1.5ct\",\n    \"shape\": \"round\",\n    \"carat\": 1.5,\n    \"color\": \"D\",\n    \"clarity\": \"VS1\",\n    \"cut\": \"Excellent\",\n    \"polish\": \"Excellent\",\n    \"symmetry\": \"Excellent\",\n    \"fluorescence\": \"None\",\n    \"certificate\": \"GIA\",\n    \"price\": 10000,\n    \"image\": \"https://example.com/diamond-image.jpg\",\n    \"featured\": true,\n    \"certificateNumber\": \"GIA12345678\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/diamonds",
@@ -246,6 +434,25 @@
             "description": "Remove a diamond from the inventory (Admin only)"
           },
           "response": []
+        },
+        {
+          "name": "Get Diamond Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/diamonds/statistics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "diamonds", "statistics"]
+            },
+            "description": "Get statistics about diamonds inventory (Admin only)"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for managing diamonds"
@@ -298,6 +505,54 @@
               "path": ["api", "cart"]
             },
             "description": "Create or replace the entire cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "Optional: Works for both authenticated users and guests"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"diamondId\": \"{{diamondId}}\",\n    \"quantity\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/item",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "item"]
+            },
+            "description": "Add a single item to the cart"
+          },
+          "response": []
+        },
+        {
+          "name": "Remove from Cart",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "description": "Optional: Works for both authenticated users and guests"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/cart/item/{{diamondId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "cart", "item", "{{diamondId}}"]
+            },
+            "description": "Remove a specific item from the cart"
           },
           "response": []
         },
@@ -436,7 +691,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"customerName\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"+1234567890\",\n    \"items\": [\n        {\n            \"diamondId\": \"{{diamondId}}\",\n            \"quantity\": 1,\n            \"price\": 10000,\n            \"name\": \"Round Diamond 1.5ct\"\n        }\n    ],\n    \"totalAmount\": 10000,\n    \"shippingAddress\": {\n        \"street\": \"123 Main St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"postalCode\": \"10001\",\n        \"country\": \"USA\"\n    },\n    \"paymentInfo\": {\n        \"method\": \"credit_card\",\n        \"transactionId\": \"txn_123456\"\n    }\n}"
+              "raw": "{\n    \"customerName\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"phone\": \"+1234567890\",\n    \"items\": [\n        {\n            \"diamondId\": \"{{diamondId}}\",\n            \"quantity\": 1,\n            \"price\": 10000,\n            \"name\": \"Round Diamond 1.5ct\"\n        }\n    ],\n    \"totalAmount\": 10000,\n    \"shippingAddress\": {\n        \"street\": \"123 Main St\",\n        \"city\": \"New York\",\n        \"state\": \"NY\",\n        \"postalCode\": \"10001\",\n        \"country\": \"USA\"\n    },\n    \"paymentInfo\": {\n        \"method\": \"credit_card\",\n        \"transactionId\": \"txn_123456\"\n    },\n    \"notes\": \"Gift wrap requested\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/orders",
@@ -538,6 +793,69 @@
             "description": "Update an order's status with tracking information (Admin only)"
           },
           "response": []
+        },
+        {
+          "name": "Cancel Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reason\": \"Changed my mind\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "{{orderId}}", "cancel"]
+            },
+            "description": "Cancel an order that hasn't been processed yet"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order Statistics (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/statistics?period=monthly&year=2025&month=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", "statistics"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "monthly",
+                  "description": "Period for statistics: daily, weekly, monthly, yearly"
+                },
+                {
+                  "key": "year",
+                  "value": "2025",
+                  "description": "Year for statistics"
+                },
+                {
+                  "key": "month",
+                  "value": "5",
+                  "description": "Month for statistics (1-12)"
+                }
+              ]
+            },
+            "description": "Get order statistics and analytics (Admin only)"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for managing orders"
@@ -587,6 +905,59 @@
             "description": "Get an image by ID"
           },
           "response": []
+        },
+        {
+          "name": "Delete Image (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/images/{{imageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "images", "{{imageId}}"]
+            },
+            "description": "Delete an image (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Batch Upload Images (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": "/path/to/diamond-image1.jpg"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": "/path/to/diamond-image2.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/upload/batch",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload", "batch"]
+            },
+            "description": "Upload multiple images at once (Admin only)"
+          },
+          "response": []
         }
       ],
       "description": "Endpoints for managing images"
@@ -622,6 +993,33 @@
           "response": []
         },
         {
+          "name": "Process Credit Card Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"orderId\": \"{{orderId}}\",\n    \"paymentMethod\": \"credit_card\",\n    \"amount\": 10000,\n    \"currency\": \"USD\",\n    \"paymentToken\": \"tok_visa\",\n    \"billingDetails\": {\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@example.com\",\n        \"address\": {\n            \"street\": \"123 Main St\",\n            \"city\": \"New York\",\n            \"state\": \"NY\",\n            \"postalCode\": \"10001\",\n            \"country\": \"USA\"\n        }\n    }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/process",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "process"]
+            },
+            "description": "Process a credit card payment for an order"
+          },
+          "response": []
+        },
+        {
           "name": "Verify Payment Status",
           "request": {
             "method": "GET",
@@ -651,11 +1049,91 @@
               }
             ],
             "url": {
-              "raw": "{{baseUrl}}/api/payments/receipt/{{orderId}}",
+              "raw": "{{baseUrl}}/api/payments/receipt?paymentId={{paymentId}}",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "payments", "receipt", "{{orderId}}"]
+              "path": ["api", "payments", "receipt"],
+              "query": [
+                {
+                  "key": "paymentId",
+                  "value": "{{paymentId}}",
+                  "description": "ID of the payment"
+                }
+              ]
             },
             "description": "Generate a receipt for a confirmed payment"
+          },
+          "response": []
+        },
+        {
+          "name": "Refund Payment (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"paymentId\": \"{{paymentId}}\",\n    \"amount\": 10000,\n    \"reason\": \"Customer requested refund\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/refund",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "refund"]
+            },
+            "description": "Process a refund for a previous payment (Admin only)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment History (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/payments?page=1&limit=20&fromDate=2025-01-01&toDate=2025-05-06&status=successful",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Number of results per page"
+                },
+                {
+                  "key": "fromDate",
+                  "value": "2025-01-01",
+                  "description": "Filter payments after this date"
+                },
+                {
+                  "key": "toDate",
+                  "value": "2025-05-06",
+                  "description": "Filter payments before this date"
+                },
+                {
+                  "key": "status",
+                  "value": "successful",
+                  "description": "Filter by payment status: successful, failed, refunded"
+                }
+              ]
+            },
+            "description": "Get payment transaction history (Admin only)"
           },
           "response": []
         }
@@ -705,6 +1183,18 @@
       "value": "guest_cart_id",
       "type": "string",
       "description": "ID of a guest cart"
+    },
+    {
+      "key": "userId",
+      "value": "user_id",
+      "type": "string",
+      "description": "ID of a user"
+    },
+    {
+      "key": "paymentId",
+      "value": "payment_id",
+      "type": "string",
+      "description": "ID of a payment"
     }
   ]
 }

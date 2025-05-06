@@ -1,7 +1,7 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticate } from '@/middleware/auth';
 import { CartItem } from '@/types/cart';
-import { ObjectId, Document, UpdateFilter } from 'mongodb';
+import { Document, ObjectId, UpdateFilter } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Update a specific item in the cart
@@ -178,11 +178,18 @@ export async function DELETE(
         .findOneAndUpdate({ _id: new ObjectId(cartId) }, update, { returnDocument: 'after' });
     }
 
-    if (!result || !result.value) {
+    // Check if any cart was found
+    if (!result) {
       return NextResponse.json({ error: 'Cart not found' }, { status: 404 });
     }
 
     const cart = result.value;
+
+    // If cart.value is null but result exists, it means the cart exists but no update was made
+    // This could happen if the item wasn't in the cart
+    if (!cart) {
+      return NextResponse.json({ error: 'Item not found in cart' }, { status: 404 });
+    }
 
     // Populate diamond details
     if (cart.items && cart.items.length > 0) {

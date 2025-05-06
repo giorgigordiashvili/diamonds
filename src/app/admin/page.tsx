@@ -1,6 +1,7 @@
 'use client';
 import AdminLogin from '@/components/AdminLogin';
 import ImageUploader from '@/components/ImageUploader';
+import { Order } from '@/types/order';
 import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -63,9 +64,11 @@ const Button = styled.button`
   border: none;
   cursor: pointer;
   margin-right: 5px;
+  font-weight: 500;
 
   &:hover {
     background: #555;
+    color: white;
   }
 `;
 
@@ -109,6 +112,7 @@ const OrderDetailsModal = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #000;
 `;
 
 const ModalContent = styled.div`
@@ -159,26 +163,6 @@ interface Cart {
   createdAt: string;
   updatedAt: string;
   user?: User;
-}
-
-interface Order {
-  _id: string;
-  userId: string;
-  items: CartItem[];
-  totalPrice: number;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  user?: User;
-  shippingAddress: {
-    street: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    country: string;
-  };
-  paymentMethod: string;
-  notes?: string;
 }
 
 // Admin Dashboard Component
@@ -682,22 +666,23 @@ export default function AdminDashboard() {
 
           <div style={{ marginBottom: '20px' }}>
             <p>
-              <strong>Order ID:</strong> {selectedOrder._id}
+              <strong>Order ID:</strong> {selectedOrder.id}
             </p>
             <p>
-              <strong>User:</strong>{' '}
-              {selectedOrder.user
-                ? `${selectedOrder.user.firstName} ${selectedOrder.user.lastName} (${selectedOrder.user.email})`
-                : 'User details not available'}
+              <strong>Customer:</strong> {selectedOrder.customerName} ({selectedOrder.email})
             </p>
             <p>
-              <strong>Date:</strong> {new Date(selectedOrder.createdAt).toLocaleString()}
+              <strong>Phone:</strong> {selectedOrder.phone}
+            </p>
+            <p>
+              <strong>Date:</strong>{' '}
+              {selectedOrder.createdAt ? new Date(selectedOrder.createdAt).toLocaleString() : 'N/A'}
             </p>
             <p>
               <strong>Status:</strong> {selectedOrder.status}
             </p>
             <p>
-              <strong>Total Price:</strong> ${selectedOrder.totalPrice.toLocaleString()}
+              <strong>Total Amount:</strong> ${selectedOrder.totalAmount.toLocaleString()}
             </p>
           </div>
 
@@ -706,7 +691,6 @@ export default function AdminDashboard() {
             <thead>
               <tr>
                 <th>Diamond</th>
-                <th>Details</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Total</th>
@@ -715,51 +699,39 @@ export default function AdminDashboard() {
             <tbody>
               {selectedOrder.items.map((item, index) => (
                 <tr key={index}>
-                  <td>{item.diamond?.name || 'Unknown Diamond'}</td>
-                  <td>
-                    {item.diamond ? (
-                      <>
-                        {item.diamond.carat}ct {item.diamond.color} {item.diamond.clarity}
-                        <br />
-                        {item.diamond.cut} cut
-                      </>
-                    ) : (
-                      'Details not available'
-                    )}
-                  </td>
-                  <td>${item.diamond?.price?.toLocaleString() || 'N/A'}</td>
+                  <td>{item.name || `Diamond ID: ${item.diamondId}`}</td>
+                  <td>${item.price.toLocaleString()}</td>
                   <td>{item.quantity}</td>
-                  <td>${((item.diamond?.price || 0) * item.quantity).toLocaleString()}</td>
+                  <td>${(item.price * item.quantity).toLocaleString()}</td>
                 </tr>
               ))}
             </tbody>
           </Table>
 
-          <h3>Shipping Details</h3>
-          <div style={{ marginBottom: '20px' }}>
-            <p>
-              <strong>Address:</strong> {selectedOrder.shippingAddress.street}
-            </p>
-            <p>
-              <strong>City:</strong> {selectedOrder.shippingAddress.city}
-            </p>
-            <p>
-              <strong>State/Province:</strong> {selectedOrder.shippingAddress.state}
-            </p>
-            <p>
-              <strong>Postal Code:</strong> {selectedOrder.shippingAddress.postalCode}
-            </p>
-            <p>
-              <strong>Country:</strong> {selectedOrder.shippingAddress.country}
-            </p>
-          </div>
-
-          <h3>Payment</h3>
-          <div style={{ marginBottom: '20px' }}>
-            <p>
-              <strong>Method:</strong> {selectedOrder.paymentMethod}
-            </p>
-          </div>
+          {selectedOrder.shippingAddress && (
+            <>
+              <h3>Shipping Details</h3>
+              <div style={{ marginBottom: '20px' }}>
+                <p>
+                  <strong>Address:</strong> {selectedOrder.shippingAddress.street}
+                </p>
+                <p>
+                  <strong>City:</strong> {selectedOrder.shippingAddress.city}
+                </p>
+                {selectedOrder.shippingAddress.state && (
+                  <p>
+                    <strong>State/Province:</strong> {selectedOrder.shippingAddress.state}
+                  </p>
+                )}
+                <p>
+                  <strong>Postal Code:</strong> {selectedOrder.shippingAddress.postalCode}
+                </p>
+                <p>
+                  <strong>Country:</strong> {selectedOrder.shippingAddress.country}
+                </p>
+              </div>
+            </>
+          )}
 
           {selectedOrder.notes && (
             <>
@@ -773,10 +745,18 @@ export default function AdminDashboard() {
           <div
             style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'flex-end' }}
           >
-            <Button onClick={() => handleUpdateOrderStatus(selectedOrder._id, 'completed')}>
+            <Button
+              onClick={() =>
+                selectedOrder?.id && handleUpdateOrderStatus(selectedOrder.id, 'Completed')
+              }
+            >
               Mark Completed
             </Button>
-            <Button onClick={() => handleUpdateOrderStatus(selectedOrder._id, 'cancelled')}>
+            <Button
+              onClick={() =>
+                selectedOrder?.id && handleUpdateOrderStatus(selectedOrder.id, 'Cancelled')
+              }
+            >
               Cancel Order
             </Button>
             <Button onClick={() => setSelectedOrder(null)}>Close</Button>
@@ -823,7 +803,7 @@ export default function AdminDashboard() {
           <thead>
             <tr>
               <th>ID</th>
-              <th>User</th>
+              <th>Customer</th>
               <th>Items</th>
               <th>Total</th>
               <th>Status</th>
@@ -833,13 +813,14 @@ export default function AdminDashboard() {
           </thead>
           <tbody>
             {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order._id.toString().slice(0, 6)}...</td>
+              <tr key={order._id?.toString() || order.id}>
+                <td>{(order._id?.toString() || order.id || '').slice(0, 6)}...</td>
                 <td>
-                  {order.user ? `${order.user.firstName} ${order.user.lastName}` : 'User Info N/A'}
+                  {order.customerName} <br />
+                  <small>{order.email}</small>
                 </td>
                 <td>{order.items.length} items</td>
-                <td>${order.totalPrice.toLocaleString()}</td>
+                <td>${order.totalAmount.toLocaleString()}</td>
                 <td>
                   <span
                     style={{
@@ -847,11 +828,11 @@ export default function AdminDashboard() {
                       padding: '4px 8px',
                       borderRadius: '4px',
                       backgroundColor:
-                        order.status === 'completed'
+                        order.status === 'Completed'
                           ? '#4caf50'
-                          : order.status === 'cancelled'
+                          : order.status === 'Cancelled'
                             ? '#f44336'
-                            : order.status === 'processing'
+                            : order.status === 'Processing'
                               ? '#2196f3'
                               : '#ff9800',
                       color: 'white',
@@ -860,7 +841,7 @@ export default function AdminDashboard() {
                     {order.status}
                   </span>
                 </td>
-                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>{order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}</td>
                 <td>
                   <Button onClick={() => setSelectedOrder(order)}>View Details</Button>
                 </td>
