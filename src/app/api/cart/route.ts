@@ -1,15 +1,8 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticate } from '@/middleware/auth';
-import { Cart, CartItem } from '@/types/cart';
+import { Cart } from '@/types/cart';
 import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
-
-interface AuthResult {
-  userId: string;
-  email: string;
-  role: string;
-  id: string; // Add this to match the expected property
-}
 
 // Get the current user's cart
 export async function GET(request: NextRequest) {
@@ -17,7 +10,7 @@ export async function GET(request: NextRequest) {
     // Authentication is optional - both logged in users and guests can have carts
     const authResult = await authenticate(request, false);
     // Get userId if authenticated, otherwise use null
-    const userId = authResult instanceof NextResponse ? null : (authResult as AuthResult).id;
+    const userId = authResult instanceof NextResponse ? null : authResult.id;
 
     const { db } = await connectToDatabase();
 
@@ -52,7 +45,9 @@ export async function GET(request: NextRequest) {
 
     // If cart has items, populate diamond details
     if (cart.items && cart.items.length > 0) {
-      const diamondIds = cart.items.map((item: CartItem) => new ObjectId(item.diamondId));
+      const diamondIds = cart.items.map(
+        (item: { diamondId: string }) => new ObjectId(item.diamondId)
+      );
       const diamonds = await db
         .collection('diamonds')
         .find({
@@ -61,7 +56,7 @@ export async function GET(request: NextRequest) {
         .toArray();
 
       // Attach diamond details to cart items
-      cart.items = cart.items.map((item: CartItem) => {
+      cart.items = cart.items.map((item: { diamondId: string; quantity: number }) => {
         const diamond = diamonds.find((d) => d._id.toString() === item.diamondId);
         return {
           ...item,
@@ -83,7 +78,7 @@ export async function POST(request: NextRequest) {
     // Authentication is optional - both logged in users and guests can have carts
     const authResult = await authenticate(request, false);
     // Get userId if authenticated, otherwise use null
-    const userId = authResult instanceof NextResponse ? null : (authResult as AuthResult).id;
+    const userId = authResult instanceof NextResponse ? null : authResult.id;
 
     const data = await request.json();
 
@@ -180,8 +175,10 @@ export async function POST(request: NextRequest) {
     }
 
     // If items exist, populate diamond details
-    if (cart && cart.items && cart.items.length > 0) {
-      const diamondIds = cart.items.map((item: CartItem) => new ObjectId(item.diamondId));
+    if (cart.items && cart.items.length > 0) {
+      const diamondIds = cart.items.map(
+        (item: { diamondId: string }) => new ObjectId(item.diamondId)
+      );
       const diamonds = await db
         .collection('diamonds')
         .find({
@@ -190,7 +187,7 @@ export async function POST(request: NextRequest) {
         .toArray();
 
       // Attach diamond details to cart items
-      cart.items = cart.items.map((item: CartItem) => {
+      cart.items = cart.items.map((item: { diamondId: string; quantity: number }) => {
         const diamond = diamonds.find((d) => d._id.toString() === item.diamondId);
         return {
           ...item,
@@ -212,7 +209,7 @@ export async function DELETE(request: NextRequest) {
     // Authentication is optional - both logged in users and guests can have carts
     const authResult = await authenticate(request, false);
     // Get userId if authenticated, otherwise use null
-    const userId = authResult instanceof NextResponse ? null : (authResult as AuthResult).id;
+    const userId = authResult instanceof NextResponse ? null : authResult.id;
 
     const { db } = await connectToDatabase();
 

@@ -146,10 +146,14 @@ export async function POST(request: NextRequest) {
 
     const result = await db.collection('diamonds').insertOne(newDiamond);
 
-    // Return the created diamond with the id
+    // Create the response object with the server-generated id and all relevant properties
+    // We don't need to extract the id from the diamond object, we can just use spread
+    // and then override it with our server-generated id
     const createdDiamond = {
-      id: result.insertedId.toString(),
-      ...newDiamond,
+      ...diamond, // This includes all diamond properties
+      id: result.insertedId.toString(), // This overrides any client-provided id
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
 
     return NextResponse.json(createdDiamond, { status: 201 });

@@ -467,6 +467,52 @@
           "response": []
         },
         {
+          "name": "Get My Order History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/me/orders?page=1&limit=10&status=Pending&sortBy=createdAt&sortOrder=desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "me", "orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number for pagination"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of results per page"
+                },
+                {
+                  "key": "status",
+                  "value": "Pending",
+                  "description": "Filter by order status"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdAt",
+                  "description": "Field to sort by"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc",
+                  "description": "Sort direction (asc or desc)"
+                }
+              ]
+            },
+            "description": "Retrieve the current user's order history"
+          },
+          "response": []
+        },
+        {
           "name": "Update Order Status (Admin)",
           "request": {
             "method": "PUT",
@@ -482,14 +528,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"status\": \"Completed\",\n    \"trackingNumber\": \"TRK12345678\"\n}"
+              "raw": "{\n    \"status\": \"Processing\",\n    \"trackingNumber\": \"TN123456789\",\n    \"shippingCarrier\": \"FedEx\",\n    \"notes\": \"Order is being prepared for shipping\"\n}"
             },
             "url": {
-              "raw": "{{baseUrl}}/api/orders/{{orderId}}",
+              "raw": "{{baseUrl}}/api/orders/{{orderId}}/status",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "orders", "{{orderId}}"]
+              "path": ["api", "orders", "{{orderId}}", "status"]
             },
-            "description": "Update an order's status or other details (Admin only)"
+            "description": "Update an order's status with tracking information (Admin only)"
           },
           "response": []
         }
@@ -544,6 +590,77 @@
         }
       ],
       "description": "Endpoints for managing images"
+    },
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Confirm Cash Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"orderId\": \"{{orderId}}\",\n    \"amount\": 10000,\n    \"paymentReference\": \"CASH-12345\",\n    \"notes\": \"Cash payment received in full\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/cash",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "cash"]
+            },
+            "description": "Confirm a cash payment for an order"
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Payment Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/verify/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "verify", "{{orderId}}"]
+            },
+            "description": "Check the payment status for an order"
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Payment Receipt",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/payments/receipt/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "payments", "receipt", "{{orderId}}"]
+            },
+            "description": "Generate a receipt for a confirmed payment"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing payments"
     }
   ],
   "variable": [

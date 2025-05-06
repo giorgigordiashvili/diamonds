@@ -3,7 +3,8 @@ import { Diamond } from './diamond';
 export interface CartItem {
   diamondId: string;
   quantity: number;
-  diamond?: Diamond;
+  price: number;
+  diamond: Diamond;
 }
 
 export interface Cart {

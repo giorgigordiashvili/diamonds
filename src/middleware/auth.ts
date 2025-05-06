@@ -4,7 +4,15 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function authenticate(
   req: NextRequest,
   requireAdmin = false
-): Promise<{ userId: string; email: string; role: string } | NextResponse> {
+): Promise<
+  | {
+      id: any;
+      userId: string;
+      email: string;
+      role: string;
+    }
+  | NextResponse
+> {
   const authHeader = req.headers.get('authorization');
   const token = extractTokenFromHeader(authHeader || undefined);
 
@@ -23,6 +31,7 @@ export async function authenticate(
   }
 
   return {
+    id: payload.id,
     userId: payload.id,
     email: payload.email,
     role: payload.role,
