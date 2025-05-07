@@ -6,7 +6,7 @@ import Links from '@/components/Links';
 import UniqueGift from '@/components/UniqueGift';
 import DiamondQuality from '@/components/DiamondQuality';
 import Certifications from '@/components/Certifications';
-
+import DiamondFilter from '@/components/DiamondFilter';
 const Main = styled.div`
   margin-top: 52px;
 `;
@@ -14,12 +14,30 @@ const Desc = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 1086px;
+  @media screen and (max-width: 1120px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: fit-content;
+  }
+  @media screen and (max-width: 800px) {
+    padding-inline: 16px;
+    height: fit-content;
+  }
 `;
 const Left = styled.div`
-  padding: 124px 140px 0 130px;
+  padding: 124px 140px 130px 130px;
+
+  @media screen and (max-width: 800px) {
+    padding: 80px 0;
+  }
 `;
 const Right = styled.div`
   background-color: rgba(38, 38, 38, 1);
+  padding-top: 120px;
+  padding-inline: 140px;
+  @media screen and (max-width: 800px) {
+    padding-inline: 0px;
+  }
 `;
 const Lefthead = styled.div`
   display: flex;
@@ -85,6 +103,9 @@ const Sec1 = styled.div`
   width: 100%;
   margin-inline: auto;
   padding-inline: 32px;
+  @media screen and (max-width: 1120px) {
+    padding-inline: 16px;
+  }
 `;
 
 const Back = styled.div`
@@ -99,9 +120,12 @@ const Back = styled.div`
 `;
 const Page = styled.div`
   margin-top: 20px;
-
   display: grid;
   grid-template-columns: 1fr 1fr;
+  @media screen and (max-width: 1120px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
 `;
 const Headtitle = styled.div`
   p:first-of-type {
@@ -143,7 +167,11 @@ const Smalls = styled.div`
   flex-direction: column;
   gap: 16px;
 `;
-const Mainpic = styled.div``;
+const Mainpic = styled.div`
+  height: 514px;
+  width: 514px;
+  position: relative;
+`;
 const Purchase = styled.div`
   margin-top: 48px;
   P:first-of-type {
@@ -313,9 +341,9 @@ const Order = () => {
               </Smalls>
               <Mainpic>
                 <Image
-                  src={'/assets/order/sample.png'}
-                  width={514}
-                  height={514}
+                  src={'/assets/order/bigsample.png'}
+                  fill
+                  style={{ objectFit: 'fill' }}
                   alt="mainpic of diamond"
                 ></Image>
               </Mainpic>
@@ -457,7 +485,18 @@ const Order = () => {
             </List>
           </Leftbody>
         </Left>
-        <Right></Right>
+        <Right>
+          <DiamondFilter
+            activeValues={{
+              Color: `G`,
+              Clarity: 'SI1',
+              Cut: 'GOOD',
+              Polish: 'VERY GOOD',
+              Symmetry: 'GOOD',
+              Fluorescence: 'NONE',
+            }}
+          />
+        </Right>
       </Desc>
       <UniqueGift></UniqueGift>
       <DiamondQuality></DiamondQuality>

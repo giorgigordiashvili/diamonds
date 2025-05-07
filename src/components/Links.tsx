@@ -4,11 +4,21 @@ import Image from 'next/image';
 
 const Main = styled.div`
   width: 100%;
-  height: 210px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 70px 0;
   background-color: rgba(26, 26, 26, 1);
+  @media screen and (max-width: 1360px) {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 20px;
+    padding-inline: 20px;
+    @media screen and (max-width: 588px) {
+      justify-content: left;
+      width: fit-content;
+    }
+  }
 `;
 const Box = styled.div`
   display: flex;

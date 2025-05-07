@@ -197,9 +197,8 @@ function ReceiptContent() {
           return;
         }
 
-        // Store token in cookie for middleware authentication
         setCookie('authToken', token, {
-          maxAge: 60 * 60 * 24 * 7, // 7 days
+          maxAge: 60 * 60 * 24 * 7,
           path: '/',
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
@@ -217,8 +216,37 @@ function ReceiptContent() {
 
         setIsAuthenticated(true);
 
-        // Now fetch the receipt
-        fetchReceipt(token);
+        // Moved here to avoid the dependency warning
+        const fetchReceipt = async () => {
+          try {
+            if (!paymentId) {
+              setError('Payment ID is required');
+              setLoading(false);
+              return;
+            }
+
+            const res = await fetch(`/api/payments/receipt?paymentId=${paymentId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (!res.ok) {
+              const errorData = await res.json();
+              throw new Error(errorData.error || 'Failed to fetch receipt');
+            }
+
+            const data = await res.json();
+            setReceipt(data);
+          } catch (error) {
+            console.error('Error fetching receipt:', error);
+            setError(error instanceof Error ? error.message : 'Failed to load receipt');
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        await fetchReceipt();
       } catch (error) {
         console.error('Auth error:', error);
         setError('Authentication failed');
@@ -230,34 +258,34 @@ function ReceiptContent() {
   }, [paymentId]);
 
   // Fetch receipt data
-  const fetchReceipt = async (token: string) => {
-    try {
-      if (!paymentId) {
-        setError('Payment ID is required');
-        setLoading(false);
-        return;
-      }
+  // const fetchReceipt = async (token: string) => {
+  //   try {
+  //     if (!paymentId) {
+  //       setError('Payment ID is required');
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      const response = await fetch(`/api/payments/receipt?paymentId=${paymentId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  //     const response = await fetch(`/api/payments/receipt?paymentId=${paymentId}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch receipt');
-      }
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.error || 'Failed to fetch receipt');
+  //     }
 
-      const data = await response.json();
-      setReceipt(data);
-    } catch (error) {
-      console.error('Error fetching receipt:', error);
-      setError(error instanceof Error ? error.message : 'Failed to load receipt');
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     const data = await response.json();
+  //     setReceipt(data);
+  //   } catch (error) {
+  //     console.error('Error fetching receipt:', error);
+  //     setError(error instanceof Error ? error.message : 'Failed to load receipt');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // Handle print button click
   const handlePrint = () => {
