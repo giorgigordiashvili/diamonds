@@ -6,6 +6,7 @@ import Links from '@/components/Links';
 import UniqueGift from '@/components/UniqueGift';
 import DiamondQuality from '@/components/DiamondQuality';
 import Certifications from '@/components/Certifications';
+import DiamondFilter from '@/components/DiamondFilter';
 
 const Main = styled.div`
   margin-top: 52px;
@@ -27,7 +28,7 @@ const Left = styled.div`
   padding: 124px 140px 130px 130px;
 
   @media screen and (max-width: 800px) {
-    padding: 80px 0;
+    padding: 80px 16px;
   }
 `;
 const Right = styled.div`
@@ -116,9 +117,11 @@ const Back = styled.div`
 `;
 const Page = styled.div`
   margin-top: 20px;
-
   display: grid;
   grid-template-columns: 1fr 1fr;
+  @media screen and (max-width: 1120px) {
+    grid-template-columns: 1fr;
+  }
 `;
 const Headtitle = styled.div`
   p:first-of-type {
@@ -151,9 +154,11 @@ const Buy = styled.div`
   align-items: center;
 `;
 const Diamondpics = styled.div`
+  width: 100%;
   margin-top: 36px;
   display: flex;
   gap: 32px;
+  margin-bottom: 16px;
   @media screen and (max-width: 650px) {
     display: grid;
     grid-template-rows: auto auto;
@@ -177,7 +182,7 @@ const Smalls = styled.div`
 `;
 const Mainpic = styled.div`
   height: 514px;
-  width: 514px;
+  width: 100%;
   position: relative;
   @media screen and (max-width: 650px) {
     width: 100%;
@@ -190,6 +195,9 @@ const Purchase = styled.div`
     font-size: 10.88px;
     line-height: 24px;
     letter-spacing: 0%;
+  }
+  @media screen and (max-width: 1120px) {
+    width: 100%;
   }
 `;
 const Blank = styled.div`
@@ -295,7 +303,7 @@ const Info = styled.div`
   margin-top: 28px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 `;
 const Assistant = styled.div`
   display: flex;
@@ -505,7 +513,18 @@ const Order = () => {
             </List>
           </Leftbody>
         </Left>
-        <Right></Right>
+        <Right>
+          <DiamondFilter
+            activeValues={{
+              Color: `G`,
+              Clarity: 'SI1',
+              Cut: 'GOOD',
+              Polish: 'VERY GOOD',
+              Symmetry: 'GOOD',
+              Fluorescence: 'NONE',
+            }}
+          />
+        </Right>
       </Desc>
       <UniqueGift></UniqueGift>
       <DiamondQuality></DiamondQuality>

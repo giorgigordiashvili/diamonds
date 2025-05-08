@@ -3,17 +3,23 @@ import styled from 'styled-components';
 import Image from 'next/image';
 
 const Main = styled.div`
+  flex-wrap: wrap;
   width: 100%;
-  height: 210px;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 50px 16px;
+  row-gap: 20px;
   background-color: rgba(26, 26, 26, 1);
 `;
 const Box = styled.div`
   display: flex;
   gap: 17px;
   padding-inline: 8px;
+  @media screen and (max-width: 795px) {
+    width: 100%;
+  }
 `;
 const Texts = styled.div`
   display: flex;
