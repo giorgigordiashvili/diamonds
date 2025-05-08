@@ -1,6 +1,7 @@
 import { connectToDatabase } from '@/lib/mongodb';
+import { authenticate } from '@/middleware/auth';
 import { Diamond } from '@/types/diamond';
-import { ObjectId } from 'mongodb';
+import { ObjectId, ReturnDocument } from 'mongodb';
 import { headers } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -68,6 +69,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 // PUT/UPDATE a diamond
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true); // true means admin-only
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const { id } = await params;
     const updateData = (await request.json()) as Partial<Diamond>;
     const { db } = await connectToDatabase();
@@ -90,7 +97,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       .findOneAndUpdate(
         { _id: new ObjectId(id) },
         { $set: updateData },
-        { returnDocument: 'after' }
+        { returnDocument: ReturnDocument.AFTER }
       );
 
     if (!result) {
@@ -122,6 +129,12 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true); // true means admin-only
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const { id } = await params;
     const { db } = await connectToDatabase();
 

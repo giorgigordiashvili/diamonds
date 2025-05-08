@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+
 interface OptionProps {
   active: boolean;
 }
@@ -21,6 +22,7 @@ interface DiamondFilterProps {
     Fluorescence: string;
   };
 }
+
 
 const Container = styled.div`
   color: white;
@@ -48,6 +50,7 @@ const OptionsRow = styled.div`
   gap: 4px;
   flex-wrap: wrap;
   row-gap: 16px;
+
 `;
 
 const OptionWrapper = styled.div`
@@ -73,6 +76,7 @@ const Underline = styled.div`
 `;
 
 const Option = styled.div<OptionProps>`
+
   font-weight: 600;
   font-size: 12px;
   line-height: 14px;
@@ -86,7 +90,9 @@ const Option = styled.div<OptionProps>`
   border-radius: 2px;
 `;
 
+
 const SectionComponent: React.FC<SectionComponentProps> = ({ title, options, activeValue }) => {
+
   return (
     <Section>
       <Title>{title}</Title>
@@ -104,6 +110,7 @@ const SectionComponent: React.FC<SectionComponentProps> = ({ title, options, act
 };
 
 const DiamondFilter: React.FC<DiamondFilterProps> = ({ activeValues }) => {
+
   return (
     <Container>
       <SectionComponent

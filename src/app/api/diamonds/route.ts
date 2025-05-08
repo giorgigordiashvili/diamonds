@@ -1,4 +1,5 @@
 import { connectToDatabase } from '@/lib/mongodb';
+import { authenticate } from '@/middleware/auth';
 import { Diamond } from '@/types/diamond';
 import { Sort } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
@@ -103,6 +104,12 @@ export async function GET(request: NextRequest) {
 // POST a new diamond
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true); // true means admin-only
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     const diamond = (await request.json()) as Diamond;
     const { db } = await connectToDatabase();
 
@@ -139,10 +146,14 @@ export async function POST(request: NextRequest) {
 
     const result = await db.collection('diamonds').insertOne(newDiamond);
 
-    // Return the created diamond with the id
+    // Create the response object with the server-generated id and all relevant properties
+    // We don't need to extract the id from the diamond object, we can just use spread
+    // and then override it with our server-generated id
     const createdDiamond = {
-      id: result.insertedId.toString(),
-      ...newDiamond,
+      ...diamond, // This includes all diamond properties
+      id: result.insertedId.toString(), // This overrides any client-provided id
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
 
     return NextResponse.json(createdDiamond, { status: 201 });

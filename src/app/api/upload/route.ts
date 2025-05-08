@@ -1,4 +1,5 @@
 import { uploadFileToGridFS } from '@/lib/gridfs';
+import { authenticate } from '@/middleware/auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 // Disable default body parsing for file uploads
@@ -11,6 +12,12 @@ export const config = {
 // Handler for image uploads
 export async function POST(request: NextRequest) {
   try {
+    // Authenticate as admin
+    const authResult = await authenticate(request, true);
+    if (authResult instanceof NextResponse) {
+      return authResult; // Auth failed, return error response
+    }
+
     // This uses the ReadableStream API to handle the file upload
     const formData = await request.formData();
 

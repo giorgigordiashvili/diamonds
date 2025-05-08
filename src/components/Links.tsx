@@ -11,7 +11,18 @@ const Main = styled.div`
   align-items: center;
   padding: 50px 16px;
   row-gap: 20px;
+
   background-color: rgba(26, 26, 26, 1);
+  @media screen and (max-width: 1360px) {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 20px;
+    padding-inline: 20px;
+    @media screen and (max-width: 588px) {
+      justify-content: left;
+      width: fit-content;
+    }
+  }
 `;
 const Box = styled.div`
   display: flex;

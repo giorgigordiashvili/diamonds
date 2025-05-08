@@ -21,6 +21,9 @@ const Desc = styled.div`
     height: fit-content;
   }
   @media screen and (max-width: 800px) {
+
+    padding-inline: 16px;
+
     height: fit-content;
   }
 `;
@@ -29,6 +32,7 @@ const Left = styled.div`
 
   @media screen and (max-width: 800px) {
     padding: 80px 16px;
+
   }
 `;
 const Right = styled.div`
@@ -37,6 +41,7 @@ const Right = styled.div`
   padding-inline: 140px;
   @media screen and (max-width: 800px) {
     padding-inline: 16px;
+
   }
 `;
 const Lefthead = styled.div`
@@ -103,6 +108,9 @@ const Sec1 = styled.div`
   width: 100%;
   margin-inline: auto;
   padding-inline: 32px;
+  @media screen and (max-width: 1120px) {
+    padding-inline: 16px;
+  }
 `;
 
 const Back = styled.div`
@@ -121,6 +129,8 @@ const Page = styled.div`
   grid-template-columns: 1fr 1fr;
   @media screen and (max-width: 1120px) {
     grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+
   }
 `;
 const Headtitle = styled.div`
@@ -187,6 +197,12 @@ const Mainpic = styled.div`
   @media screen and (max-width: 650px) {
     width: 100%;
   }
+`;
+
+const Mainpic = styled.div`
+  height: 514px;
+  width: 514px;
+  position: relative;
 `;
 const Purchase = styled.div`
   margin-top: 48px;
@@ -372,6 +388,8 @@ const Order = () => {
                   src={'/assets/order/sample.png'}
                   fill
                   style={{ objectFit: 'cover', borderRadius: `8px` }}
+
+
                   alt="mainpic of diamond"
                 ></Image>
               </Mainpic>

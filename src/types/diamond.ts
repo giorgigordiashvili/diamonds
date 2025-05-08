@@ -37,8 +37,8 @@ export type Fluorescence = 'None' | 'Faint' | 'Medium' | 'Strong' | 'Very Strong
 export type Certificate = 'GIA' | 'IGI' | 'HRD' | 'AGS' | 'Other';
 
 export interface Diamond {
-  _id?: ObjectId;
-  id?: string;
+  _id?: ObjectId; // MongoDB ObjectId (only used server-side)
+  id: string; // Always available string ID for client usage
   name: string;
   shape: Shape;
   carat: number;

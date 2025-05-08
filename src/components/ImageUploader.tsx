@@ -115,6 +115,13 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUploaded, currentI
       const formData = new FormData();
       formData.append('file', file);
 
+      // Get authentication token from localStorage
+      const token = localStorage.getItem('authToken');
+
+      if (!token) {
+        throw new Error('Authentication token not found. Please log in again.');
+      }
+
       // Simulate progress (since fetch doesn't support progress events directly)
       const progressInterval = setInterval(() => {
         setProgress((prev) => {
@@ -125,6 +132,10 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageUploaded, currentI
 
       const response = await fetch('/api/upload', {
         method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // Don't set Content-Type here as it will be automatically set with the boundary parameter
+        },
         body: formData,
       });
 
