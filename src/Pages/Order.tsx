@@ -21,7 +21,6 @@ const Desc = styled.div`
     height: fit-content;
   }
   @media screen and (max-width: 800px) {
-
     padding-inline: 16px;
 
     height: fit-content;
@@ -32,7 +31,6 @@ const Left = styled.div`
 
   @media screen and (max-width: 800px) {
     padding: 80px 16px;
-
   }
 `;
 const Right = styled.div`
@@ -41,7 +39,6 @@ const Right = styled.div`
   padding-inline: 140px;
   @media screen and (max-width: 800px) {
     padding-inline: 16px;
-
   }
 `;
 const Lefthead = styled.div`
@@ -130,7 +127,6 @@ const Page = styled.div`
   @media screen and (max-width: 1120px) {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr;
-
   }
 `;
 const Headtitle = styled.div`
@@ -199,11 +195,6 @@ const Mainpic = styled.div`
   }
 `;
 
-const Mainpic = styled.div`
-  height: 514px;
-  width: 514px;
-  position: relative;
-`;
 const Purchase = styled.div`
   margin-top: 48px;
   P:first-of-type {
@@ -388,8 +379,6 @@ const Order = () => {
                   src={'/assets/order/sample.png'}
                   fill
                   style={{ objectFit: 'cover', borderRadius: `8px` }}
-
-
                   alt="mainpic of diamond"
                 ></Image>
               </Mainpic>
