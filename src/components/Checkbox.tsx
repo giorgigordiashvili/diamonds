@@ -4,10 +4,11 @@ import styled from 'styled-components';
 interface CheckboxProps {
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  labelText?: React.ReactNode;
 }
 
-// Styled component for the container
 const CheckboxContainer = styled.div`
+  width: fit-content;
   display: flex;
   align-items: center;
   color: white;
@@ -15,10 +16,9 @@ const CheckboxContainer = styled.div`
   font-size: 14px;
 `;
 
-// Styled component for the checkbox input
 const CheckboxInput = styled.input`
   margin-right: 10px;
-  width: 36px;
+  width: 18px;
   height: 18px;
   cursor: pointer;
   appearance: none;
@@ -46,8 +46,8 @@ const CheckboxInput = styled.input`
   }
 `;
 
-// Styled component for the label
 const Label = styled.label`
+  width: fit-content;
   user-select: none;
   color: gray;
 
@@ -64,18 +64,18 @@ const Label = styled.label`
   }
 `;
 
-const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e); // Call the passed onChange handler
-  };
-
+const Checkbox: React.FC<CheckboxProps> = ({ checked, onChange, labelText }) => {
   return (
     <CheckboxContainer>
-      <CheckboxInput type="checkbox" checked={checked} onChange={handleChange} />
+      <CheckboxInput type="checkbox" checked={checked} onChange={onChange} />
       <Label>
-        By selecting continue you confirm that you have read our
-        <span> data protection information</span> and accepted our
-        <span> general terms and conditions.</span>
+        {labelText || (
+          <>
+            By selecting continue you confirm that you have read our
+            <span> data protection information</span> and accepted our
+            <span> general terms and conditions.</span>
+          </>
+        )}
       </Label>
     </CheckboxContainer>
   );
