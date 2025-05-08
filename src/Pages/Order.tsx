@@ -14,12 +14,29 @@ const Desc = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   height: 1086px;
+  @media screen and (max-width: 1120px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    height: fit-content;
+  }
+  @media screen and (max-width: 800px) {
+    height: fit-content;
+  }
 `;
 const Left = styled.div`
-  padding: 124px 140px 0 130px;
+  padding: 124px 140px 130px 130px;
+
+  @media screen and (max-width: 800px) {
+    padding: 80px 0;
+  }
 `;
 const Right = styled.div`
   background-color: rgba(38, 38, 38, 1);
+  padding-top: 120px;
+  padding-inline: 140px;
+  @media screen and (max-width: 800px) {
+    padding-inline: 16px;
+  }
 `;
 const Lefthead = styled.div`
   display: flex;
@@ -137,13 +154,35 @@ const Diamondpics = styled.div`
   margin-top: 36px;
   display: flex;
   gap: 32px;
+  @media screen and (max-width: 650px) {
+    display: grid;
+    grid-template-rows: auto auto;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    gap: 16px;
+    width: 100%;
+  }
 `;
 const Smalls = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  @media screen and (max-width: 650px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    grid-row: 2;
+    gap: 32px;
+  }
 `;
-const Mainpic = styled.div``;
+const Mainpic = styled.div`
+  height: 514px;
+  width: 514px;
+  position: relative;
+  @media screen and (max-width: 650px) {
+    width: 100%;
+  }
+`;
 const Purchase = styled.div`
   margin-top: 48px;
   P:first-of-type {
@@ -212,7 +251,7 @@ const Middle = styled.div`
   div {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    width: 224px;
+    width: 100%;
     justify-content: space-between;
   }
   div p:first-of-type {
@@ -227,6 +266,9 @@ const Middle = styled.div`
     font-size: 12.8px;
     line-height: 16px;
     letter-spacing: 0%;
+  }
+  @media screen and (max-width: 1120px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -265,6 +307,10 @@ const Assistant = styled.div`
 
   div {
     display: flex;
+    @media screen and (max-width: 490px) {
+      align-items: baseline;
+      flex-direction: column;
+    }
   }
   div p:first-child {
     font-weight: 700;
@@ -303,19 +349,21 @@ const Order = () => {
                   width={75}
                   height={75}
                   alt="mainpic of diamond"
+                  style={{ objectFit: 'cover', borderRadius: `8px` }}
                 ></Image>
                 <Image
                   src={'/assets/order/sample.png'}
                   width={75}
                   height={75}
                   alt="mainpic of diamond"
+                  style={{ objectFit: 'cover', borderRadius: `8px` }}
                 ></Image>
               </Smalls>
               <Mainpic>
                 <Image
                   src={'/assets/order/sample.png'}
-                  width={514}
-                  height={514}
+                  fill
+                  style={{ objectFit: 'cover', borderRadius: `8px` }}
                   alt="mainpic of diamond"
                 ></Image>
               </Mainpic>
