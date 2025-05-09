@@ -10,6 +10,9 @@ const Main = styled.div`
   height: fit-content;
   padding: 20px 36px;
   border: 1px solid #7d7d7d;
+  @media screen and (max-width: 600px) {
+    padding-inline: 16px;
+  }
 `;
 
 const Head = styled.div`
@@ -50,6 +53,9 @@ const Item = styled.div`
 
 const Desc = styled.div`
   margin-inline: 32px;
+  @media screen and (max-width: 1120px) {
+    margin-right: auto;
+  }
 `;
 
 const Name = styled.div`
