@@ -40,32 +40,84 @@ const Dash = styled.span`
   font-size: 16px;
 `;
 
-const ClarityDropwown = () => {
-  const options = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'SI3', 'I1'];
-  const [fromValue, setFromValue] = useState('from');
-  const [toValue, setToValue] = useState('to');
+interface ClarityDropdownProps {
+  onClarityChange: (from: string | undefined, to: string | undefined) => void;
+  initialMin?: string;
+  initialMax?: string;
+}
+
+const ClarityDropwown = ({
+  onClarityChange,
+  initialMin = 'from',
+  initialMax = 'to',
+}: ClarityDropdownProps) => {
+  const options = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
+  const [fromValue, setFromValue] = useState(initialMin);
+  const [toValue, setToValue] = useState(initialMax);
+
+  const getClarityIndex = (clarity: string) => options.indexOf(clarity);
 
   const handleFromChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = e.target.value;
-    setFromValue(selectedValue);
-    if (selectedValue !== 'from') {
-      console.log('From selected:', selectedValue);
+    const newFromValue = e.target.value;
+    setFromValue(newFromValue);
+
+    let currentToValue = toValue;
+    // If "from" is not the placeholder and "to" is not the placeholder,
+    // and the new "from" value is worse than the current "to" value,
+    // then update "to" to be the same as "from".
+    if (
+      newFromValue !== 'from' &&
+      currentToValue !== 'to' &&
+      getClarityIndex(newFromValue) > getClarityIndex(currentToValue)
+    ) {
+      setToValue(newFromValue);
+      currentToValue = newFromValue;
     }
+
+    onClarityChange(
+      newFromValue === 'from' ? undefined : newFromValue,
+      currentToValue === 'to' ? undefined : currentToValue
+    );
   };
 
   const handleToChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedValue = e.target.value;
-    setToValue(selectedValue);
-    if (selectedValue !== 'to') {
-      console.log('To selected:', selectedValue);
+    const newToValue = e.target.value;
+    setToValue(newToValue);
+
+    let currentFromValue = fromValue;
+    // If "to" is not the placeholder and "from" is not the placeholder,
+    // and the new "to" value is better than the current "from" value,
+    // then update "from" to be the same as "to".
+    if (
+      newToValue !== 'to' &&
+      currentFromValue !== 'from' &&
+      getClarityIndex(newToValue) < getClarityIndex(currentFromValue)
+    ) {
+      setFromValue(newToValue);
+      currentFromValue = newToValue;
     }
+
+    onClarityChange(
+      currentFromValue === 'from' ? undefined : currentFromValue,
+      newToValue === 'to' ? undefined : newToValue
+    );
   };
+
+  const fromOptions =
+    toValue === 'to'
+      ? options
+      : options.filter((option) => getClarityIndex(option) <= getClarityIndex(toValue));
+
+  const toOptions =
+    fromValue === 'from'
+      ? options
+      : options.filter((option) => getClarityIndex(option) >= getClarityIndex(fromValue));
 
   return (
     <Container>
       <Select value={fromValue} onChange={handleFromChange}>
         <option value="from">from</option>
-        {options.map((option) => (
+        {fromOptions.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
@@ -74,7 +126,7 @@ const ClarityDropwown = () => {
       <Dash>-</Dash>
       <Select value={toValue} onChange={handleToChange}>
         <option value="to">to</option>
-        {options.map((option) => (
+        {toOptions.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>

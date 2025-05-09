@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -96,11 +96,21 @@ type Props = {
   type: 'solid' | 'dashed';
   solidMin?: number;
   solidMax?: number;
+  initialMin?: number;
+  initialMax?: number;
+  onRangeChange?: (min: number, max: number) => void;
 };
 
-const DualSlider: React.FC<Props> = ({ type, solidMin = 0, solidMax = 500 }) => {
-  const [solidMinVal, setSolidMinVal] = useState(solidMin);
-  const [solidMaxVal, setSolidMaxVal] = useState(solidMax);
+const DualSlider: React.FC<Props> = ({
+  type,
+  solidMin = 0,
+  solidMax = 500,
+  initialMin,
+  initialMax,
+  onRangeChange,
+}) => {
+  const [solidMinVal, setSolidMinVal] = useState(initialMin !== undefined ? initialMin : solidMin);
+  const [solidMaxVal, setSolidMaxVal] = useState(initialMax !== undefined ? initialMax : solidMax);
 
   const [dashedMinVal, setDashedMinVal] = useState(1);
   const [dashedMaxVal, setDashedMaxVal] = useState(4);
@@ -111,15 +121,25 @@ const DualSlider: React.FC<Props> = ({ type, solidMin = 0, solidMax = 500 }) => 
   const clamp = (val: number, min: number, max: number) => Math.max(min, Math.min(max, val));
 
   const handleSolidMinChange = (val: number) => {
-    const clamped = clamp(val, solidMin, solidMaxVal);
-    setSolidMinVal(clamped);
-    if (clamped > solidMaxVal) setSolidMaxVal(clamped);
+    const newMinVal = clamp(val, solidMin, solidMaxVal);
+    setSolidMinVal(newMinVal);
+    if (newMinVal > solidMaxVal) {
+      setSolidMaxVal(newMinVal);
+      if (onRangeChange) onRangeChange(newMinVal, newMinVal);
+    } else {
+      if (onRangeChange) onRangeChange(newMinVal, solidMaxVal);
+    }
   };
 
   const handleSolidMaxChange = (val: number) => {
-    const clamped = clamp(val, solidMinVal, solidMax);
-    setSolidMaxVal(clamped);
-    if (clamped < solidMinVal) setSolidMinVal(clamped);
+    const newMaxVal = clamp(val, solidMinVal, solidMax);
+    setSolidMaxVal(newMaxVal);
+    if (newMaxVal < solidMinVal) {
+      setSolidMinVal(newMaxVal);
+      if (onRangeChange) onRangeChange(newMaxVal, newMaxVal);
+    } else {
+      if (onRangeChange) onRangeChange(solidMinVal, newMaxVal);
+    }
   };
 
   const handleDashedMinChange = (val: number) => {
@@ -133,6 +153,17 @@ const DualSlider: React.FC<Props> = ({ type, solidMin = 0, solidMax = 500 }) => 
     setDashedMaxVal(clamped);
     if (clamped < dashedMinVal) setDashedMinVal(clamped);
   };
+
+  useEffect(() => {
+    if (type === 'solid') {
+      if (initialMin !== undefined && initialMin !== solidMinVal) {
+        setSolidMinVal(clamp(initialMin, solidMin, solidMaxVal));
+      }
+      if (initialMax !== undefined && initialMax !== solidMaxVal) {
+        setSolidMaxVal(clamp(initialMax, solidMinVal, solidMax));
+      }
+    }
+  }, [type, initialMin, initialMax, solidMin, solidMax, solidMinVal, solidMaxVal]);
 
   useEffect(() => {
     if (type === 'solid') {

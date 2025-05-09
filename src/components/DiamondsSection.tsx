@@ -95,7 +95,9 @@ const ShowButton = styled.div`
 
 interface DiamondsSectionProps {
   onFilterChange: (filterName: string, value: any) => void;
-  currentFilters: Partial<diamondsApi.DiamondSearchParams>;
+  currentFilters: Partial<
+    diamondsApi.DiamondSearchParams & { clarityMin?: string; clarityMax?: string }
+  >;
 }
 
 const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, currentFilters }) => {
@@ -113,6 +115,21 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
 
   const handleShapeChange = (shape: Shape | undefined) => {
     onFilterChange('shape', shape);
+  };
+
+  const handleCaratRangeChange = (min: number, max: number) => {
+    onFilterChange('caratMin', min);
+    onFilterChange('caratMax', max);
+  };
+
+  const handleClarityChange = (min: string | undefined, max: string | undefined) => {
+    onFilterChange('clarityMin', min);
+    onFilterChange('clarityMax', max);
+  };
+
+  const handleColorChange = (min: string | undefined, max: string | undefined) => {
+    onFilterChange('colorMin', min);
+    onFilterChange('colorMax', max);
   };
 
   return (
@@ -148,7 +165,15 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
             />
           </Arrow>
         </Filter>
-        {showCarat && <Dualslider type="solid" solidMax={15} />}
+        {showCarat && (
+          <Dualslider
+            type="solid"
+            solidMax={15} // Assuming 15 is the absolute max for carat selection
+            initialMin={currentFilters.caratMin}
+            initialMax={currentFilters.caratMax}
+            onRangeChange={handleCaratRangeChange}
+          />
+        )}
         {/* color Filter */}
         <Filter onClick={() => setShowColor((prev) => !prev)}>
           <Title>Color</Title>
@@ -161,7 +186,13 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
             />
           </Arrow>
         </Filter>
-        {showColor && <ColorDropdown />}
+        {showColor && (
+          <ColorDropdown
+            onColorChange={handleColorChange}
+            initialMin={currentFilters.colorMin}
+            initialMax={currentFilters.colorMax}
+          />
+        )}
         {/* clarity Filter */}
         <Filter onClick={() => setShowClarity((prev) => !prev)}>
           <Title>Clarity</Title>
@@ -174,7 +205,13 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
             />
           </Arrow>
         </Filter>
-        {showClarity && <ClarityDropwown />}
+        {showClarity && (
+          <ClarityDropwown
+            onClarityChange={handleClarityChange}
+            initialMin={currentFilters.clarityMin}
+            initialMax={currentFilters.clarityMax}
+          />
+        )}
         {/* Cut Filter */}
         <Filter onClick={() => setShowCut((prev) => !prev)}>
           <Title>Cut</Title>

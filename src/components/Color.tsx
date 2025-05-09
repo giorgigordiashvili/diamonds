@@ -39,25 +39,37 @@ const Dash = styled.span`
   font-size: 16px;
 `;
 
-const ColorDropdown = () => {
+interface ColorDropdownProps {
+  onColorChange: (from: string | undefined, to: string | undefined) => void;
+  initialMin?: string;
+  initialMax?: string;
+}
+
+const ColorDropdown = ({
+  onColorChange,
+  initialMin = 'from',
+  initialMax = 'to',
+}: ColorDropdownProps) => {
   const options = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
-  const [fromValue, setFromValue] = useState('from');
-  const [toValue, setToValue] = useState('to');
+  const [fromValue, setFromValue] = useState(initialMin);
+  const [toValue, setToValue] = useState(initialMax);
 
   const handleFromChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setFromValue(selectedValue);
-    if (selectedValue !== 'from') {
-      console.log('From selected:', selectedValue);
-    }
+    onColorChange(
+      selectedValue === 'from' ? undefined : selectedValue,
+      toValue === 'to' ? undefined : toValue
+    );
   };
 
   const handleToChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setToValue(selectedValue);
-    if (selectedValue !== 'to') {
-      console.log('To selected:', selectedValue);
-    }
+    onColorChange(
+      fromValue === 'from' ? undefined : fromValue,
+      selectedValue === 'to' ? undefined : selectedValue
+    );
   };
 
   return (

@@ -1,6 +1,6 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticate } from '@/middleware/auth';
-import { Diamond } from '@/types/diamond';
+import { Clarity, Diamond } from '@/types/diamond';
 import { Sort } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,42 +11,131 @@ export async function GET(request: NextRequest) {
     const { db } = await connectToDatabase();
 
     // Build filter from query params
-    const filter: Record<string, string | number | boolean | { $gte?: number; $lte?: number }> = {};
+    const filter: Record<
+      string,
+      string | number | boolean | { $gte?: number; $lte?: number } | { $in?: string[] }
+    > = {};
 
     // Apply filters if they exist in query params
     if (searchParams.has('shape')) {
       const shape = searchParams.get('shape');
       if (shape !== null) filter.shape = shape;
     }
-    if (searchParams.has('minCarat') || searchParams.has('maxCarat')) {
-      filter.carat = {};
-      if (searchParams.has('minCarat')) {
-        filter.carat.$gte = parseFloat(searchParams.get('minCarat') as string);
-      }
-      if (searchParams.has('maxCarat')) {
-        filter.carat.$lte = parseFloat(searchParams.get('maxCarat') as string);
+
+    // Correctly handle caratMin and caratMax
+    const caratFilter: { $gte?: number; $lte?: number } = {};
+    let hasCaratFilter = false;
+
+    if (searchParams.has('caratMin')) {
+      const caratMinValue = searchParams.get('caratMin');
+      if (caratMinValue !== null) {
+        caratFilter.$gte = parseFloat(caratMinValue);
+        hasCaratFilter = true;
       }
     }
-    if (searchParams.has('color')) {
-      const color = searchParams.get('color');
-      if (color !== null) filter.color = color;
+    if (searchParams.has('caratMax')) {
+      const caratMaxValue = searchParams.get('caratMax');
+      if (caratMaxValue !== null) {
+        caratFilter.$lte = parseFloat(caratMaxValue);
+        hasCaratFilter = true;
+      }
     }
-    if (searchParams.has('clarity')) {
+
+    if (hasCaratFilter) {
+      filter.carat = caratFilter;
+    }
+
+    // Handle colorMin and colorMax
+    const colorOrder = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+    const colorMin = searchParams.get('colorMin');
+    const colorMax = searchParams.get('colorMax');
+
+    if (colorMin && colorMax) {
+      const minIndex = colorOrder.indexOf(colorMin);
+      const maxIndex = colorOrder.indexOf(colorMax);
+      if (minIndex !== -1 && maxIndex !== -1 && minIndex <= maxIndex) {
+        filter.color = { $in: colorOrder.slice(minIndex, maxIndex + 1) };
+      }
+    } else if (colorMin) {
+      const minIndex = colorOrder.indexOf(colorMin);
+      if (minIndex !== -1) {
+        filter.color = { $in: colorOrder.slice(minIndex) };
+      }
+    } else if (colorMax) {
+      const maxIndex = colorOrder.indexOf(colorMax);
+      if (maxIndex !== -1) {
+        filter.color = { $in: colorOrder.slice(0, maxIndex + 1) };
+      }
+    }
+
+    // Handle clarityMin and clarityMax
+    const clarityOrder: Clarity[] = [
+      'FL',
+      'IF',
+      'VVS1',
+      'VVS2',
+      'VS1',
+      'VS2',
+      'SI1',
+      'SI2',
+      'I1',
+      'I2',
+      'I3',
+    ];
+    const clarityMin = searchParams.get('clarityMin');
+    const clarityMax = searchParams.get('clarityMax');
+
+    if (clarityMin && clarityMax) {
+      const minIndex = clarityOrder.indexOf(clarityMin as Clarity);
+      const maxIndex = clarityOrder.indexOf(clarityMax as Clarity);
+      if (minIndex !== -1 && maxIndex !== -1 && minIndex <= maxIndex) {
+        filter.clarity = { $in: clarityOrder.slice(minIndex, maxIndex + 1) };
+      }
+    } else if (clarityMin) {
+      const minIndex = clarityOrder.indexOf(clarityMin as Clarity);
+      if (minIndex !== -1) {
+        filter.clarity = { $in: clarityOrder.slice(minIndex) };
+      }
+    } else if (clarityMax) {
+      const maxIndex = clarityOrder.indexOf(clarityMax as Clarity);
+      if (maxIndex !== -1) {
+        filter.clarity = { $in: clarityOrder.slice(0, maxIndex + 1) };
+      }
+    } else if (searchParams.has('clarity')) {
+      // Keep existing single clarity filter
       const clarity = searchParams.get('clarity');
       if (clarity !== null) filter.clarity = clarity;
     }
+
     if (searchParams.has('cut')) {
       const cut = searchParams.get('cut');
       if (cut !== null) filter.cut = cut;
     }
+
+    // Handle priceMin and priceMax
+    const priceFilter: { $gte?: number; $lte?: number } = {};
+    let hasPriceFilter = false;
+
     if (searchParams.has('minPrice')) {
-      filter.price = filter.price && typeof filter.price === 'object' ? filter.price : {};
-      filter.price.$gte = parseFloat(searchParams.get('minPrice') as string);
+      const minPriceValue = searchParams.get('minPrice');
+      if (minPriceValue !== null) {
+        priceFilter.$gte = parseFloat(minPriceValue);
+        hasPriceFilter = true;
+      }
     }
+
     if (searchParams.has('maxPrice')) {
-      filter.price = filter.price && typeof filter.price === 'object' ? filter.price : {};
-      filter.price.$lte = parseFloat(searchParams.get('maxPrice') as string);
+      const maxPriceValue = searchParams.get('maxPrice');
+      if (maxPriceValue !== null) {
+        priceFilter.$lte = parseFloat(maxPriceValue);
+        hasPriceFilter = true;
+      }
     }
+
+    if (hasPriceFilter) {
+      filter.price = priceFilter;
+    }
+
     if (searchParams.has('featured')) filter.featured = searchParams.get('featured') === 'true';
 
     // Handle pagination
