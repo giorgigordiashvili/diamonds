@@ -25,17 +25,23 @@ const Margin = styled.div`
   }
 `;
 
+const ITEMS_PER_PAGE = 10; // Define items per page
+
 export default function IndexPage() {
-  const [filters, setFilters] = useState<Partial<diamondsApi.DiamondSearchParams>>({});
+  const [filters, setFilters] = useState<Partial<diamondsApi.DiamondSearchParams>>({
+    page: 1, // Initialize with page 1
+    limit: ITEMS_PER_PAGE, // Initialize with items per page
+  });
 
   const handleFilterChange = (filterName: string, value: any) => {
     setFilters((prevFilters) => {
-      const newFilters = {
+      const newFilters: Partial<diamondsApi.DiamondSearchParams> = {
         ...prevFilters,
         [filterName]: value,
+        limit: ITEMS_PER_PAGE, // Ensure limit is always set
       };
       if (filterName !== 'page') {
-        newFilters.page = 1;
+        newFilters.page = 1; // Reset to page 1 if filter changes (excluding page itself)
       }
       console.log('Filters updated in page.tsx:', newFilters);
       return newFilters;
@@ -48,7 +54,7 @@ export default function IndexPage() {
         <LanguageSwitcher />
         <First>
           <DiamondsFilter onFilterChange={handleFilterChange} currentFilters={filters} />
-          <DiamondsList filterParams={filters} />
+          <DiamondsList filterParams={filters} onFilterChange={handleFilterChange} />
         </First>
       </div>
       <Margin></Margin>

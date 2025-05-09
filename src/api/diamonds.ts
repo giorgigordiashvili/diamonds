@@ -25,13 +25,31 @@ export interface DiamondSearchParams {
   sortOrder?: 'asc' | 'desc';
 }
 
+// Define the actual structure of the API response from /api/diamonds
+interface ActualApiResponse {
+  diamonds: Diamond[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    pages: number;
+  };
+}
+
 /**
  * Get a list of diamonds with optional filtering
  */
-export function getDiamonds(params: DiamondSearchParams = {}): Promise<DiamondListResponse> {
-  return get<DiamondListResponse>('/api/diamonds', {
+export async function getDiamonds(params: DiamondSearchParams = {}): Promise<DiamondListResponse> {
+  // Call the generic 'get' but expect the actual API structure
+  const response = await get<ActualApiResponse>('/api/diamonds', {
     params: params as Record<string, string>,
   });
+
+  // Transform the response to match DiamondListResponse
+  return {
+    diamonds: response.diamonds,
+    total: response.pagination.total,
+  };
 }
 
 /**

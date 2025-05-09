@@ -7,13 +7,6 @@ import styled from 'styled-components';
 import Scroll from './Scroll';
 import SortingDropdown from './SortingDropdown';
 
-// Define the DiamondFilterParams interface
-interface DiamondFilterParams {
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  // Add other filter parameters as needed
-}
-
 const Page = styled.div`
   width: 100%;
 `;
@@ -176,28 +169,62 @@ const StyledImageCard = styled.div`
 `;
 
 interface DiamondsListProps {
-  filterParams: DiamondFilterParams;
+  filterParams: Partial<diamondsApi.DiamondSearchParams>;
+  onFilterChange: (filterName: string, value: any) => void;
 }
 
-const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams }) => {
+const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChange }) => {
   const { data, loading, error, execute: fetchDiamonds } = useApi(diamondsApi.getDiamonds);
-  const [sortColumn, setSortColumn] = useState<string>('price');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortColumn, setSortColumn] = useState<string>(filterParams.sortBy || 'price');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(filterParams.sortOrder || 'asc');
+
+  const currentPage = filterParams.page || 1;
+  const itemsPerPage = filterParams.limit || 10;
 
   useEffect(() => {
-    const paramsToFetch = {
+    const paramsToFetch: diamondsApi.DiamondSearchParams = {
       ...filterParams,
-      sortBy: sortColumn,
-      sortOrder,
+      page: currentPage,
+      limit: itemsPerPage,
+      sortBy: sortColumn === 'relevance' ? undefined : sortColumn,
+      sortOrder: sortColumn === 'relevance' ? undefined : sortOrder,
     };
     fetchDiamonds(paramsToFetch);
-  }, [fetchDiamonds, sortColumn, sortOrder, filterParams]);
+  }, [fetchDiamonds, sortColumn, sortOrder, filterParams, currentPage, itemsPerPage]);
 
   const diamonds = data?.diamonds || [];
   const totalDiamonds = data?.total || 0;
+  const totalPages = Math.ceil(totalDiamonds / itemsPerPage);
 
   const formatPrice = (price: number) => {
     return `€ ${price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} incl. VAT`;
+  };
+
+  const handleTableHeaderSort = (columnApiKey: string) => {
+    if (columnApiKey === 'relevance') return;
+    if (sortColumn === columnApiKey) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(columnApiKey);
+      setSortOrder('asc');
+    }
+  };
+
+  const handleSortDropdownChange = (selectedApiKey: string) => {
+    if (selectedApiKey === 'relevance') {
+      setSortColumn('relevance');
+    } else if (sortColumn === selectedApiKey) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(selectedApiKey);
+      setSortOrder('asc');
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages && newPage !== currentPage) {
+      onFilterChange('page', newPage);
+    }
   };
 
   if (loading) {
@@ -227,21 +254,25 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams }) => {
     { label: 'Price', key: 'price', sortable: true, apiKey: 'price', symbol: '' },
   ];
 
-  const handleSort = (columnKey: string) => {
-    if (sortColumn === columnKey) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-    } else {
-      setSortColumn(columnKey);
-      setSortOrder('asc');
-    }
-  };
+  console.log('[DiamondsList Debug]', {
+    diamondsLength: diamonds.length,
+    totalDiamonds,
+    itemsPerPage,
+    totalPages,
+    currentPage,
+    loading,
+    error,
+  });
 
   return (
     <Page>
       <Head>
         <Title>{totalDiamonds.toLocaleString('de-DE')} Diamonds</Title>
         <Line>
-          <SortingDropdown />
+          <SortingDropdown
+            onSortSelect={handleSortDropdownChange}
+            currentSortByApiKey={sortColumn}
+          />
         </Line>
       </Head>
       <TableContainer>
@@ -250,7 +281,7 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams }) => {
             <TableHeaderCell
               key={header.key}
               className={`col-${header.key}`}
-              onClick={() => header.sortable && handleSort(header.apiKey)}
+              onClick={() => header.sortable && handleTableHeaderSort(header.apiKey)}
             >
               {header.sortable && (
                 <span>
@@ -288,7 +319,9 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams }) => {
           </TableDataRow>
         ))}
       </TableContainer>
-      {diamonds.length > 0 && <Scroll />}
+      {diamonds.length > 0 && totalPages > 0 && (
+        <Scroll currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      )}
     </Page>
   );
 };

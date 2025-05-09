@@ -1,41 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-const Scroll: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const totalPages: number = 968;
+interface ScrollProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
 
+const Scroll: React.FC<ScrollProps> = ({ currentPage, totalPages, onPageChange }) => {
   const handlePageChange = (page: number): void => {
     if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
+      onPageChange(page);
     }
   };
 
   const getVisiblePages = (): (number | string)[] => {
-    const pages: (number | string)[] = [];
-
-    // Start with the current page
-    pages.push(currentPage);
-
-    // Add the next two pages if they exist
-    if (currentPage + 1 <= totalPages) {
-      pages.push(currentPage + 1);
-    }
-    if (currentPage + 2 <= totalPages) {
-      pages.push(currentPage + 2);
+    const visible: (number | string)[] = [];
+    if (totalPages === 0) return []; // If no pages, show nothing.
+    if (totalPages <= 7) {
+      // Show all pages if 7 or less (this handles totalPages === 1 correctly)
+      for (let i = 1; i <= totalPages; i++) {
+        visible.push(i);
+      }
+      return visible;
     }
 
-    // Add ellipsis if the last page we added is not the second-to-last page
-    if (currentPage + 2 < totalPages - 1) {
-      pages.push('...');
+    // Logic for more than 7 pages
+    visible.push(1); // Always show first page
+
+    // Ellipsis after first page if current page is far from start
+    if (currentPage > 3) {
+      visible.push('...');
     }
 
-    // Always add the last page if it's not already included
-    if (currentPage + 2 < totalPages) {
-      pages.push(totalPages);
+    // Pages around current page
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      if (i > 1 && i < totalPages && !visible.includes(i)) {
+        // Ensure not to duplicate 1 or totalPages if they are part of this range
+        visible.push(i);
+      }
     }
 
-    return pages;
+    // Ellipsis before last page if current page is far from end
+    if (currentPage < totalPages - 2) {
+      visible.push('...');
+    }
+
+    // Always show last page (if not already included)
+    if (!visible.includes(totalPages)) {
+      visible.push(totalPages);
+    }
+    return visible;
   };
 
   const Container = styled.div`
@@ -68,6 +86,9 @@ const Scroll: React.FC = () => {
     margin: 0 2px;
     background-color: black;
     cursor: pointer;
+    &:disabled {
+      cursor: not-allowed;
+    }
   `;
 
   const Dots = styled.span`
@@ -79,7 +100,10 @@ const Scroll: React.FC = () => {
 
   return (
     <Container>
-      <ArrowButton onClick={() => handlePageChange(1)} disabled={currentPage === 1}>
+      <ArrowButton
+        onClick={() => handlePageChange(1)}
+        disabled={currentPage === 1 || totalPages === 0}
+      >
         <svg
           width="16"
           height="16"
@@ -94,7 +118,10 @@ const Scroll: React.FC = () => {
           <polyline points="18 17 13 12 18 7"></polyline>
         </svg>
       </ArrowButton>
-      <ArrowButton onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+      <ArrowButton
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1 || totalPages === 0}
+      >
         <svg
           width="16"
           height="16"
@@ -117,6 +144,7 @@ const Scroll: React.FC = () => {
             key={page}
             isActive={page === currentPage}
             onClick={() => handlePageChange(page)}
+            disabled={totalPages === 0}
           >
             {page}
           </PageButton>
@@ -125,7 +153,7 @@ const Scroll: React.FC = () => {
 
       <ArrowButton
         onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || totalPages === 0}
       >
         <svg
           width="16"
@@ -142,7 +170,7 @@ const Scroll: React.FC = () => {
       </ArrowButton>
       <ArrowButton
         onClick={() => handlePageChange(totalPages)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || totalPages === 0}
       >
         <svg
           width="16"

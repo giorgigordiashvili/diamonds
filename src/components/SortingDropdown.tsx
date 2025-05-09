@@ -1,28 +1,42 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const SortingDropdown: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>('Relevance');
+interface SortOption {
+  label: string;
+  apiKey: string;
+}
 
-  const options: string[] = [
-    'Relevance',
-    'Price',
-    'Shape',
-    'Size',
-    'Color',
-    'Clarity',
-    'Cut',
-    'Lab',
-  ];
+const sortOptions: SortOption[] = [
+  { label: 'Relevance', apiKey: 'relevance' },
+  { label: 'Price', apiKey: 'price' },
+  { label: 'Shape', apiKey: 'shape' },
+  { label: 'Size', apiKey: 'carat' },
+  { label: 'Color', apiKey: 'color' },
+  { label: 'Clarity', apiKey: 'clarity' },
+  { label: 'Cut', apiKey: 'cut' },
+  { label: 'Lab', apiKey: 'certificate' },
+];
+
+interface SortingDropdownProps {
+  onSortSelect: (sortByApiKey: string) => void;
+  currentSortByApiKey: string;
+}
+
+const SortingDropdown: React.FC<SortingDropdownProps> = ({ onSortSelect, currentSortByApiKey }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleDropdown = (): void => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (option: string): void => {
-    setSelectedOption(option);
+  const handleOptionClick = (option: SortOption): void => {
+    onSortSelect(option.apiKey);
     setIsOpen(false);
+  };
+
+  const getCurrentLabel = () => {
+    const currentOption = sortOptions.find((opt) => opt.apiKey === currentSortByApiKey);
+    return currentOption ? currentOption.label : 'Relevance';
   };
 
   const DropdownContainer = styled.div`
@@ -45,7 +59,7 @@ const SortingDropdown: React.FC = () => {
     border: none;
     color: rgba(168, 168, 168, 1);
     font-weight: 400;
-    font-size: 12;
+    font-size: 12px;
 
     &:focus {
       outline: none;
@@ -58,6 +72,9 @@ const SortingDropdown: React.FC = () => {
     z-index: 10;
     width: 100%;
     border-bottom: none;
+    background-color: #333;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   `;
 
   const OptionButton = styled.button<{ isHighlighted: boolean }>`
@@ -65,19 +82,22 @@ const SortingDropdown: React.FC = () => {
     font-size: 14px;
     text-align: left;
     border: none;
-    padding-left: 4px;
+    padding: 8px 12px;
     font-size: unset;
+    background-color: ${({ isHighlighted }) =>
+      isHighlighted ? 'rgba(80,80,80,1)' : 'transparent'};
+    color: white;
 
     &:hover {
-      background-color: gray;
+      background-color: rgba(70, 70, 70, 1);
     }
     &:last-of-type {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
     }
     &:first-of-type {
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
     }
   `;
 
@@ -86,7 +106,7 @@ const SortingDropdown: React.FC = () => {
       <DropdownContainer>
         <span>Sorting: </span>
         <DropdownButton onClick={toggleDropdown}>
-          <span>{selectedOption}</span>
+          <span>{getCurrentLabel()}</span>
           <svg
             style={{ width: '20px', height: '20px', marginLeft: '8px', marginRight: '-4px' }}
             xmlns="http://www.w3.org/2000/svg"
@@ -101,13 +121,13 @@ const SortingDropdown: React.FC = () => {
           </svg>
           {isOpen && (
             <DropdownMenu>
-              {options.map((option) => (
+              {sortOptions.map((option) => (
                 <OptionButton
-                  key={option}
-                  isHighlighted={option === 'Shape'}
+                  key={option.apiKey}
+                  isHighlighted={option.apiKey === currentSortByApiKey}
                   onClick={() => handleOptionClick(option)}
                 >
-                  {option}
+                  {option.label}
                 </OptionButton>
               ))}
             </DropdownMenu>
