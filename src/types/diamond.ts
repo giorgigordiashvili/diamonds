@@ -9,7 +9,8 @@ export type Shape =
   | 'Radiant'
   | 'Cushion'
   | 'Asscher'
-  | 'Heart';
+  | 'Heart'
+  | 'Pear';
 
 export type Color = 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M';
 

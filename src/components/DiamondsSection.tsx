@@ -1,14 +1,16 @@
 'use client';
-import React, { useState } from 'react';
-import Dualslider from './Slider';
-import styled from 'styled-components';
+import { diamondsApi } from '@/api';
+import { Shape } from '@/types/diamond';
 import Image from 'next/image';
-import DiamondsPicker from './DiamondsPicker';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Certificate from './Certificate';
 import ClarityDropwown from './Claruty';
 import ColorDropdown from './Color';
+import DiamondsPicker from './DiamondsPicker';
 import Fluorescence from './Fluorescence';
-import Certificate from './Certificate';
 import Professional from './Proffesionall';
+import Dualslider from './Slider';
 
 const Main = styled.div`
   width: 100%;
@@ -91,7 +93,12 @@ const ShowButton = styled.div`
   }
 `;
 
-const DiamondsSection = () => {
+interface DiamondsSectionProps {
+  onFilterChange: (filterName: string, value: any) => void;
+  currentFilters: Partial<diamondsApi.DiamondSearchParams>;
+}
+
+const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, currentFilters }) => {
   const [showPicker, setShowPicker] = useState(true);
   const [showCarat, setShowCarat] = useState(true);
   const [showCut, setShowCut] = useState(false);
@@ -103,6 +110,10 @@ const DiamondsSection = () => {
   const [showFluorescence, setShowFluorescence] = useState(false);
   const [showCertrificate, setShowCertrificate] = useState(false);
   const [showProf, setShowProf] = useState(false);
+
+  const handleShapeChange = (shape: Shape | undefined) => {
+    onFilterChange('shape', shape);
+  };
 
   return (
     <Main>
@@ -119,7 +130,12 @@ const DiamondsSection = () => {
             />
           </Arrow>
         </Filter>
-        {showPicker && <DiamondsPicker />}
+        {showPicker && (
+          <DiamondsPicker
+            onShapeChange={handleShapeChange}
+            selectedShape={currentFilters.shape as Shape}
+          />
+        )}
         {/* carat Filter */}
         <Filter onClick={() => setShowCarat((prev) => !prev)}>
           <Title>Carat</Title>
@@ -148,7 +164,7 @@ const DiamondsSection = () => {
         {showColor && <ColorDropdown />}
         {/* clarity Filter */}
         <Filter onClick={() => setShowClarity((prev) => !prev)}>
-          <Title>Carat</Title>
+          <Title>Clarity</Title>
           <Arrow rotated={showClarity}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}

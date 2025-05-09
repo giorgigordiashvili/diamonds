@@ -1,6 +1,7 @@
+import { diamondsApi } from '@/api'; // Import diamondsApi
 import React from 'react';
-import DiamondsSection from './DiamondsSection';
 import styled from 'styled-components';
+import DiamondsSection from './DiamondsSection';
 
 const Aside = styled.div`
   width: 100%;
@@ -40,9 +41,11 @@ const Close = styled.div`
 
 interface MobileFilterProps {
   onClose: () => void;
+  onFilterChange: (filterName: string, value: any) => void;
+  currentFilters: Partial<diamondsApi.DiamondSearchParams>; // Add currentFilters prop
 }
 
-const MobileFilter: React.FC<MobileFilterProps> = ({ onClose }) => {
+const MobileFilter: React.FC<MobileFilterProps> = ({ onClose, onFilterChange, currentFilters }) => {
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose(); // Only close if the actual background (Aside) is clicked
@@ -52,7 +55,8 @@ const MobileFilter: React.FC<MobileFilterProps> = ({ onClose }) => {
   return (
     <Aside onClick={handleBackgroundClick}>
       <Filter onClick={(e) => e.stopPropagation()}>
-        <DiamondsSection />
+        {/* Pass onFilterChange and currentFilters to DiamondsSection */}
+        <DiamondsSection onFilterChange={onFilterChange} currentFilters={currentFilters} />
       </Filter>
       <Close onClick={onClose}>×</Close>
     </Aside>

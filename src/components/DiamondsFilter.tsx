@@ -1,4 +1,5 @@
 'use client';
+import { diamondsApi } from '@/api';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DiamondsSection from './DiamondsSection';
@@ -19,7 +20,12 @@ const Head = styled.div`
   }
 `;
 
-const DiamondsFilter = () => {
+interface DiamondsFilterProps {
+  onFilterChange: (filterName: string, value: any) => void;
+  currentFilters: Partial<diamondsApi.DiamondSearchParams>; // Add currentFilters prop
+}
+
+const DiamondsFilter: React.FC<DiamondsFilterProps> = ({ onFilterChange, currentFilters }) => {
   const [showFilter, setShowFilter] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -34,7 +40,15 @@ const DiamondsFilter = () => {
     <div>
       <Head onClick={() => setShowFilter((prev) => !prev)}>Configure diamond</Head>
       {showFilter &&
-        (isMobile ? <MobileFilter onClose={() => setShowFilter(false)} /> : <DiamondsSection />)}
+        (isMobile ? (
+          <MobileFilter
+            onClose={() => setShowFilter(false)}
+            onFilterChange={onFilterChange}
+            currentFilters={currentFilters} // Pass currentFilters
+          />
+        ) : (
+          <DiamondsSection onFilterChange={onFilterChange} currentFilters={currentFilters} /> // Pass currentFilters
+        ))}
     </div>
   );
 };
