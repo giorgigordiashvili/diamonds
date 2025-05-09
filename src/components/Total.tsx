@@ -2,12 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Main = styled.div`
-  width: 100%;
-  padding: 36px 40px;
-  background-color: #1a1a1a;
-  height: fit-content;
-  border: 1px solid #7d7d7d;
-  border-top: unset;
   div {
     padding-inline: 8px;
     display: flex;
