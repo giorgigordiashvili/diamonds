@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Certificate from './Certificate';
 import ClarityDropwown from './Claruty';
 import ColorDropdown from './Color';
+import CutDropdown from './Cut';
 import DiamondsPicker from './DiamondsPicker';
 import Fluorescence from './Fluorescence';
 import Professional from './Proffesionall';
@@ -96,7 +97,12 @@ const ShowButton = styled.div`
 interface DiamondsSectionProps {
   onFilterChange: (filterName: string, value: any) => void;
   currentFilters: Partial<
-    diamondsApi.DiamondSearchParams & { clarityMin?: string; clarityMax?: string }
+    diamondsApi.DiamondSearchParams & {
+      clarityMin?: string;
+      clarityMax?: string;
+      cutMin?: string;
+      cutMax?: string;
+    }
   >;
 }
 
@@ -130,6 +136,11 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
   const handleColorChange = (min: string | undefined, max: string | undefined) => {
     onFilterChange('colorMin', min);
     onFilterChange('colorMax', max);
+  };
+
+  const handleCutChange = (min: string | undefined, max: string | undefined) => {
+    onFilterChange('cutMin', min);
+    onFilterChange('cutMax', max);
   };
 
   return (
@@ -224,7 +235,13 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
             />
           </Arrow>
         </Filter>
-        {showCut && <Dualslider type="dashed" />}
+        {showCut && (
+          <CutDropdown
+            onCutChange={handleCutChange}
+            initialMin={currentFilters.cutMin}
+            initialMax={currentFilters.cutMax}
+          />
+        )}
         {/* Polish Filter */}
         <Filter onClick={() => setShowPolish((prev) => !prev)}>
           <Title>Polish</Title>

@@ -107,7 +107,29 @@ export async function GET(request: NextRequest) {
       if (clarity !== null) filter.clarity = clarity;
     }
 
-    if (searchParams.has('cut')) {
+    // Handle cutMin and cutMax
+    const cutOrder = ['Excellent', 'Very Good', 'Good', 'Fair', 'Poor'];
+    const cutMin = searchParams.get('cutMin');
+    const cutMax = searchParams.get('cutMax');
+
+    if (cutMin && cutMax) {
+      const minIndex = cutOrder.indexOf(cutMin);
+      const maxIndex = cutOrder.indexOf(cutMax);
+      if (minIndex !== -1 && maxIndex !== -1 && minIndex <= maxIndex) {
+        filter.cut = { $in: cutOrder.slice(minIndex, maxIndex + 1) };
+      }
+    } else if (cutMin) {
+      const minIndex = cutOrder.indexOf(cutMin);
+      if (minIndex !== -1) {
+        filter.cut = { $in: cutOrder.slice(minIndex) };
+      }
+    } else if (cutMax) {
+      const maxIndex = cutOrder.indexOf(cutMax);
+      if (maxIndex !== -1) {
+        filter.cut = { $in: cutOrder.slice(0, maxIndex + 1) };
+      }
+    } else if (searchParams.has('cut')) {
+      // Keep existing single cut filter
       const cut = searchParams.get('cut');
       if (cut !== null) filter.cut = cut;
     }
