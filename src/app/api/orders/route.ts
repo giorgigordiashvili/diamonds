@@ -1,6 +1,6 @@
 import { connectToDatabase } from '@/lib/mongodb';
 import { authenticate } from '@/middleware/auth';
-import { Order } from '@/types/order';
+import { Order, OrderStatus } from '@/types/order';
 import { ObjectId, Sort } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -134,11 +134,11 @@ export async function POST(request: NextRequest) {
 
     // Set default status if not provided
     if (!orderData.status) {
-      orderData.status = 'Pending';
+      orderData.status = OrderStatus.Pending;
     }
 
     // Validate all diamond IDs in the order
-    const diamondIds = orderData.items.map((item) => item.diamondId);
+    const diamondIds = orderData.items.map((item) => item.diamond.id);
     const validDiamonds = await db
       .collection('diamonds')
       .find({
@@ -162,7 +162,10 @@ export async function POST(request: NextRequest) {
       updatedAt: timestamp,
     };
 
-    const result = await db.collection('orders').insertOne(newOrder);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, ...orderWithoutId } = newOrder;
+
+    const result = await db.collection('orders').insertOne(orderWithoutId);
 
     // Return the created order with the id
     const createdOrder = {

@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 export interface User {
   _id?: ObjectId;
   id?: string;
+  name?: string; // Add name property
   email: string;
   password: string; // This will store the hashed password
   firstName: string;
@@ -14,6 +15,7 @@ export interface User {
 
 export interface UserResponse {
   id: string;
+  name?: string; // Add name property
   email: string;
   firstName: string;
   lastName: string;

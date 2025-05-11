@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DiamondsTab from './AdminDashboard/DiamondsTab';
+import OrdersTab from './AdminDashboard/OrdersTab'; // Import OrdersTab
+import UsersTab from './AdminDashboard/UsersTab'; // Import UsersTab
 
 const AdminContainer = styled.div`
   padding: 20px;
@@ -111,11 +113,10 @@ export default function AdminDashboardClient({ adminDict, lang }: AdminDashboard
       case 'diamonds':
         return <DiamondsTab adminDict={adminDict} />;
       case 'users':
-        return <div>{adminDict.tabs.users}</div>;
-      case 'carts':
-        return <div>{adminDict.tabs.carts}</div>;
+        return <UsersTab adminDict={adminDict} lang={lang} />; // Pass lang to UsersTab
+
       case 'orders':
-        return <div>{adminDict.tabs.orders}</div>;
+        return <OrdersTab adminDict={adminDict} lang={lang} />; // Pass lang to OrdersTab
       default:
         return null;
     }

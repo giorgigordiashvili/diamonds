@@ -252,6 +252,7 @@ export async function POST(request: NextRequest) {
     const timestamp = new Date();
     const newDiamond = {
       ...diamond,
+      inStock: diamond.inStock === undefined ? true : diamond.inStock, // Default inStock to true if not provided
       createdAt: timestamp,
       updatedAt: timestamp,
     };
@@ -259,14 +260,11 @@ export async function POST(request: NextRequest) {
     const result = await db.collection('diamonds').insertOne(newDiamond);
 
     // Create the response object with the server-generated id and all relevant properties
-    // We don't need to extract the id from the diamond object, we can just use spread
-    // and then override it with our server-generated id
     const createdDiamond = {
-      ...diamond, // This includes all diamond properties
-      id: result.insertedId.toString(), // This overrides any client-provided id
-      createdAt: timestamp,
-      updatedAt: timestamp,
+      ...newDiamond, // Use newDiamond to include the defaulted inStock
+      id: result.insertedId.toString(),
     };
+    delete (createdDiamond as any)._id; // Ensure client-provided _id (if any) is removed, rely on DB _id via id string
 
     return NextResponse.json(createdDiamond, { status: 201 });
   } catch (error: unknown) {

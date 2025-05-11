@@ -163,16 +163,16 @@ const Cartitems: React.FC<CartitemsProps> = ({ items, removeFromCart, updateQuan
           <DiamondStyled key={item.diamondId}>
             <Item>
               <Image
-                src={item.diamond.image || '/assets/diamonds/Diamant.png'}
-                alt={item.diamond.name_en || 'Diamond'}
+                src={item?.diamond?.image || '/assets/diamonds/Diamant.png'}
+                alt={item?.diamond?.name_en || 'Diamond'}
                 width={70}
                 height={70}
                 style={{ objectFit: 'cover', borderRadius: '4px' }}
               />
               <Desc>
-                <Name>{item.diamond.name_en}</Name>
+                <Name>{item?.diamond?.name_en}</Name>
                 <Description>
-                  {`Shape: ${item.diamond.shape}, Carat: ${item.diamond.carat.toFixed(2)}, Color: ${item.diamond.color}, Clarity: ${item.diamond.clarity}`}
+                  {`Shape: ${item?.diamond?.shape}, Carat: ${item?.diamond?.carat.toFixed(2)}, Color: ${item?.diamond?.color}, Clarity: ${item?.diamond?.clarity}`}
                 </Description>
                 <Moreinfo>
                   <QuantityControl>

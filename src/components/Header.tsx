@@ -2,6 +2,7 @@
 import { useCart } from '@/context/CartContext'; // Import useCart
 import Image from 'next/image';
 import Link from 'next/link'; // Import Link for navigation
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LoginPopup from './LoginPopup'; // Import LoginPopup
@@ -144,7 +145,7 @@ const Header = () => {
   const [userName, setUserName] = useState('');
   const { getCartCount } = useCart(); // Get cart count
   const cartItemCount = getCartCount();
-
+  const pathname = usePathname();
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -175,6 +176,7 @@ const Header = () => {
     setShowRegisterPopup(true);
   };
 
+  if (pathname?.includes('admin')) return null;
   return (
     <>
       <Styledhead>

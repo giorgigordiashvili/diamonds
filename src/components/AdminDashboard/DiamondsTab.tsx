@@ -4,7 +4,8 @@ import { getDictionary } from '@/get-dictionary';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import DiamondForm, { Diamond } from './DiamondForm'; // Import the new DiamondForm component and Diamond interface
+import { Diamond } from '../../types/diamond'; // Import Diamond from types
+import DiamondForm from './DiamondForm'; // Import the new DiamondForm component
 
 // Styled components (can be moved to a shared file or defined within AdminDashboardClient if preferred)
 const Table = styled.table`
@@ -98,6 +99,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
     description_en: '', // Changed from description
     description_ka: '', // Added
     image: '',
+    inStock: 0, // Default inStock to 0 for new diamonds
   };
 
   const handleEdit = (diamond: Diamond) => {
@@ -151,11 +153,20 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    let processedValue: string | number = value;
+    const { name, value, type } = e.target;
+    let processedValue: string | number | boolean = value;
 
-    if (e.target instanceof HTMLInputElement && e.target.type === 'number') {
+    if (type === 'number') {
       processedValue = parseFloat(value) || 0;
+    } else if (name === 'inStock') {
+      // Keep inStock as a number
+      processedValue = parseInt(value, 10);
+      if (isNaN(processedValue)) {
+        processedValue = 0; // Default to 0 if parsing fails
+      }
+    } else if (type === 'checkbox') {
+      // This case might no longer be needed if no other checkboxes exist
+      processedValue = (e.target as HTMLInputElement).checked;
     }
 
     if (currentDiamond) {
@@ -225,6 +236,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
               <th>{adminDict.diamondsTable.headerColor}</th>
               <th>{adminDict.diamondsTable.headerClarity}</th>
               <th>{adminDict.diamondsTable.headerPrice}</th>
+              <th>{adminDict.diamondsTable.headerInStock}</th> {/* Added In Stock header */}
               <th>{adminDict.diamondsTable.headerImage}</th>
               <th>{adminDict.diamondsTable.headerActions}</th>
             </tr>
@@ -240,6 +252,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
                 <td>{diamond.color}</td>
                 <td>{diamond.clarity}</td>
                 <td>${diamond.price.toLocaleString()}</td>
+                <td>{diamond.inStock}</td> {/* Display In Stock quantity */}
                 <td>
                   {diamond.image ? (
                     <a
@@ -272,7 +285,8 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
             ))}
             {diamonds.length === 0 && (
               <tr>
-                <td colSpan={10} style={{ textAlign: 'center' }}>
+                <td colSpan={11} style={{ textAlign: 'center' }}>
+                  {/* Adjusted colSpan */}
                   {adminDict.diamondsTable.noDiamondsFound}
                 </td>
               </tr>

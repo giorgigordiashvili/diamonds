@@ -82,7 +82,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     // If updating items, validate diamond IDs
     if (updateData.items && updateData.items.length > 0) {
-      const diamondIds = updateData.items.map((item) => item.diamondId);
+      const diamondIds = updateData.items.map((item) => item.diamond.id);
 
       try {
         const validDiamonds = await db

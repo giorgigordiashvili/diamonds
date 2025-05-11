@@ -13,6 +13,7 @@
     "go_to_nextjs": "Go to nextjs.org →"
   },
   "admin": {
+    "closeButton": "Close",
     "loading": "Loading...",
     "dashboardTitle": "Diamond Admin Dashboard",
     "logout": "Logout",
@@ -27,7 +28,9 @@
       "users": "Users"
     },
     "placeholders": {
-      "ordersManagementSoon": "Orders management coming soon..."
+      "users": "Users management coming soon...",
+      "carts": "Carts management coming soon...",
+      "orders": "Orders management coming soon..."
     },
     "diamondForm": {
       "editTitle": "Edit Diamond",
@@ -48,6 +51,7 @@
       "descriptionLabel": "Description",
       "descriptionEnLabel": "Description (EN)",
       "descriptionKaLabel": "Description (KA)",
+      "inStockLabel": "In Stock",
       "currentImageLabel": "Current Image",
       "saveButton": "Save",
       "cancelButton": "Cancel",
@@ -122,6 +126,7 @@
       "headerClarity": "Clarity",
       "headerPrice": "Price",
       "headerImage": "Image",
+      "headerInStock": "In Stock",
       "headerActions": "Actions",
       "viewAction": "View",
       "noImage": "None",
@@ -137,7 +142,89 @@
       "headerCreatedAt": "Created At",
       "headerActions": "Actions",
       "makeAdminAction": "Make Admin",
-      "noUsersFound": "No users found"
+      "removeAdminAction": "Remove Admin",
+      "deleteAction": "Delete",
+      "noUsersFound": "No users found",
+      "confirmPromoteUser": "Are you sure you want to promote this user to admin?",
+      "confirmDemoteUser": "Are you sure you want to demote this user from admin?",
+      "confirmDeleteUser": "Are you sure you want to delete this user?",
+      "userPromotedSuccess": "User promoted to admin successfully.",
+      "userDemotedSuccess": "User demoted from admin successfully.",
+      "userDeletedSuccess": "User deleted successfully.",
+      "userPromoteFailed": "Failed to promote user to admin.",
+      "userDemoteFailed": "Failed to demote user from admin.",
+      "userDeleteFailed": "Failed to delete user."
+    },
+    "orderDetails": {
+      "title": "Order Details",
+      "backToOrders": "Back to Orders",
+      "loading": "Loading order details...",
+      "notFound": "Order not found.",
+      "orderIdLabel": "Order ID:",
+      "customerLabel": "Customer:",
+      "customerEmailLabel": "Email:",
+      "customerPhoneLabel": "Phone:",
+      "orderDateLabel": "Order Date:",
+      "orderStatusLabel": "Status:",
+      "totalAmountLabel": "Total Amount:",
+      "shippingAddressLabel": "Shipping Address:",
+      "billingAddressLabel": "Billing Address:",
+      "itemsTable": {
+        "title": "Order Items",
+        "headerImage": "Image",
+        "headerName": "Name",
+        "headerShape": "Shape",
+        "headerCarat": "Carat",
+        "headerColor": "Color",
+        "headerClarity": "Clarity",
+        "headerPrice": "Price",
+        "headerQuantity": "Quantity",
+        "headerTotal": "Total"
+      },
+      "paymentDetails": {
+        "title": "Payment Details",
+        "paymentIdLabel": "Payment ID:",
+        "paymentMethodLabel": "Method:",
+        "paymentStatusLabel": "Status:",
+        "transactionIdLabel": "Transaction ID:"
+      },
+      "updateStatusButton": "Update Status",
+      "printInvoiceButton": "Print Invoice",
+      "status": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "refunded": "Refunded"
+      },
+      "updateStatusModal": {
+        "title": "Update Order Status",
+        "newStatusLabel": "New Status:",
+        "updateButton": "Update",
+        "cancelButton": "Cancel"
+      }
+    },
+    "cartsManagement": {
+      "fetchCartsError": "Failed to fetch carts",
+      "loadingCarts": "Loading carts...",
+      "noCartsFound": "No carts found.",
+      "cartId": "Cart ID",
+      "user": "User",
+      "items": "Items",
+      "totalPrice": "Total Price",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "guestUser": "Guest",
+      "quantity": "Quantity"
+    },
+    "userManagement": {
+      "name": "Name",
+      "email": "Email"
+    },
+    "diamondManagement": {
+      "diamondName": "Diamond",
+      "price": "Price"
     },
     "cartsTable": {
       "headerId": "ID",
@@ -270,10 +357,15 @@
       "paymentStatusUpdateFailed": "Failed to update payment status",
       "confirmDeleteDiamond": "Are you sure you want to delete this diamond?",
       "confirmPromoteUser": "Are you sure you want to promote this user to admin?",
-      "userPromotedSuccess": "User has been promoted to admin",
-      "userPromoteFailed": "Failed to promote user: {error}",
-      "userPromoteError": "An error occurred while promoting the user"
-    }
+      "userPromotedSuccess": "User promoted to admin successfully.",
+      "userPromoteFailed": "Failed to promote user to admin: {error}",
+      "userPromoteError": "An error occurred while promoting the user to admin.",
+      "confirmDemoteUser": "Are you sure you want to demote this user from admin?",
+      "userDemotedSuccess": "User demoted from admin successfully.",
+      "userDemoteFailed": "Failed to demote user from admin."
+    },
+    "yes": "Yes",
+    "no": "No"
   },
   "pageContent": {
     "uniqueGift": {

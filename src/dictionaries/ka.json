@@ -13,6 +13,7 @@
     "go_to_nextjs": "გადადით nextjs.org-ზე →"
   },
   "admin": {
+    "closeButton": "დახურვა",
     "loading": "იტვირთება...",
     "dashboardTitle": "ალმასების ადმინისტრირების პანელი",
     "logout": "გასვლა",
@@ -27,7 +28,9 @@
       "users": "მომხმარებლები"
     },
     "placeholders": {
-      "ordersManagementSoon": "შეკვეთების მართვა მალე დაემატება..."
+      "users": "მომხმარებლების მართვა მალე დაემატება...",
+      "carts": "კალათების მართვა მალე დაემატება...",
+      "orders": "შეკვეთების მართვა მალე დაემატება..."
     },
     "diamondForm": {
       "editTitle": "ალმასის რედაქტირება",
@@ -48,6 +51,7 @@
       "descriptionLabel": "აღწერა",
       "descriptionEnLabel": "აღწერა (EN)",
       "descriptionKaLabel": "აღწერა (KA)",
+      "inStockLabel": "მარაგშია",
       "currentImageLabel": "მიმდინარე სურათი",
       "saveButton": "შენახვა",
       "cancelButton": "გაუქმება",
@@ -111,33 +115,41 @@
       }
     },
     "diamondsTable": {
-      "addNewButton": "ახალი ალმასის დამატება",
+      "addNewButton": "ახალი ბრილიანტის დამატება",
       "headerId": "ID",
-      "headerName": "დასახელება",
-      "headerNameEn": "დასახელება (EN)",
-      "headerNameKa": "დასახელება (KA)",
+      "headerName": "სახელი",
+      "headerNameEn": "სახელი (EN)",
+      "headerNameKa": "სახელი (KA)",
       "headerShape": "ფორმა",
       "headerCarat": "კარატი",
       "headerColor": "ფერი",
       "headerClarity": "სისუფთავე",
       "headerPrice": "ფასი",
       "headerImage": "სურათი",
+      "headerInStock": "საწყობშია",
       "headerActions": "მოქმედებები",
       "viewAction": "ნახვა",
       "noImage": "არცერთი",
       "editAction": "რედაქტირება",
       "deleteAction": "წაშლა",
-      "noDiamondsFound": "ალმასები ვერ მოიძებნა"
+      "noDiamondsFound": "ბრილიანტები ვერ მოიძებნა"
     },
     "usersTable": {
       "headerId": "ID",
       "headerName": "სახელი",
-      "headerEmail": "ელ.ფოსტა",
+      "headerEmail": "ელ. ფოსტა",
       "headerRole": "როლი",
-      "headerCreatedAt": "შექმნის თარიღი",
+      "headerCreatedAt": "შექმნის დრო",
       "headerActions": "მოქმედებები",
       "makeAdminAction": "ადმინად დაყენება",
-      "noUsersFound": "მომხმარებლები ვერ მოიძებნა"
+      "removeAdminAction": "ადმინის მოხსნა",
+      "noUsersFound": "მომხმარებლები ვერ მოიძებნა",
+      "confirmPromoteUser": "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებლის ადმინად დაყენება?",
+      "confirmDemoteUser": "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებელს ადმინის სტატუსის მოხსნა?",
+      "userPromotedSuccess": "მომხმარებელი წარმატებით დაინიშნა ადმინად.",
+      "userDemotedSuccess": "მომხმარებელს წარმატებით მოეხსნა ადმინის სტატუსი.",
+      "userPromoteFailed": "მომხმარებლის ადმინად დაყენება ვერ მოხერხდა.",
+      "userDemoteFailed": "მომხმარებლისთვის ადმინის სტატუსის მოხსნა ვერ მოხერხდა."
     },
     "cartsTable": {
       "headerId": "ID",
@@ -154,7 +166,15 @@
       "viewDetailsAction": "დეტალების ნახვა",
       "clearAction": "გასუფთავება",
       "toOrderAction": "შეკვეთაზე გადაყვანა",
-      "noCartsFound": "აქტიური კალათები ვერ მოიძებნა"
+      "noCartsFound": "აქტიური კალათები ვერ მოიძებნა",
+      "confirmDeleteDiamond": "დარწმუნებული ხართ, რომ გსურთ ამ ბრილიანტის წაშლა?",
+      "confirmPromoteUser": "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებლის ადმინად დაყენება?",
+      "userPromotedSuccess": "მომხმარებელი წარმატებით დაინიშნა ადმინად.",
+      "userPromoteFailed": "მომხმარებლის ადმინად დაყენება ვერ მოხერხდა: {error}",
+      "userPromoteError": "მომხმარებლის ადმინად დაყენებისას მოხდა შეცდომა.",
+      "confirmDemoteUser": "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებელს ადმინის სტატუსის მოხსნა?",
+      "userDemotedSuccess": "მომხმარებელს წარმატებით მოეხსნა ადმინის სტატუსი.",
+      "userDemoteFailed": "მომხმარებლისთვის ადმინის სტატუსის მოხსნა ვერ მოხერხდა."
     },
     "cartModal": {
       "title": "კალათის დეტალები",
@@ -217,6 +237,67 @@
       "cancelOrderButton": "შეკვეთის გაუქმება",
       "closeButton": "დახურვა"
     },
+    "orderDetails": {
+      "title": "დეტალები შეკვეთის",
+      "backToOrders": "შეკვეთებზე დაბრუნება",
+      "loading": "შეკვეთის დეტალების ჩატვირთვა...",
+      "notFound": "შეკვეთა ვერ მოიძებნა.",
+      "orderIdLabel": "შეკვეთის ID:",
+      "customerLabel": "მომხმარებელი:",
+      "customerEmailLabel": "ელ.ფოსტა:",
+      "customerPhoneLabel": "ტელეფონი:",
+      "orderDateLabel": "შეკვეთის თარიღი:",
+      "orderStatusLabel": "სტატუსი:",
+      "totalAmountLabel": "სრული თანხა:",
+      "shippingAddressLabel": "მიწოდების მისამართი:",
+      "billingAddressLabel": "გადახდის მისამართი:",
+      "itemsTable": {
+        "title": "შეკვეთის ერთეულები",
+        "headerImage": "სურათი",
+        "headerName": "დასახელება",
+        "headerShape": "ფორმა",
+        "headerCarat": "კარატი",
+        "headerColor": "ფერი",
+        "headerClarity": "სისუფთავე",
+        "headerPrice": "ფასი",
+        "headerQuantity": "რაოდენობა",
+        "headerTotal": "სულ"
+      },
+      "paymentDetails": {
+        "title": "გადახდის დეტალები",
+        "paymentIdLabel": "გადახდის ID:",
+        "paymentMethodLabel": "მეთოდი:",
+        "paymentStatusLabel": "სტატუსი:",
+        "transactionIdLabel": "ტრანზაქციის ID:"
+      },
+      "updateStatusButton": "სტატუსის განახლება",
+      "printInvoiceButton": "ინვოისის ამობეჭდვა",
+      "status": {
+        "pending": "მომლოდინე",
+        "processing": "დამუშავების პროცესშია",
+        "shipped": "გაგზავნილია",
+        "delivered": "მიწოდებულია",
+        "cancelled": "გაუქმებულია",
+        "refunded": "თანხა დაბრუნებულია"
+      },
+      "updateStatusModal": {
+        "title": "შეკვეთის სტატუსის განახლება",
+        "newStatusLabel": "ახალი სტატუსი:",
+        "updateButton": "განახლება",
+        "cancelButton": "გაუქმება"
+      }
+    },
+    "cartsManagement": {
+      "headerId": "ID",
+      "headerUser": "მომხმარებელი",
+      "headerItems": "ნივთები",
+      "headerTotalValue": "სრული ღირებულება",
+      "headerLastUpdated": "ბოლო განახლება",
+      "headerActions": "მოქმედებები",
+      "viewDetailsAction": "დეტალების ნახვა",
+      "clearCartAction": "კალათის გასუფთავება",
+      "noCartsFound": "კალათები ვერ მოიძებნა"
+    },
     "paymentsTable": {
       "headerId": "ID",
       "headerOrderId": "შეკვეთის ID",
@@ -268,12 +349,17 @@
       "confirmUpdatePaymentStatus": "დარწმუნებული ხართ, რომ გსურთ ამ გადახდის მონიშვნა როგორც {status}?",
       "paymentStatusUpdatedSuccess": "გადახდა მონიშნულია როგორც {status}",
       "paymentStatusUpdateFailed": "გადახდის სტატუსის განახლება ვერ მოხერხდა",
-      "confirmDeleteDiamond": "დარწმუნებული ხართ, რომ გსურთ ამ ალმასის წაშლა?",
+      "confirmDeleteDiamond": "დარწმუნებული ხართ, რომ გსურთ ამ ბრილიანტის წაშლა?",
       "confirmPromoteUser": "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებლის ადმინად დაყენება?",
-      "userPromotedSuccess": "მომხმარებელი წარმატებით დაყენდა ადმინად",
+      "userPromotedSuccess": "მომხმარებელი წარმატებით დაინიშნა ადმინად.",
       "userPromoteFailed": "მომხმარებლის ადმინად დაყენება ვერ მოხერხდა: {error}",
-      "userPromoteError": "მომხმარებლის ადმინად დაყენებისას მოხდა შეცდომა"
-    }
+      "userPromoteError": "მომხმარებლის ადმინად დაყენებისას მოხდა შეცდომა.",
+      "confirmDemoteUser": "დარწმუნებული ხართ, რომ გსურთ ამ მომხმარებელს ადმინის სტატუსის მოხსნა?",
+      "userDemotedSuccess": "მომხმარებელს წარმატებით მოეხსნა ადმინის სტატუსი.",
+      "userDemoteFailed": "მომხმარებლისთვის ადმინის სტატუსის მოხსნა ვერ მოხერხდა."
+    },
+    "yes": "დიახ",
+    "no": "არა"
   },
   "pageContent": {
     "uniqueGift": {

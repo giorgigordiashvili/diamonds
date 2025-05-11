@@ -93,43 +93,52 @@ export default function CartExample() {
 
       <div className="cart-items">
         {cart.items.map((item) => (
-          <div key={item.diamond.id} className="cart-item">
+          <div key={item?.diamond?.id} className="cart-item">
             <div className="item-image">
-              {item.diamond.image && (
+              {item?.diamond?.image && (
                 <img
-                  src={item.diamond.image}
-                  alt={item.diamond.name_en}
+                  src={item?.diamond?.image}
+                  alt={item?.diamond?.name_en}
                   style={{ width: 80, height: 80, objectFit: 'cover' }}
                 />
               )}
             </div>
 
             <div className="item-details">
-              <h3>{item.diamond.name_en}</h3>
+              <h3>{item?.diamond?.name_en}</h3>
               <p>
-                {item.diamond.carat}ct {item.diamond.color} {item.diamond.clarity}
+                {item?.diamond?.carat}ct {item?.diamond?.color} {item?.diamond?.clarity}
               </p>
-              <p>Shape: {item.diamond.shape}</p>
+              <p>Shape: {item?.diamond?.shape}</p>
             </div>
 
             <div className="item-price">${item.price.toLocaleString()}</div>
 
             <div className="item-quantity">
               <button
-                onClick={() => handleUpdateQuantity(item.diamond.id, item.quantity - 1)}
+                onClick={() =>
+                  item?.diamond?.id && handleUpdateQuantity(item.diamond.id, item.quantity - 1)
+                }
                 disabled={item.quantity <= 1}
               >
                 -
               </button>
               <span>{item.quantity}</span>
-              <button onClick={() => handleUpdateQuantity(item.diamond.id, item.quantity + 1)}>
+              <button
+                onClick={() =>
+                  item?.diamond?.id && handleUpdateQuantity(item.diamond.id, item.quantity + 1)
+                }
+              >
                 +
               </button>
             </div>
 
             <div className="item-subtotal">${(item.price * item.quantity).toLocaleString()}</div>
 
-            <button className="remove-button" onClick={() => handleRemoveItem(item.diamond.id)}>
+            <button
+              className="remove-button"
+              onClick={() => item?.diamond?.id && handleRemoveItem(item.diamond.id)}
+            >
               Remove
             </button>
           </div>

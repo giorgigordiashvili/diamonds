@@ -71,9 +71,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         // Ensure all items have a top-level price property
         const normalizedItems = (apiCart.items || []).map((item) => ({
           ...item,
-          price: item.price !== undefined ? item.price : item.diamond?.price, // Use item.price if available, else item.diamond.price
+          price: item.price !== undefined ? item.price : item?.diamond?.price || 0, // Use item.price if available, else item.diamond.price, default to 0
         }));
-        setCartItems(normalizedItems);
+        setCartItems(normalizedItems as CartItem[]);
       } else {
         // Guest cart logic, ensure localStorage is accessed only on client
         if (typeof window !== 'undefined') {

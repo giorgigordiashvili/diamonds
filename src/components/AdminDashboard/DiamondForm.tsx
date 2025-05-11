@@ -5,26 +5,7 @@ import { getDictionary } from '@/get-dictionary';
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
-
-// Types (should ideally be imported from a shared types file)
-export interface Diamond {
-  id?: string;
-  name_en: string; // Changed from name
-  name_ka: string; // Added
-  shape: string;
-  carat: number;
-  color: string;
-  clarity: string;
-  cut: string;
-  polish: string;
-  symmetry: string;
-  fluorescence: string;
-  certificate: string;
-  price: number;
-  image?: string;
-  description_en?: string; // Changed from description
-  description_ka?: string; // Added
-}
+import { Diamond } from '../../types/diamond'; // Import Diamond type
 
 // Styled components
 const Form = styled.form`
@@ -287,6 +268,17 @@ export default function DiamondForm({
           value={currentDiamond?.description_ka || ''}
           onChange={onInputChange}
           rows={4}
+        />
+      </div>
+      <div>
+        <label htmlFor="inStock">{adminDict.diamondForm.inStockLabel}</label>
+        <input
+          type="number" // Changed from checkbox to number
+          id="inStock"
+          name="inStock"
+          value={currentDiamond?.inStock === undefined ? 0 : currentDiamond.inStock} // Default to 0
+          onChange={onInputChange}
+          style={{ width: '100%', margin: '0 0 15px 0' }} // Adjusted style
         />
       </div>
       <ImageUploader onImageUploaded={onImageUploaded} currentImageUrl={currentDiamond?.image} />

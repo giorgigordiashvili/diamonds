@@ -73,7 +73,10 @@ export interface CheckoutResponse {
 }
 
 export function checkout(checkoutData: CheckoutData): Promise<CheckoutResponse> {
-  return post<CheckoutResponse>('/api/cart/checkout', checkoutData);
+  // Conditionally set requireAuth based on token presence
+  const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  const options = token ? { requireAuth: true } : {};
+  return post<CheckoutResponse>('/api/cart/checkout', checkoutData, options);
 }
 
 /**

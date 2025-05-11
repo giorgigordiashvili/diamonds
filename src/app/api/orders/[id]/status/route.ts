@@ -28,7 +28,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     }
 
     // Validate status value
-    const validStatuses: OrderStatus[] = ['Pending', 'Processing', 'Completed', 'Cancelled'];
+    const validStatuses: OrderStatus[] = [
+      OrderStatus.Pending,
+      OrderStatus.Processing,
+      OrderStatus.Shipped,
+      OrderStatus.Delivered,
+      OrderStatus.Refunded,
+    ];
     if (!validStatuses.includes(data.status as OrderStatus)) {
       return NextResponse.json(
         {

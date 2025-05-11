@@ -57,6 +57,7 @@ export interface Diamond {
   description_en?: string; // Changed from description
   description_ka?: string; // Added
   featured?: boolean;
+  inStock?: number; // Changed from boolean to number
   createdAt?: Date;
   updatedAt?: Date;
 }
