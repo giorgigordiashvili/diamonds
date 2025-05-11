@@ -2,13 +2,10 @@
 
 import Billing from '@/components/Billing';
 import Cartitems from '@/components/Cartitems';
-import Checkbox from '@/components/Checkbox';
 import Customer from '@/components/Customer';
 import Data from '@/components/Data';
-import Payment from '@/components/Payment';
 import Total from '@/components/Total';
 import { useCart } from '@/context/CartContext'; // Import useCart
-import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Main = styled.div`
@@ -19,25 +16,6 @@ const Main = styled.div`
   @media screen and (max-width: 600px) {
     padding-inline: 16px;
   }
-`;
-
-const Choose = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-evenly;
-  gap: 20px;
-`;
-
-const Step = styled.p<{ selected: boolean }>`
-  padding-bottom: 12px;
-  width: 100%;
-  text-align: center;
-  border-bottom: 2px solid white;
-  font-size: 14px;
-  font-weight: bold;
-  opacity: ${({ selected }) => (selected ? 1 : 0.5)};
-  cursor: pointer;
-  transition: opacity 0.2s;
 `;
 
 const Page = styled.div`
@@ -90,41 +68,9 @@ const Final = styled.div`
   margin-bottom: 24px;
 `;
 
-const Code = styled.div`
-  background-color: #262626;
-  display: flex;
-  width: 100%;
-  margin-bottom: 24px;
-  align-items: center;
-  padding-right: 12px;
-  justify-content: space-between;
-
-  div {
-    font-weight: 700;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
-
-  input {
-    background-color: unset;
-    padding: 12px;
-    border: none;
-    width: 100%;
-    outline: none;
-  }
-`;
-
 const Cart = () => {
-  const [selectedStep, setSelectedStep] = useState<number>(0);
-  const [agreed, setAgreed] = useState(false);
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, getCartCount, isLoading } =
     useCart();
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAgreed(e.target.checked);
-  };
 
   if (isLoading) {
     return (
@@ -144,80 +90,27 @@ const Cart = () => {
         Your Shopping Cart{' '}
         {cartCount > 0 ? `(${cartCount} item${cartCount > 1 ? 's' : ''})` : 'is empty'}
       </h1>
-      <Choose>
-        <Step selected={selectedStep === 0} onClick={() => setSelectedStep(0)}>
-          1 Login
-        </Step>
-        <Step selected={selectedStep === 1} onClick={() => setSelectedStep(1)}>
-          2 Payment
-        </Step>
-      </Choose>
 
       {/* You can conditionally render either login or payment step */}
-      {selectedStep === 0 ? (
-        <Page>
-          <Left>
-            <Customer />
-            <Data />
-            <Billing />
-          </Left>
-          <Shopping>
-            <Cartitems
-              items={cartItems}
-              removeFromCart={removeFromCart}
-              updateQuantity={updateQuantity}
-            />{' '}
-            {/* Pass props */}
-            <Final>
-              <Total totalAmount={getCartTotal()} /> {/* Pass props */}
-            </Final>
-            <Pay onClick={() => setSelectedStep(1)}>PAY AND ORDER</Pay>
-          </Shopping>
-        </Page>
-      ) : (
-        <Page>
-          <Left>
-            <Payment />
-          </Left>
-          <Shopping>
-            <Cartitems
-              items={cartItems}
-              removeFromCart={removeFromCart}
-              updateQuantity={updateQuantity}
-            />{' '}
-            {/* Pass props */}
-            <Final>
-              <Total totalAmount={getCartTotal()} /> {/* Pass props */}
-              <Code>
-                <input type="text" name="giftcode" id="giftcode" placeholder="Enter gift code *" />
-                <div>
-                  APPLY <p>&#8250;</p>
-                </div>
-              </Code>
-              <textarea
-                name="comment"
-                id="comment"
-                placeholder="Comment here..."
-                style={{
-                  resize: 'none',
-                  width: '100%',
-                  padding: '16px',
-                  border: 'none',
-                  outline: 'none',
-                  backgroundColor: '#262626',
-                  color: 'white',
-                }}
-              ></textarea>
-            </Final>
-            <Checkbox
-              checked={agreed}
-              onChange={handleCheckboxChange}
-              labelText="I have read and accepted the general terms and conditions."
-            />
-            <Pay>ORDER WITH COSTS</Pay>
-          </Shopping>
-        </Page>
-      )}
+      <Page>
+        <Left>
+          <Customer />
+          <Data />
+          <Billing />
+        </Left>
+        <Shopping>
+          <Cartitems
+            items={cartItems}
+            removeFromCart={removeFromCart}
+            updateQuantity={updateQuantity}
+          />{' '}
+          {/* Pass props */}
+          <Final>
+            <Total totalAmount={getCartTotal()} /> {/* Pass props */}
+          </Final>
+          <Pay onClick={() => {}}>PAY AND ORDER</Pay>
+        </Shopping>
+      </Page>
     </Main>
   );
 };

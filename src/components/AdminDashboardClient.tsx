@@ -116,8 +116,6 @@ export default function AdminDashboardClient({ adminDict, lang }: AdminDashboard
         return <div>{adminDict.tabs.carts}</div>;
       case 'orders':
         return <div>{adminDict.tabs.orders}</div>;
-      case 'payments':
-        return <div>{adminDict.tabs.payments}</div>;
       default:
         return null;
     }
@@ -158,9 +156,6 @@ export default function AdminDashboardClient({ adminDict, lang }: AdminDashboard
         </Tab>
         <Tab active={activeTab === 'orders'} onClick={() => setActiveTab('orders')}>
           {adminDict.tabs.orders}
-        </Tab>
-        <Tab active={activeTab === 'payments'} onClick={() => setActiveTab('payments')}>
-          {adminDict.tabs.payments}
         </Tab>
       </Tabs>
       {renderContent()}
