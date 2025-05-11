@@ -24,19 +24,18 @@ function getLocale(request: NextRequest): string | undefined {
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
+  // Updated the list of exempted paths
   if (
     [
       '/manifest.json',
       '/favicon.ico',
       '/robots.txt',
       '/sitemap.xml',
-      '/admin', // Add admin to the exempted paths
       // Add other files in `public` as needed
     ].includes(pathname) ||
     pathname.startsWith('/images/') ||
     pathname.startsWith('/fonts/') ||
     pathname.startsWith('/assets/') ||
-    pathname.startsWith('/admin/') || // Also exempt all paths under /admin/
     pathname.startsWith('/.netlify/') || // Exempt Netlify functionality paths
     pathname.startsWith('/dictionaries/') // Exempt dictionaries folder
   ) {
@@ -61,6 +60,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Matcher ignoring `/_next/`, `/api/`, `/admin`, `/.netlify/`, and `/dictionaries/`
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|admin|.netlify|dictionaries|assets).*)'],
+  // Matcher ignoring `/_next/`, `/api/`, `/.netlify/`, and `/dictionaries/`
+  // Admin paths will now be processed by the middleware
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.netlify|dictionaries|assets).*)'],
 };
