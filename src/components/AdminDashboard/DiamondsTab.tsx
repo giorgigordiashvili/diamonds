@@ -4,38 +4,85 @@ import { getDictionary } from '@/get-dictionary';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import DiamondForm, { Diamond } from './DiamondForm'; // Import the new DiamondForm component and Diamond interface
+import { Diamond } from '../../types/diamond'; // Import Diamond from types
+import DiamondForm from './DiamondForm'; // Import the new DiamondForm component
 
 // Styled components (can be moved to a shared file or defined within AdminDashboardClient if preferred)
+const Container = styled.div`
+  // Added a Container styled-component
+  padding: 20px;
+  color: #e0e0e0; // Light gray text for readability on black background
+  background-color: #000000; // Black background
+  border-radius: 8px; // Rounded corners for the container
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); // Subtle shadow - consider if this is visible/needed on black
+`;
+
+const TabTitle = styled.h2`
+  // Styled component for the title
+  font-size: 24px; // Consistent with AdminDashboardClient Title
+  font-weight: 500; // Medium weight
+  color: #ffffff; // White title
+  margin-bottom: 20px; // Add some space below the title
+`;
+
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); // Lighter shadow for dark background
+  border-radius: 8px;
+  overflow: hidden;
 
   th,
   td {
-    padding: 10px;
+    border: 1px solid #444; // Darker border, but visible on black
+    padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #333;
+    color: #e0e0e0; // Light text for table content
   }
 
   th {
-    font-weight: 700;
+    background-color: #222; // Darker header background
+    color: #ffffff; // White text for headers
+    font-weight: 600;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background-color: #1a1a1a; // Slightly lighter black for hover
   }
 `;
 
 const Button = styled.button`
-  padding: 5px 10px;
-  background: #333;
+  padding: 8px 12px;
+  background-color: #007bff; // Primary blue color
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 8px;
   font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background: #555;
-    color: white;
+    background-color: #0056b3; // Darker blue on hover
   }
+
+  &.delete-button {
+    background-color: #dc3545; // Red color for delete
+    &:hover {
+      background-color: #c82333; // Darker red on hover
+    }
+  }
+`;
+
+const ActionButtonContainer = styled.div`
+  // Container for action buttons
+  display: flex;
+  gap: 8px; // Space between buttons
 `;
 
 interface DiamondsTabProps {
@@ -98,6 +145,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
     description_en: '', // Changed from description
     description_ka: '', // Added
     image: '',
+    inStock: 0, // Default inStock to 0 for new diamonds
   };
 
   const handleEdit = (diamond: Diamond) => {
@@ -151,11 +199,20 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target;
-    let processedValue: string | number = value;
+    const { name, value, type } = e.target;
+    let processedValue: string | number | boolean = value;
 
-    if (e.target instanceof HTMLInputElement && e.target.type === 'number') {
+    if (type === 'number') {
       processedValue = parseFloat(value) || 0;
+    } else if (name === 'inStock') {
+      // Keep inStock as a number
+      processedValue = parseInt(value, 10);
+      if (isNaN(processedValue)) {
+        processedValue = 0; // Default to 0 if parsing fails
+      }
+    } else if (type === 'checkbox') {
+      // This case might no longer be needed if no other checkboxes exist
+      processedValue = (e.target as HTMLInputElement).checked;
     }
 
     if (currentDiamond) {
@@ -207,7 +264,10 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
     );
   }
   return (
-    <>
+    <Container>
+      {' '}
+      {/* Added Container */}
+      <TabTitle>{adminDict.tabs.diamonds}</TabTitle> {/* Added TabTitle */}
       <div style={{ marginBottom: '20px', textAlign: 'right' }}>
         <Button onClick={handleAdd}>{adminDict.diamondsTable.addNewButton}</Button>
       </div>
@@ -225,6 +285,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
               <th>{adminDict.diamondsTable.headerColor}</th>
               <th>{adminDict.diamondsTable.headerClarity}</th>
               <th>{adminDict.diamondsTable.headerPrice}</th>
+              <th>{adminDict.diamondsTable.headerInStock}</th> {/* Added In Stock header */}
               <th>{adminDict.diamondsTable.headerImage}</th>
               <th>{adminDict.diamondsTable.headerActions}</th>
             </tr>
@@ -240,13 +301,14 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
                 <td>{diamond.color}</td>
                 <td>{diamond.clarity}</td>
                 <td>${diamond.price.toLocaleString()}</td>
+                <td>{diamond.inStock}</td> {/* Display In Stock quantity */}
                 <td>
                   {diamond.image ? (
                     <a
                       href={diamond.image}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: '#aaa' }}
+                      style={{ color: '#6bbaff' }} // Light blue for link, consistent with ViewDetailsButton
                     >
                       <Image
                         src={diamond.image}
@@ -261,18 +323,26 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
                   )}
                 </td>
                 <td>
-                  <Button onClick={() => handleEdit(diamond)}>
-                    {adminDict.diamondsTable.editAction}
-                  </Button>
-                  <Button onClick={() => diamond.id && handleDelete(diamond.id)}>
-                    {adminDict.diamondsTable.deleteAction}
-                  </Button>
+                  <ActionButtonContainer>
+                    {' '}
+                    {/* Group buttons */}
+                    <Button onClick={() => handleEdit(diamond)}>
+                      {adminDict.diamondsTable.editAction}
+                    </Button>
+                    <Button
+                      className="delete-button"
+                      onClick={() => diamond.id && handleDelete(diamond.id)}
+                    >
+                      {adminDict.diamondsTable.deleteAction}
+                    </Button>
+                  </ActionButtonContainer>
                 </td>
               </tr>
             ))}
             {diamonds.length === 0 && (
               <tr>
-                <td colSpan={10} style={{ textAlign: 'center' }}>
+                <td colSpan={11} style={{ textAlign: 'center' }}>
+                  {/* Adjusted colSpan */}
                   {adminDict.diamondsTable.noDiamondsFound}
                 </td>
               </tr>
@@ -280,6 +350,6 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
           </tbody>
         </Table>
       )}
-    </>
+    </Container>
   );
 }

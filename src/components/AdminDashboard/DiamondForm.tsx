@@ -5,55 +5,77 @@ import { getDictionary } from '@/get-dictionary';
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
-
-// Types (should ideally be imported from a shared types file)
-export interface Diamond {
-  id?: string;
-  name_en: string; // Changed from name
-  name_ka: string; // Added
-  shape: string;
-  carat: number;
-  color: string;
-  clarity: string;
-  cut: string;
-  polish: string;
-  symmetry: string;
-  fluorescence: string;
-  certificate: string;
-  price: number;
-  image?: string;
-  description_en?: string; // Changed from description
-  description_ka?: string; // Added
-}
+import { Diamond } from '../../types/diamond'; // Import Diamond type
 
 // Styled components
 const Form = styled.form`
   max-width: 600px;
-  margin: 0 auto;
+  margin: 20px auto;
+  padding: 25px;
+  background-color: #1a1a1a; // Dark background for the form
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); // Lighter shadow for dark background
+  color: #e0e0e0; // Light gray text for form content
+
+  h2 {
+    color: #ffffff; // White title for the form
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 500;
+  }
 
   label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #cccccc; // Lighter gray for labels
   }
 
   input,
   select,
   textarea {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #333;
-    background: transparent;
-    color: inherit;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #444; // Darker border, visible on dark background
+    background: #2c2c2c; // Darker input background
+    color: #e0e0e0; // Light text for input fields
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensures padding doesn't affect width */
+    transition: border-color 0.2s ease-in-out;
+
+    &:focus {
+      border-color: #007bff; // Blue border on focus
+      outline: none;
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
   }
 
   button {
-    padding: 10px 20px;
-    background: #333;
+    padding: 12px 24px;
+    background: #007bff; // Primary blue for save button
     color: white;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background: #0056b3; // Darker blue on hover
+    }
+
+    &[type='button'] {
+      // Specific style for cancel button
+      background: #555; // Medium gray for cancel button
+      &:hover {
+        background: #777; // Lighter gray on hover
+      }
+    }
   }
 `;
 
@@ -289,22 +311,40 @@ export default function DiamondForm({
           rows={4}
         />
       </div>
+      <div>
+        <label htmlFor="inStock">{adminDict.diamondForm.inStockLabel}</label>
+        <input
+          type="number" // Changed from checkbox to number
+          id="inStock"
+          name="inStock"
+          value={currentDiamond?.inStock === undefined ? 0 : currentDiamond.inStock} // Default to 0
+          onChange={onInputChange}
+          style={{ width: '100%', margin: '0 0 15px 0' }} // Adjusted style
+        />
+      </div>
       <ImageUploader onImageUploaded={onImageUploaded} currentImageUrl={currentDiamond?.image} />
       {currentDiamond?.image && (
-        <div style={{ marginBottom: '15px' }}>
-          <label>{adminDict.diamondForm.currentImageLabel}</label>
+        <div style={{ marginBottom: '20px', textAlign: 'center' }}>
+          <label style={{ color: '#cccccc' }}>{adminDict.diamondForm.currentImageLabel}</label>
           <Image
             src={currentDiamond.image}
             alt={
               currentDiamond.name_en || adminDict.diamondForm.currentDiamondAlt || 'Diamond Image'
             }
-            width={200}
-            height={200}
-            style={{ display: 'block', marginTop: '5px', objectFit: 'contain' }}
+            width={150} // Adjusted size
+            height={150} // Adjusted size
+            style={{
+              display: 'block',
+              marginTop: '10px',
+              objectFit: 'contain',
+              border: '1px solid #444',
+              borderRadius: '5px',
+              margin: '10px auto', // Center the image
+            }}
           />
         </div>
       )}
-      <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+      <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'flex-end', gap: '15px' }}>
         <button type="submit">{adminDict.diamondForm.saveButton}</button>
         <button type="button" onClick={onClose}>
           {adminDict.diamondForm.cancelButton}

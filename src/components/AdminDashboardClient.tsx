@@ -8,38 +8,56 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DiamondsTab from './AdminDashboard/DiamondsTab';
+import OrdersTab from './AdminDashboard/OrdersTab'; // Import OrdersTab
+import UsersTab from './AdminDashboard/UsersTab'; // Import UsersTab
 
 const AdminContainer = styled.div`
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  font-family: 'Helvetica Neue', Arial, sans-serif; // Add a modern font stack
 `;
 
 const Header = styled.header`
+  background-color: #f8f9fa; // Lighter background for the header
+  padding: 20px; // Increased padding
+  border-radius: 8px; // Rounded corners
   margin-bottom: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Subtle shadow for depth
 `;
 
 const Title = styled.h1`
-  font-size: 24px;
-  font-weight: 300;
+  font-size: 28px; // Slightly larger font size
+  font-weight: 500; // Medium weight for a modern feel
+  color: #343a40; // Darker color for better contrast
 `;
 
 const Tabs = styled.div`
   display: flex;
   margin-bottom: 20px;
-  border-bottom: 1px solid #333;
+  border-bottom: 2px solid #dee2e6; // Slightly thicker and lighter border
 `;
 
 const Tab = styled.button<{ active: boolean }>`
-  padding: 10px 20px;
-  background: ${(props) => (props.active ? '#333' : 'transparent')};
-  color: ${(props) => (props.active ? '#fff' : 'inherit')};
+  padding: 12px 24px; // Increased padding for tabs
+  background: transparent; // Default transparent background
+  color: ${(props) => (props.active ? '#007bff' : '#495057')}; // Blue for active, gray for inactive
   border: none;
+  border-bottom: ${(props) =>
+    props.active ? '2px solid #007bff' : '2px solid transparent'}; // Active tab indicator
   cursor: pointer;
   font-size: 16px;
+  font-weight: 500; // Medium weight for tab text
+  transition:
+    color 0.2s ease-in-out,
+    border-bottom-color 0.2s ease-in-out; // Smooth transition
+
+  &:hover {
+    color: #0056b3; // Darker blue on hover
+  }
 `;
 
 interface AdminDashboardClientProps {
@@ -111,13 +129,10 @@ export default function AdminDashboardClient({ adminDict, lang }: AdminDashboard
       case 'diamonds':
         return <DiamondsTab adminDict={adminDict} />;
       case 'users':
-        return <div>{adminDict.tabs.users}</div>;
-      case 'carts':
-        return <div>{adminDict.tabs.carts}</div>;
+        return <UsersTab adminDict={adminDict} lang={lang} />; // Pass lang to UsersTab
+
       case 'orders':
-        return <div>{adminDict.tabs.orders}</div>;
-      case 'payments':
-        return <div>{adminDict.tabs.payments}</div>;
+        return <OrdersTab adminDict={adminDict} lang={lang} />; // Pass lang to OrdersTab
       default:
         return null;
     }
@@ -136,11 +151,14 @@ export default function AdminDashboardClient({ adminDict, lang }: AdminDashboard
             router.push(`/${lang}/admin-login`);
           }}
           style={{
-            padding: '8px 12px',
-            background: '#333',
+            padding: '10px 15px', // Adjusted padding
+            background: '#dc3545', // Red color for logout button
             color: 'white',
             border: 'none',
+            borderRadius: '5px', // Rounded corners for button
             cursor: 'pointer',
+            fontSize: '14px', // Adjusted font size
+            fontWeight: '500',
           }}
         >
           {adminDict.logout}
@@ -158,9 +176,6 @@ export default function AdminDashboardClient({ adminDict, lang }: AdminDashboard
         </Tab>
         <Tab active={activeTab === 'orders'} onClick={() => setActiveTab('orders')}>
           {adminDict.tabs.orders}
-        </Tab>
-        <Tab active={activeTab === 'payments'} onClick={() => setActiveTab('payments')}>
-          {adminDict.tabs.payments}
         </Tab>
       </Tabs>
       {renderContent()}

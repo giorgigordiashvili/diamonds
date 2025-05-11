@@ -1,4 +1,5 @@
 import Header from '@/components/Header';
+import { CartProvider } from '@/context/CartContext'; // Import CartProvider
 import { i18n, type Locale } from '@/i18n-config';
 import StyledComponentsRegistry from '@/lib/registry';
 import './globals.css';
@@ -24,8 +25,10 @@ export default async function Root(props: {
     <html lang={params.lang}>
       <body>
         <StyledComponentsRegistry>
-          <Header />
-          {children}
+          <CartProvider>
+            <Header />
+            {children}
+          </CartProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

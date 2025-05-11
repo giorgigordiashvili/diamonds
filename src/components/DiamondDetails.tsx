@@ -1,8 +1,8 @@
 'use client';
-import * as cartApi from '@/api/cart';
 import * as diamondsApi from '@/api/diamonds';
 import DiamondFilter from '@/components/DiamondFilter';
 import Links from '@/components/Links';
+import { useCart } from '@/context/CartContext'; // Import useCart
 import { Diamond } from '@/types/diamond';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -374,6 +374,8 @@ const DiamondDetails: React.FC<DiamondDetailsProps> = ({ id, lang, dictionary })
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { addToCart } = useCart(); // Get addToCart from context
+
   useEffect(() => {
     if (id && dictionary) {
       setLoading(true);
@@ -402,7 +404,7 @@ const DiamondDetails: React.FC<DiamondDetailsProps> = ({ id, lang, dictionary })
   const handleAddToCart = async () => {
     if (diamond) {
       try {
-        await cartApi.addToCart(diamond.id, 1);
+        addToCart(diamond); // Use context function
         alert(dictionary?.diamondDetail?.addedToCartSuccess || 'Diamond added to cart!');
       } catch (err) {
         console.error('Failed to add to cart:', err);

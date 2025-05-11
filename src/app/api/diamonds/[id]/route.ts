@@ -92,6 +92,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     // Add updated timestamp
     updateData.updatedAt = new Date();
 
+    // If inStock is not explicitly provided in the update, do not change it.
+    // If it is provided, it will be set by the $set operator.
+    // No specific handling needed here for inStock unless a default is desired when it's absent in updateData.
+
     const result = await db
       .collection('diamonds')
       .findOneAndUpdate(
