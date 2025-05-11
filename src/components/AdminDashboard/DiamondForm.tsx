@@ -9,7 +9,8 @@ import styled from 'styled-components';
 // Types (should ideally be imported from a shared types file)
 export interface Diamond {
   id?: string;
-  name: string;
+  name_en: string; // Changed from name
+  name_ka: string; // Added
   shape: string;
   carat: number;
   color: string;
@@ -21,7 +22,8 @@ export interface Diamond {
   certificate: string;
   price: number;
   image?: string;
-  description?: string;
+  description_en?: string; // Changed from description
+  description_ka?: string; // Added
 }
 
 // Styled components
@@ -80,12 +82,23 @@ export default function DiamondForm({
         {currentDiamond?.id ? adminDict.diamondForm.editTitle : adminDict.diamondForm.addTitle}
       </h2>
       <div>
-        <label htmlFor="name">{adminDict.diamondForm.nameLabel}</label>
+        <label htmlFor="name_en">{adminDict.diamondForm.nameEnLabel}</label>
         <input
           type="text"
-          id="name"
-          name="name"
-          value={currentDiamond?.name || ''}
+          id="name_en"
+          name="name_en"
+          value={currentDiamond?.name_en || ''}
+          onChange={onInputChange}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="name_ka">{adminDict.diamondForm.nameKaLabel}</label>
+        <input
+          type="text"
+          id="name_ka"
+          name="name_ka"
+          value={currentDiamond?.name_ka || ''}
           onChange={onInputChange}
           required
         />
@@ -257,11 +270,21 @@ export default function DiamondForm({
         />
       </div>
       <div>
-        <label htmlFor="description">{adminDict.diamondForm.descriptionLabel}</label>
+        <label htmlFor="description_en">{adminDict.diamondForm.descriptionEnLabel}</label>
         <textarea
-          id="description"
-          name="description"
-          value={currentDiamond?.description || ''}
+          id="description_en"
+          name="description_en"
+          value={currentDiamond?.description_en || ''}
+          onChange={onInputChange}
+          rows={4}
+        />
+      </div>
+      <div>
+        <label htmlFor="description_ka">{adminDict.diamondForm.descriptionKaLabel}</label>
+        <textarea
+          id="description_ka"
+          name="description_ka"
+          value={currentDiamond?.description_ka || ''}
           onChange={onInputChange}
           rows={4}
         />
@@ -272,7 +295,9 @@ export default function DiamondForm({
           <label>{adminDict.diamondForm.currentImageLabel}</label>
           <Image
             src={currentDiamond.image}
-            alt={currentDiamond.name || adminDict.diamondForm.currentDiamondAlt || 'Diamond Image'}
+            alt={
+              currentDiamond.name_en || adminDict.diamondForm.currentDiamondAlt || 'Diamond Image'
+            }
             width={200}
             height={200}
             style={{ display: 'block', marginTop: '5px', objectFit: 'contain' }}

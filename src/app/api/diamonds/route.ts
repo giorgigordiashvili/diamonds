@@ -226,7 +226,8 @@ export async function POST(request: NextRequest) {
 
     // Validate required fields
     const requiredFields = [
-      'name',
+      'name_en', // Changed from name
+      'name_ka', // Added
       'shape',
       'carat',
       'color',

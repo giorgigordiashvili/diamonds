@@ -83,7 +83,8 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
   }
 
   const defaultDiamond: Omit<Diamond, 'id'> = {
-    name: '',
+    name_en: '', // Changed from name
+    name_ka: '', // Added
     shape: 'Brilliant',
     carat: 0,
     color: 'D',
@@ -94,7 +95,8 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
     fluorescence: 'None',
     certificate: 'GIA',
     price: 0,
-    description: '',
+    description_en: '', // Changed from description
+    description_ka: '', // Added
     image: '',
   };
 
@@ -216,7 +218,8 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
           <thead>
             <tr>
               <th>{adminDict.diamondsTable.headerId}</th>
-              <th>{adminDict.diamondsTable.headerName}</th>
+              <th>{adminDict.diamondsTable.headerNameEn}</th> {/* Changed */}
+              <th>{adminDict.diamondsTable.headerNameKa}</th> {/* Added */}
               <th>{adminDict.diamondsTable.headerShape}</th>
               <th>{adminDict.diamondsTable.headerCarat}</th>
               <th>{adminDict.diamondsTable.headerColor}</th>
@@ -230,7 +233,8 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
             {diamonds.map((diamond) => (
               <tr key={diamond.id}>
                 <td>{diamond.id?.slice(0, 6)}...</td>
-                <td>{diamond.name}</td>
+                <td>{diamond.name_en}</td>
+                <td>{diamond.name_ka}</td> {/* Added */}
                 <td>{diamond.shape}</td>
                 <td>{diamond.carat}</td>
                 <td>{diamond.color}</td>
@@ -246,7 +250,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
                     >
                       <Image
                         src={diamond.image}
-                        alt={diamond.name || 'Diamond'}
+                        alt={diamond.name_en || 'Diamond'} // Use English name for alt text
                         width={50}
                         height={50}
                         style={{ objectFit: 'contain' }}
@@ -268,7 +272,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
             ))}
             {diamonds.length === 0 && (
               <tr>
-                <td colSpan={9} style={{ textAlign: 'center' }}>
+                <td colSpan={10} style={{ textAlign: 'center' }}>
                   {adminDict.diamondsTable.noDiamondsFound}
                 </td>
               </tr>

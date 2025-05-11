@@ -98,14 +98,14 @@ export default function CartExample() {
               {item.diamond.image && (
                 <img
                   src={item.diamond.image}
-                  alt={item.diamond.name}
+                  alt={item.diamond.name_en}
                   style={{ width: 80, height: 80, objectFit: 'cover' }}
                 />
               )}
             </div>
 
             <div className="item-details">
-              <h3>{item.diamond.name}</h3>
+              <h3>{item.diamond.name_en}</h3>
               <p>
                 {item.diamond.carat}ct {item.diamond.color} {item.diamond.clarity}
               </p>
