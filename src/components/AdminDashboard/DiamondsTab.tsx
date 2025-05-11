@@ -8,35 +8,81 @@ import { Diamond } from '../../types/diamond'; // Import Diamond from types
 import DiamondForm from './DiamondForm'; // Import the new DiamondForm component
 
 // Styled components (can be moved to a shared file or defined within AdminDashboardClient if preferred)
+const Container = styled.div`
+  // Added a Container styled-component
+  padding: 20px;
+  color: #e0e0e0; // Light gray text for readability on black background
+  background-color: #000000; // Black background
+  border-radius: 8px; // Rounded corners for the container
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); // Subtle shadow - consider if this is visible/needed on black
+`;
+
+const TabTitle = styled.h2`
+  // Styled component for the title
+  font-size: 24px; // Consistent with AdminDashboardClient Title
+  font-weight: 500; // Medium weight
+  color: #ffffff; // White title
+  margin-bottom: 20px; // Add some space below the title
+`;
+
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); // Lighter shadow for dark background
+  border-radius: 8px;
+  overflow: hidden;
 
   th,
   td {
-    padding: 10px;
+    border: 1px solid #444; // Darker border, but visible on black
+    padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #333;
+    color: #e0e0e0; // Light text for table content
   }
 
   th {
-    font-weight: 700;
+    background-color: #222; // Darker header background
+    color: #ffffff; // White text for headers
+    font-weight: 600;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background-color: #1a1a1a; // Slightly lighter black for hover
   }
 `;
 
 const Button = styled.button`
-  padding: 5px 10px;
-  background: #333;
+  padding: 8px 12px;
+  background-color: #007bff; // Primary blue color
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 8px;
   font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background: #555;
-    color: white;
+    background-color: #0056b3; // Darker blue on hover
   }
+
+  &.delete-button {
+    background-color: #dc3545; // Red color for delete
+    &:hover {
+      background-color: #c82333; // Darker red on hover
+    }
+  }
+`;
+
+const ActionButtonContainer = styled.div`
+  // Container for action buttons
+  display: flex;
+  gap: 8px; // Space between buttons
 `;
 
 interface DiamondsTabProps {
@@ -218,7 +264,10 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
     );
   }
   return (
-    <>
+    <Container>
+      {' '}
+      {/* Added Container */}
+      <TabTitle>{adminDict.tabs.diamonds}</TabTitle> {/* Added TabTitle */}
       <div style={{ marginBottom: '20px', textAlign: 'right' }}>
         <Button onClick={handleAdd}>{adminDict.diamondsTable.addNewButton}</Button>
       </div>
@@ -259,7 +308,7 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
                       href={diamond.image}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: '#aaa' }}
+                      style={{ color: '#6bbaff' }} // Light blue for link, consistent with ViewDetailsButton
                     >
                       <Image
                         src={diamond.image}
@@ -274,12 +323,19 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
                   )}
                 </td>
                 <td>
-                  <Button onClick={() => handleEdit(diamond)}>
-                    {adminDict.diamondsTable.editAction}
-                  </Button>
-                  <Button onClick={() => diamond.id && handleDelete(diamond.id)}>
-                    {adminDict.diamondsTable.deleteAction}
-                  </Button>
+                  <ActionButtonContainer>
+                    {' '}
+                    {/* Group buttons */}
+                    <Button onClick={() => handleEdit(diamond)}>
+                      {adminDict.diamondsTable.editAction}
+                    </Button>
+                    <Button
+                      className="delete-button"
+                      onClick={() => diamond.id && handleDelete(diamond.id)}
+                    >
+                      {adminDict.diamondsTable.deleteAction}
+                    </Button>
+                  </ActionButtonContainer>
                 </td>
               </tr>
             ))}
@@ -294,6 +350,6 @@ export default function DiamondsTab({ adminDict }: DiamondsTabProps) {
           </tbody>
         </Table>
       )}
-    </>
+    </Container>
   );
 }

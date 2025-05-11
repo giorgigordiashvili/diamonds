@@ -10,35 +10,59 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); // Lighter shadow for dark background
+  border-radius: 8px;
+  overflow: hidden;
+
   th,
   td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid #444; // Darker border, but visible on black
+    padding: 12px 15px;
     text-align: left;
+    color: #e0e0e0; // Light text for table content
   }
+
   th {
-    background-color: #f2f2f2;
+    background-color: #222; // Darker header background
+    color: #ffffff; // White text for headers
+    font-weight: 600;
+  }
+
+  tr:last-child td {
+    border-bottom: none; // Remove border for the last row
+  }
+
+  tr:hover {
+    background-color: #1a1a1a; // Slightly lighter black for hover
   }
 `;
 
 const Button = styled.button`
-  margin-right: 5px;
-  padding: 5px 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  background-color: #007bff;
+  padding: 8px 12px;
+  background-color: #007bff; // Primary blue color
   color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px; // Adjusted margin
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out;
+
   &:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; // Darker blue on hover
   }
 `;
 
 const DeleteButton = styled(Button)`
-  background-color: #dc3545;
+  background-color: #dc3545; // Red color for delete
   &:hover {
-    background-color: #c82333;
+    background-color: #c82333; // Darker red on hover
   }
+`;
+
+const ActionButtonContainer = styled.div`
+  display: flex;
+  gap: 8px; // Space between buttons
 `;
 
 interface UsersTableProps {
@@ -119,21 +143,25 @@ const UsersTable: React.FC<UsersTableProps> = ({ adminDict, lang }) => {
       <tbody>
         {users.map((user) => (
           <tr key={user._id?.toString() || user.id}>
-            <td>{user._id?.toString() || user.id}</td>
+            <td>{user._id?.toString().slice(0, 8) || user.id?.slice(0, 8)}...</td>{' '}
+            {/* Shorten ID display */}
             <td>{`${user.firstName} ${user.lastName}`}</td>
             <td>{user.email}</td>
             <td>{user.role}</td>
             <td>{new Date(user.createdAt).toLocaleDateString(lang)}</td>
             <td>
-              {user.role !== 'admin' && (
-                <Button onClick={() => handlePromoteUser(user._id?.toString() || user.id!)}>
-                  {adminDict.usersTable.makeAdminAction}
-                </Button>
-              )}
-              <DeleteButton onClick={() => handleDeleteUser(user._id?.toString() || user.id!)}>
-                {adminDict.diamondsTable.deleteAction}
-              </DeleteButton>
-              {/* Add Edit button/functionality later */}
+              <ActionButtonContainer>
+                {' '}
+                {/* Group buttons */}
+                {user.role !== 'admin' && (
+                  <Button onClick={() => handlePromoteUser(user._id?.toString() || user.id!)}>
+                    {adminDict.usersTable.makeAdminAction}
+                  </Button>
+                )}
+                <DeleteButton onClick={() => handleDeleteUser(user._id?.toString() || user.id!)}>
+                  {adminDict.diamondsTable.deleteAction}
+                </DeleteButton>
+              </ActionButtonContainer>
             </td>
           </tr>
         ))}
