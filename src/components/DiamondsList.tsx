@@ -2,6 +2,7 @@ import { diamondsApi } from '@/api';
 import { useApi } from '@/hooks/useApi';
 import { Diamond } from '@/types/diamond';
 import Image from 'next/image';
+import Link from 'next/link'; // Added Link import
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Scroll from './Scroll';
@@ -329,29 +330,33 @@ const DiamondsList: React.FC<DiamondsListProps> = ({
           ))}
         </TableHeaderRow>
         {diamonds.map((diamond: Diamond) => (
-          <TableDataRow key={diamond.id}>
-            <TableDataCell className="col-image">
-              <StyledImageCard>
-                <Image
-                  src={diamond.image || '/assets/diamonds/Diamant.png'}
-                  alt={diamond.shape || 'diamond'}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </StyledImageCard>
-            </TableDataCell>
-            <TableDataCell className="col-carat">{diamond.carat.toFixed(2)}</TableDataCell>
-            <TableDataCell className="col-color">{diamond.color}</TableDataCell>
-            <TableDataCell className="col-clarity">{diamond.clarity}</TableDataCell>
-            <TableDataCell className="col-cut">{diamond.cut || '-'}</TableDataCell>
-            <TableDataCell className="col-polish">{diamond.polish || '-'}</TableDataCell>
-            <TableDataCell className="col-symmetry">{diamond.symmetry || '-'}</TableDataCell>
-            <TableDataCell className="col-fluorescence">
-              {diamond.fluorescence || '-'}
-            </TableDataCell>
-            <TableDataCell className="col-certificate">{diamond.certificate || '-'}</TableDataCell>
-            <TableDataCell className="col-price">{formatPrice(diamond.price)}</TableDataCell>
-          </TableDataRow>
+          <Link href={`/diamond/${diamond.id}`} key={diamond.id} passHref>
+            <TableDataRow>
+              <TableDataCell className="col-image">
+                <StyledImageCard>
+                  <Image
+                    src={diamond.image || '/assets/diamonds/Diamant.png'}
+                    alt={diamond.shape || 'diamond'}
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
+                </StyledImageCard>
+              </TableDataCell>
+              <TableDataCell className="col-carat">{diamond.carat.toFixed(2)}</TableDataCell>
+              <TableDataCell className="col-color">{diamond.color}</TableDataCell>
+              <TableDataCell className="col-clarity">{diamond.clarity}</TableDataCell>
+              <TableDataCell className="col-cut">{diamond.cut || '-'}</TableDataCell>
+              <TableDataCell className="col-polish">{diamond.polish || '-'}</TableDataCell>
+              <TableDataCell className="col-symmetry">{diamond.symmetry || '-'}</TableDataCell>
+              <TableDataCell className="col-fluorescence">
+                {diamond.fluorescence || '-'}
+              </TableDataCell>
+              <TableDataCell className="col-certificate">
+                {diamond.certificate || '-'}
+              </TableDataCell>
+              <TableDataCell className="col-price">{formatPrice(diamond.price)}</TableDataCell>
+            </TableDataRow>
+          </Link>
         ))}
       </TableContainer>
       {diamonds.length > 0 && totalPages > 0 && (
