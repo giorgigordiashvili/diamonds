@@ -361,6 +361,94 @@
     "yes": "დიახ",
     "no": "არა"
   },
+  "cart": {
+    "title": "თქვენი კალათა",
+    "items": "ნივთი",
+    "items_plural": "ნივთები",
+    "empty": "ცარიელია",
+    "loading": "კალათა იტვირთება...",
+    "yourCart": "თქვენი შოპინგ კალათა",
+    "emptyCart": "თქვენი კალათა ამჟამად ცარიელია.",
+    "priceError": "შეცდომა",
+    "includingVat": "დღგ-ს და დაზღვეული მიწოდების ჩათვლით",
+    "data": {
+      "title": "თქვენი მონაცემები და მიწოდების მისამართი",
+      "labels": {
+        "title": "წოდება",
+        "company": "კომპანია (არჩევითი)",
+        "firstName": "სახელი *",
+        "lastName": "გვარი *",
+        "email": "ელფოსტის მისამართი *",
+        "phone": "ტელეფონის ნომერი *",
+        "shippingStreet": "ქუჩა და სახლის ნომერი *",
+        "shippingCity": "ქალაქი *",
+        "shippingState": "შტატი/პროვინცია *",
+        "shippingPostalCode": "საფოსტო კოდი *",
+        "shippingCountry": "ქვეყანა *",
+        "createAccount": "შექმენით მომხმარებლის ანგარიში."
+      },
+      "placeholders": {
+        "title": "აირჩიეთ წოდება",
+        "company": "კომპანია",
+        "firstName": "სახელი",
+        "lastName": "გვარი",
+        "email": "თქვენი ელფოსტის მისამართი",
+        "phone": "ტელეფონის ნომერი",
+        "shippingStreet": "ქუჩა და სახლის ნომერი",
+        "shippingCity": "ქალაქი",
+        "shippingState": "შტატი/პროვინცია",
+        "shippingPostalCode": "საფოსტო კოდი",
+        "shippingCountry": "ქვეყანა"
+      },
+      "options": {
+        "title": {
+          "mr": "ბ-ნი",
+          "ms": "ქ-ნი",
+          "mrs": "ქალბატონი",
+          "dr": "დრ.",
+          "other": "სხვა"
+        }
+      }
+    },
+    "billing": {
+      "title": "გადახდის მისამართი",
+      "sameAsShipping": "იგივე, რაც მიწოდების მისამართი",
+      "labels": {
+        "billingStreet": "ქუჩა და სახლის ნომერი *",
+        "billingCity": "ქალაქი *",
+        "billingState": "შტატი/პროვინცია *",
+        "billingPostalCode": "საფოსტო კოდი *",
+        "billingCountry": "ქვეყანა *"
+      }
+    },
+    "payment": {
+      "title": "გადახდის მეთოდი",
+      "labels": {
+        "method": "გადახდის მეთოდი:",
+        "notes": "შეკვეთის შენიშვნები (არჩევითი)"
+      },
+      "placeholders": {
+        "notes": "რაიმე სპეციალური ინსტრუქციები?"
+      },
+      "methods": {
+        "cash": "ნაღდი ფული"
+      }
+    },
+    "action": {
+      "payAndOrder": "გადახდა და შეკვეთა",
+      "processing": "მუშავდება..."
+    },
+    "messages": {
+      "success": "შეკვეთა წარმატებით განთავსდა! შეკვეთის ID: {orderId}",
+      "error": "შეცდომა: {error}"
+    },
+    "total": {
+      "total": "ჯამი",
+      "shippingCosts": "მიწოდების ხარჯები",
+      "grandTotal": "სრული ჯამი",
+      "vatIncluded": "19% დღგ ჩათვლით:"
+    }
+  },
   "pageContent": {
     "uniqueGift": {
       "title": "მარადიული სიხარული",

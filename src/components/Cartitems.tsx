@@ -1,4 +1,5 @@
 'use client';
+import { getDictionary } from '@/get-dictionary';
 import { CartItem } from '@/types/cart';
 import { MinusCircle, PlusCircle, Trash } from 'lucide-react';
 import Image from 'next/image';
@@ -119,20 +120,26 @@ const Trashcan = styled.div`
 
 interface CartitemsProps {
   items: CartItem[];
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
   removeFromCart: (diamondId: string) => void;
   updateQuantity: (diamondId: string, quantity: number) => void;
 }
 
-const Cartitems: React.FC<CartitemsProps> = ({ items, removeFromCart, updateQuantity }) => {
+const Cartitems: React.FC<CartitemsProps> = ({
+  items,
+  dictionary,
+  removeFromCart,
+  updateQuantity,
+}) => {
   if (!items || items.length === 0) {
     return (
       <Main>
         <Head>
           <div></div>
-          <p>Your Shopping Cart</p>
+          <p>{dictionary.cart.yourCart}</p>
           <div></div>
         </Head>
-        <p style={{ textAlign: 'center', marginTop: '20px' }}>Your cart is currently empty.</p>
+        <p style={{ textAlign: 'center', marginTop: '20px' }}>{dictionary.cart.emptyCart}</p>
       </Main>
     );
   }
@@ -141,7 +148,7 @@ const Cartitems: React.FC<CartitemsProps> = ({ items, removeFromCart, updateQuan
     <Main>
       <Head>
         <div></div>
-        <p>Your Shopping Cart</p>
+        <p>{dictionary.cart.yourCart}</p>
         <div></div>
       </Head>
 
@@ -172,7 +179,7 @@ const Cartitems: React.FC<CartitemsProps> = ({ items, removeFromCart, updateQuan
               <Desc>
                 <Name>{item?.diamond?.name_en}</Name>
                 <Description>
-                  {`Shape: ${item?.diamond?.shape}, Carat: ${item?.diamond?.carat.toFixed(2)}, Color: ${item?.diamond?.color}, Clarity: ${item?.diamond?.clarity}`}
+                  {`${dictionary.diamondsList.headers.shape}: ${item?.diamond?.shape}, ${dictionary.diamondsList.headers.carat}: ${item?.diamond?.carat.toFixed(2)}, ${dictionary.diamondsList.headers.color}: ${item?.diamond?.color}, ${dictionary.diamondsList.headers.clarity}: ${item?.diamond?.clarity}`}
                 </Description>
                 <Moreinfo>
                   <QuantityControl>
@@ -191,13 +198,13 @@ const Cartitems: React.FC<CartitemsProps> = ({ items, removeFromCart, updateQuan
                     {/* Display item price (price per unit * quantity) */}
                     <Cost>
                       {isNaN(totalPriceForItem)
-                        ? 'Error'
+                        ? dictionary.cart.priceError
                         : totalPriceForItem.toLocaleString('de-DE', {
                             style: 'currency',
                             currency: 'EUR',
                           })}
                     </Cost>
-                    <Tax>incl. VAT, free insured shipping</Tax>
+                    <Tax>{dictionary.cart.includingVat}</Tax>
                   </Price>
                 </Moreinfo>
               </Desc>

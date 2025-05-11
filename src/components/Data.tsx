@@ -70,121 +70,137 @@ const StyledForm = styled.div`
   }
 `;
 
-// Define the props for the Data component if it needs to receive Formik context or specific field names
-// For now, assuming field names are hardcoded as they are specific to this section
-// interface DataProps {
-//   formik: any; // or more specific FormikProps<YourFormValues>
-// }
+interface DataProps {
+  dictionary: any;
+}
 
-const Data = () => {
-  // This component will now render Formik <Field> components.
-  // The actual <Formik> and <Form> tags will be in Cart.tsx.
+const Data: React.FC<DataProps> = ({ dictionary }) => {
+  const { data } = dictionary.cart;
 
   return (
     <Main>
       <Head>
         <div></div>
-        <p>Your Data & Shipping Address</p>
+        <p>{data.title}</p>
         <div></div>
       </Head>
       <StyledForm>
         {/* Title (Optional) */}
         <div className="form-field">
-          <label htmlFor="title">Title</label>
-          <Field as="select" name="title" id="title">
-            <option value="">Select Title</option>
-            <option value="Mr">Mr.</option>
-            <option value="Ms">Ms.</option>
-            <option value="Mrs">Mrs.</option>
-            <option value="Dr">Dr.</option>
-            <option value="Other">Other</option>
+          <label htmlFor="title">{data.labels.title}</label>
+          <Field as="select" name="title" id="title" placeholder={data.placeholders.title}>
+            <option value="">{data.placeholders.title}</option>
+            <option value="Mr">{data.options.title.mr}</option>
+            <option value="Ms">{data.options.title.ms}</option>
+            <option value="Mrs">{data.options.title.mrs}</option>
+            <option value="Dr">{data.options.title.dr}</option>
+            <option value="Other">{data.options.title.other}</option>
           </Field>
           <ErrorMessage name="title" component="div" className="error-message" />
         </div>
 
         {/* Company (Optional) */}
         <div className="form-field">
-          <label htmlFor="company">Company (Optional)</label>
-          <Field type="text" name="company" id="company" placeholder="Company" />
+          <label htmlFor="company">{data.labels.company}</label>
+          <Field type="text" name="company" id="company" placeholder={data.placeholders.company} />
           <ErrorMessage name="company" component="div" className="error-message" />
         </div>
 
         {/* First Name */}
         <div className="form-field">
-          <label htmlFor="firstName">First Name *</label>
-          <Field type="text" name="firstName" id="firstName" placeholder="First Name" />
+          <label htmlFor="firstName">{data.labels.firstName}</label>
+          <Field
+            type="text"
+            name="firstName"
+            id="firstName"
+            placeholder={data.placeholders.firstName}
+          />
           <ErrorMessage name="firstName" component="div" className="error-message" />
         </div>
 
         {/* Last Name */}
         <div className="form-field">
-          <label htmlFor="lastName">Last Name *</label>
-          <Field type="text" name="lastName" id="lastName" placeholder="Last Name" />
+          <label htmlFor="lastName">{data.labels.lastName}</label>
+          <Field
+            type="text"
+            name="lastName"
+            id="lastName"
+            placeholder={data.placeholders.lastName}
+          />
           <ErrorMessage name="lastName" component="div" className="error-message" />
         </div>
 
         {/* Email */}
         <div className="form-field full-width">
-          <label htmlFor="email">Email Address *</label>
-          <Field type="email" name="email" id="email" placeholder="Your Email Address" />
+          <label htmlFor="email">{data.labels.email}</label>
+          <Field type="email" name="email" id="email" placeholder={data.placeholders.email} />
           <ErrorMessage name="email" component="div" className="error-message" />
         </div>
 
         {/* Phone Number */}
         <div className="form-field full-width">
-          <label htmlFor="phone">Phone Number *</label>
-          <Field type="text" name="phone" id="phone" placeholder="Phone Number" />
+          <label htmlFor="phone">{data.labels.phone}</label>
+          <Field type="text" name="phone" id="phone" placeholder={data.placeholders.phone} />
           <ErrorMessage name="phone" component="div" className="error-message" />
         </div>
 
-        {/* Shipping Address Section Title (Optional visual cue) */}
-        {/* <div className="full-width" style={{ marginTop: '20px', marginBottom: '10px', borderTop: '1px solid #444', paddingTop: '10px' }}>
-          <p style={{fontSize: '16px', fontWeight: '500'}}>Shipping Address</p>
-        </div> */}
-
         {/* Shipping Street */}
         <div className="form-field full-width">
-          <label htmlFor="shippingStreet">Street and Housenumber *</label>
+          <label htmlFor="shippingStreet">{data.labels.shippingStreet}</label>
           <Field
             type="text"
             name="shippingStreet"
             id="shippingStreet"
-            placeholder="Street and Housenumber"
+            placeholder={data.placeholders.shippingStreet}
           />
           <ErrorMessage name="shippingStreet" component="div" className="error-message" />
         </div>
 
         {/* Shipping City */}
         <div className="form-field">
-          <label htmlFor="shippingCity">City *</label>
-          <Field type="text" name="shippingCity" id="shippingCity" placeholder="City" />
+          <label htmlFor="shippingCity">{data.labels.shippingCity}</label>
+          <Field
+            type="text"
+            name="shippingCity"
+            id="shippingCity"
+            placeholder={data.placeholders.shippingCity}
+          />
           <ErrorMessage name="shippingCity" component="div" className="error-message" />
         </div>
 
         {/* Shipping State/Province */}
         <div className="form-field">
-          <label htmlFor="shippingState">State/Province *</label>
-          <Field type="text" name="shippingState" id="shippingState" placeholder="State/Province" />
+          <label htmlFor="shippingState">{data.labels.shippingState}</label>
+          <Field
+            type="text"
+            name="shippingState"
+            id="shippingState"
+            placeholder={data.placeholders.shippingState}
+          />
           <ErrorMessage name="shippingState" component="div" className="error-message" />
         </div>
 
         {/* Shipping Postal Code */}
         <div className="form-field">
-          <label htmlFor="shippingPostalCode">Postal Code *</label>
+          <label htmlFor="shippingPostalCode">{data.labels.shippingPostalCode}</label>
           <Field
             type="text"
             name="shippingPostalCode"
             id="shippingPostalCode"
-            placeholder="Postal Code"
+            placeholder={data.placeholders.shippingPostalCode}
           />
           <ErrorMessage name="shippingPostalCode" component="div" className="error-message" />
         </div>
 
         {/* Shipping Country */}
         <div className="form-field">
-          <label htmlFor="shippingCountry">Country *</label>
-          <Field type="text" name="shippingCountry" id="shippingCountry" placeholder="Country" />
-          {/* Consider making this a select if you have a predefined list */}
+          <label htmlFor="shippingCountry">{data.labels.shippingCountry}</label>
+          <Field
+            type="text"
+            name="shippingCountry"
+            id="shippingCountry"
+            placeholder={data.placeholders.shippingCountry}
+          />
           <ErrorMessage name="shippingCountry" component="div" className="error-message" />
         </div>
       </StyledForm>
@@ -196,7 +212,7 @@ const Data = () => {
       >
         <Field type="checkbox" name="createAccount" id="createAccount" />
         <label htmlFor="createAccount" style={{ marginBottom: 0 }}>
-          Create a customer account.
+          {data.labels.createAccount}
         </label>
         <ErrorMessage name="createAccount" component="div" className="error-message" />
       </div>

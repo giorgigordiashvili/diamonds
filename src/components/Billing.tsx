@@ -96,12 +96,18 @@ const Privacy = styled.div`
   }
 `;
 
-const Billing = () => {
+interface BillingProps {
+  dictionary: any;
+}
+
+const Billing: React.FC<BillingProps> = ({ dictionary }) => {
+  const { billing } = dictionary.cart;
+
   return (
     <Main>
       <Head>
         <div></div>
-        <p>Billing Address</p>
+        <p>{billing.title}</p>
         <div></div>
       </Head>
 
@@ -111,53 +117,68 @@ const Billing = () => {
       >
         <Field type="checkbox" name="isBillingSameAsShipping" id="isBillingSameAsShipping" />
         <label htmlFor="isBillingSameAsShipping" style={{ marginBottom: 0 }}>
-          Billing address is the same as shipping address.
+          {billing.sameAsShipping}
         </label>
       </div>
 
       <StyledForm>
         {/* Billing Street */}
         <div className="form-field full-width">
-          <label htmlFor="billingStreet">Street and Housenumber *</label>
+          <label htmlFor="billingStreet">{billing.labels.billingStreet}</label>
           <Field
             type="text"
             name="billingStreet"
             id="billingStreet"
-            placeholder="Street and Housenumber"
+            placeholder={billing.labels.billingStreet.replace(' *', '')}
           />
           <ErrorMessage name="billingStreet" component="div" className="error-message" />
         </div>
 
         {/* Billing City */}
         <div className="form-field">
-          <label htmlFor="billingCity">City *</label>
-          <Field type="text" name="billingCity" id="billingCity" placeholder="City" />
+          <label htmlFor="billingCity">{billing.labels.billingCity}</label>
+          <Field
+            type="text"
+            name="billingCity"
+            id="billingCity"
+            placeholder={billing.labels.billingCity.replace(' *', '')}
+          />
           <ErrorMessage name="billingCity" component="div" className="error-message" />
         </div>
 
         {/* Billing State/Province */}
         <div className="form-field">
-          <label htmlFor="billingState">State/Province *</label>
-          <Field type="text" name="billingState" id="billingState" placeholder="State/Province" />
+          <label htmlFor="billingState">{billing.labels.billingState}</label>
+          <Field
+            type="text"
+            name="billingState"
+            id="billingState"
+            placeholder={billing.labels.billingState.replace(' *', '')}
+          />
           <ErrorMessage name="billingState" component="div" className="error-message" />
         </div>
 
         {/* Billing Postal Code */}
         <div className="form-field">
-          <label htmlFor="billingPostalCode">Postal Code *</label>
+          <label htmlFor="billingPostalCode">{billing.labels.billingPostalCode}</label>
           <Field
             type="text"
             name="billingPostalCode"
             id="billingPostalCode"
-            placeholder="Postal Code"
+            placeholder={billing.labels.billingPostalCode.replace(' *', '')}
           />
           <ErrorMessage name="billingPostalCode" component="div" className="error-message" />
         </div>
 
         {/* Billing Country */}
         <div className="form-field">
-          <label htmlFor="billingCountry">Country *</label>
-          <Field type="text" name="billingCountry" id="billingCountry" placeholder="Country" />
+          <label htmlFor="billingCountry">{billing.labels.billingCountry}</label>
+          <Field
+            type="text"
+            name="billingCountry"
+            id="billingCountry"
+            placeholder={billing.labels.billingCountry.replace(' *', '')}
+          />
           <ErrorMessage name="billingCountry" component="div" className="error-message" />
         </div>
       </StyledForm>

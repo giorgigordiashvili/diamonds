@@ -367,6 +367,94 @@
     "yes": "Yes",
     "no": "No"
   },
+  "cart": {
+    "title": "Your Shopping Cart",
+    "items": "item",
+    "items_plural": "items",
+    "empty": "is empty",
+    "loading": "Loading cart...",
+    "yourCart": "Your Shopping Cart",
+    "emptyCart": "Your cart is currently empty.",
+    "priceError": "Error",
+    "includingVat": "incl. VAT, free insured shipping",
+    "data": {
+      "title": "Your Data & Shipping Address",
+      "labels": {
+        "title": "Title",
+        "company": "Company (Optional)",
+        "firstName": "First Name *",
+        "lastName": "Last Name *",
+        "email": "Email Address *",
+        "phone": "Phone Number *",
+        "shippingStreet": "Street and Housenumber *",
+        "shippingCity": "City *",
+        "shippingState": "State/Province *",
+        "shippingPostalCode": "Postal Code *",
+        "shippingCountry": "Country *",
+        "createAccount": "Create a customer account."
+      },
+      "placeholders": {
+        "title": "Select Title",
+        "company": "Company",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Your Email Address",
+        "phone": "Phone Number",
+        "shippingStreet": "Street and Housenumber",
+        "shippingCity": "City",
+        "shippingState": "State/Province",
+        "shippingPostalCode": "Postal Code",
+        "shippingCountry": "Country"
+      },
+      "options": {
+        "title": {
+          "mr": "Mr.",
+          "ms": "Ms.",
+          "mrs": "Mrs.",
+          "dr": "Dr.",
+          "other": "Other"
+        }
+      }
+    },
+    "billing": {
+      "title": "Billing Address",
+      "sameAsShipping": "Same as shipping address",
+      "labels": {
+        "billingStreet": "Street and Housenumber *",
+        "billingCity": "City *",
+        "billingState": "State/Province *",
+        "billingPostalCode": "Postal Code *",
+        "billingCountry": "Country *"
+      }
+    },
+    "payment": {
+      "title": "Payment Method",
+      "labels": {
+        "method": "Payment Method:",
+        "notes": "Order Notes (Optional)"
+      },
+      "placeholders": {
+        "notes": "Any special instructions?"
+      },
+      "methods": {
+        "cash": "Cash"
+      }
+    },
+    "action": {
+      "payAndOrder": "PAY AND ORDER",
+      "processing": "PROCESSING..."
+    },
+    "messages": {
+      "success": "Order placed successfully! Order ID: {orderId}",
+      "error": "Error: {error}"
+    },
+    "total": {
+      "total": "Total",
+      "shippingCosts": "Shipping costs",
+      "grandTotal": "Grand total",
+      "vatIncluded": "19% VAT. included:"
+    }
+  },
   "pageContent": {
     "uniqueGift": {
       "title": "ETERNAL JOY",

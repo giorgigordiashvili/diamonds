@@ -26,8 +26,6 @@ export default async function Root(props: {
       <body>
         <StyledComponentsRegistry>
           <CartProvider>
-            {' '}
-            {/* Wrap with CartProvider */}
             <Header />
             {children}
           </CartProvider>

@@ -5,6 +5,7 @@ import Cartitems from '@/components/Cartitems';
 import Data from '@/components/Data';
 import Total from '@/components/Total';
 import { useCart } from '@/context/CartContext';
+import { getDictionary } from '@/get-dictionary';
 import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -75,7 +76,11 @@ const Final = styled.div`
   margin-bottom: 24px;
 `;
 
-const Cart = () => {
+interface AdminDashboardClientProps {
+  dictionary: Awaited<ReturnType<typeof getDictionary>>;
+}
+
+export default function Cart({ dictionary }: AdminDashboardClientProps) {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, getCartCount, isLoading } =
     useCart();
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
@@ -144,10 +149,18 @@ const Cart = () => {
     notes: Yup.string(),
   });
 
+  if (!dictionary.cart) {
+    return (
+      <Main>
+        <p style={{ textAlign: 'center', marginTop: '50px' }}>Loading...</p>
+      </Main>
+    );
+  }
+
   if (isLoading) {
     return (
       <Main>
-        <p style={{ textAlign: 'center', marginTop: '50px' }}>Loading cart...</p>
+        <p style={{ textAlign: 'center', marginTop: '50px' }}>{dictionary.cart.loading}</p>
       </Main>
     );
   }
@@ -224,7 +237,7 @@ const Cart = () => {
       const response = await checkout(checkoutData);
       if (response.success) {
         setCheckoutSuccess(response);
-        alert(`Order successful! Order ID: ${response.orderId}`);
+        alert(dictionary.cart.messages.success.replace('{orderId}', response.orderId));
       } else {
         setCheckoutError(response?.success || 'Checkout failed. Please try again.');
       }
@@ -238,11 +251,13 @@ const Cart = () => {
     }
   };
 
+  const { cart } = dictionary;
+  const itemsText = cartCount > 1 ? cart.items_plural : cart.items;
+
   return (
     <Main>
       <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>
-        Your Shopping Cart{' '}
-        {cartCount > 0 ? `(${cartCount} item${cartCount > 1 ? 's' : ''})` : 'is empty'}
+        {cart.title} {cartCount > 0 ? `(${cartCount} ${itemsText})` : cart.empty}
       </h1>
 
       <Formik
@@ -256,8 +271,8 @@ const Cart = () => {
             <Page>
               <Left>
                 {/* <Customer /> */}
-                <Data />
-                <Billing />
+                <Data dictionary={dictionary} />
+                <Billing dictionary={dictionary} />
                 <div
                   style={{
                     marginTop: '20px',
@@ -273,20 +288,22 @@ const Cart = () => {
                       marginBottom: '15px',
                     }}
                   >
-                    Payment Method
+                    {cart.payment.title}
                   </h3>
                   <div className="form-field">
-                    <p>Payment Method: Cash</p> {/* Display Cash as the payment method */}
+                    <p>
+                      {cart.payment.labels.method} {cart.payment.methods.cash}
+                    </p>
                     {/* Hidden field to include paymentMethod in form values if necessary, though it's fixed */}
                     <Field type="hidden" name="paymentMethod" value="Cash" />
                   </div>
                   <div className="form-field" style={{ marginTop: '15px' }}>
-                    <label htmlFor="notes">Order Notes (Optional)</label>
+                    <label htmlFor="notes">{cart.payment.labels.notes}</label>
                     <Field
                       as="textarea"
                       name="notes"
                       id="notes"
-                      placeholder="Any special instructions?"
+                      placeholder={cart.payment.placeholders.notes}
                       style={{
                         backgroundColor: '#262626',
                         width: '100%',
@@ -304,24 +321,25 @@ const Cart = () => {
               </Left>
               <Shopping>
                 <Cartitems
+                  dictionary={dictionary}
                   items={cartItems}
                   removeFromCart={removeFromCart}
                   updateQuantity={updateQuantity}
                 />
                 <Final>
-                  <Total totalAmount={getCartTotal()} />
+                  <Total dictionary={dictionary} totalAmount={getCartTotal()} />
                 </Final>
                 <Pay type="submit" disabled={isSubmitting || cartCount === 0}>
-                  {isSubmitting ? 'PROCESSING...' : 'PAY AND ORDER'}
+                  {isSubmitting ? cart.action.processing : cart.action.payAndOrder}
                 </Pay>
                 {checkoutError && (
                   <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
-                    Error: {checkoutError}
+                    {cart.messages.error.replace('{error}', checkoutError)}
                   </p>
                 )}
                 {checkoutSuccess && checkoutSuccess.orderId && (
                   <p style={{ color: 'green', textAlign: 'center', marginTop: '10px' }}>
-                    Order placed successfully! Order ID: {checkoutSuccess.orderId}
+                    {cart.messages.success.replace('{orderId}', checkoutSuccess.orderId)}
                   </p>
                 )}
               </Shopping>
@@ -331,6 +349,4 @@ const Cart = () => {
       </Formik>
     </Main>
   );
-};
-
-export default Cart;
+}

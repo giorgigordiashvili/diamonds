@@ -1,12 +1,10 @@
-import React from 'react';
-import Cart from '@/Pages/Cart';
+import Cart from '@/components/Cart';
+import { getDictionary } from '@/get-dictionary';
+import { Locale } from '@/i18n-config';
 
-const page = () => {
-  return (
-    <div>
-      <Cart></Cart>
-    </div>
-  );
-};
+export default async function CartPage(props: { params: Promise<{ lang: Locale }> }) {
+  const { lang } = await props.params;
 
-export default page;
+  const dictionary = await getDictionary(lang);
+  return <Cart dictionary={dictionary} />;
+}
