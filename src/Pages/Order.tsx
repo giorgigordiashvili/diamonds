@@ -1,12 +1,8 @@
 'use client';
-import Image from 'next/image';
-import React from 'react';
-import styled from 'styled-components';
-import Links from '@/components/Links';
-import UniqueGift from '@/components/UniqueGift';
-import DiamondQuality from '@/components/DiamondQuality';
-import Certifications from '@/components/Certifications';
 import DiamondFilter from '@/components/DiamondFilter';
+import Links from '@/components/Links';
+import Image from 'next/image';
+import styled from 'styled-components';
 
 const Main = styled.div`
   margin-top: 52px;
@@ -533,9 +529,9 @@ const Order = () => {
           />
         </Right>
       </Desc>
-      <UniqueGift></UniqueGift>
+      {/* <UniqueGift></UniqueGift>
       <DiamondQuality></DiamondQuality>
-      <Certifications></Certifications>
+      <Certifications></Certifications> */}
     </Main>
   );
 };

@@ -1,5 +1,6 @@
 'use client';
 import { diamondsApi } from '@/api';
+import { getDictionary } from '@/get-dictionary';
 import { Shape } from '@/types/diamond';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -104,9 +105,14 @@ interface DiamondsSectionProps {
       cutMax?: string;
     }
   >;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>['diamondsSection'];
 }
 
-const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, currentFilters }) => {
+const DiamondsSection: React.FC<DiamondsSectionProps> = ({
+  onFilterChange,
+  currentFilters,
+  dictionary,
+}) => {
   const [showPicker, setShowPicker] = useState(true);
   const [showCarat, setShowCarat] = useState(true);
   const [showCut, setShowCut] = useState(false);
@@ -148,7 +154,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
       <Filters>
         {/* Shape Filter */}
         <Filter onClick={() => setShowPicker((prev) => !prev)}>
-          <Title>Diamond shape</Title>
+          <Title>{dictionary.shapesTitle}</Title>
           <Arrow rotated={showPicker}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -166,7 +172,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         )}
         {/* carat Filter */}
         <Filter onClick={() => setShowCarat((prev) => !prev)}>
-          <Title>Carat</Title>
+          <Title>{dictionary.caratRange}</Title>
           <Arrow rotated={showCarat}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -187,7 +193,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         )}
         {/* color Filter */}
         <Filter onClick={() => setShowColor((prev) => !prev)}>
-          <Title>Color</Title>
+          <Title>{dictionary.colorsTitle}</Title>
           <Arrow rotated={showColor}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -206,7 +212,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         )}
         {/* clarity Filter */}
         <Filter onClick={() => setShowClarity((prev) => !prev)}>
-          <Title>Clarity</Title>
+          <Title>{dictionary.clarityTitle}</Title>
           <Arrow rotated={showClarity}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -225,7 +231,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         )}
         {/* Cut Filter */}
         <Filter onClick={() => setShowCut((prev) => !prev)}>
-          <Title>Cut</Title>
+          <Title>{dictionary.cutTitle}</Title>
           <Arrow rotated={showCut}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -244,7 +250,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         )}
         {/* Polish Filter */}
         <Filter onClick={() => setShowPolish((prev) => !prev)}>
-          <Title>Polish</Title>
+          <Title>{dictionary.polishTitle}</Title>
           <Arrow rotated={showPolish}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -257,7 +263,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         {showPolish && <Dualslider type="dashed" />}
         {/* Symmetry Filter */}
         <Filter onClick={() => setShowSymmetry((prev) => !prev)}>
-          <Title>Symmetry</Title>
+          <Title>{dictionary.symmetryTitle}</Title>
           <Arrow rotated={showSymmetry}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -270,7 +276,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         {showSymmetry && <Dualslider type="dashed" />}
         {/* Fluorescence Filter */}
         <Filter onClick={() => setShowFluorescence((prev) => !prev)}>
-          <Title>Fluorescence</Title>
+          <Title>{dictionary.fluorescenceTitle}</Title>
           <Arrow rotated={showFluorescence}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -283,7 +289,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         {showFluorescence && <Fluorescence />}
         {/* certificate Filter */}
         <Filter onClick={() => setShowCertrificate((prev) => !prev)}>
-          <Title>Certificate</Title>
+          <Title>{dictionary.certificatesTitle}</Title>
           <Arrow rotated={showCertrificate}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -296,7 +302,7 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         {showCertrificate && <Certificate />}
         {/* price Filter */}
         <Filter onClick={() => setShowPrice((prev) => !prev)}>
-          <Title>Price</Title>
+          <Title>{dictionary.priceRange}</Title>
           <Arrow rotated={showPrice}>
             <Image
               src={`/assets/diamonds/arrow-drop-down-big-svgrepo-com.png`}
@@ -310,14 +316,14 @@ const DiamondsSection: React.FC<DiamondsSectionProps> = ({ onFilterChange, curre
         {/* proof Filter */}
 
         <Filter onClick={() => setShowProf((prev) => !prev)}>
-          <Title>Professional</Title>
+          <Title>{dictionary.professionalTitle}</Title>
           <Arrow rotated={showProf}>+</Arrow>
         </Filter>
         {showProf && <Professional />}
       </Filters>
-      <ShowButton> Show Results</ShowButton>
+      <ShowButton> {dictionary.showResultsButton}</ShowButton>
 
-      <Resetbutton> Reset all filters</Resetbutton>
+      <Resetbutton> {dictionary.resetFiltersButton}</Resetbutton>
     </Main>
   );
 };

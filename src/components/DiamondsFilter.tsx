@@ -1,5 +1,6 @@
 'use client';
 import { diamondsApi } from '@/api';
+import { getDictionary } from '@/get-dictionary';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DiamondsSection from './DiamondsSection';
@@ -22,10 +23,15 @@ const Head = styled.div`
 
 interface DiamondsFilterProps {
   onFilterChange: (filterName: string, value: any) => void;
-  currentFilters: Partial<diamondsApi.DiamondSearchParams>; // Add currentFilters prop
+  currentFilters: Partial<diamondsApi.DiamondSearchParams>;
+  dictionary: Awaited<ReturnType<typeof getDictionary>>['diamondsSection'];
 }
 
-const DiamondsFilter: React.FC<DiamondsFilterProps> = ({ onFilterChange, currentFilters }) => {
+const DiamondsFilter: React.FC<DiamondsFilterProps> = ({
+  onFilterChange,
+  currentFilters,
+  dictionary,
+}) => {
   const [showFilter, setShowFilter] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -38,16 +44,21 @@ const DiamondsFilter: React.FC<DiamondsFilterProps> = ({ onFilterChange, current
 
   return (
     <div>
-      <Head onClick={() => setShowFilter((prev) => !prev)}>Configure diamond</Head>
+      <Head onClick={() => setShowFilter((prev) => !prev)}>{dictionary.configureDiamond}</Head>
       {showFilter &&
         (isMobile ? (
           <MobileFilter
             onClose={() => setShowFilter(false)}
             onFilterChange={onFilterChange}
-            currentFilters={currentFilters} // Pass currentFilters
+            currentFilters={currentFilters}
+            dictionary={dictionary} // Pass dictionary
           />
         ) : (
-          <DiamondsSection onFilterChange={onFilterChange} currentFilters={currentFilters} /> // Pass currentFilters
+          <DiamondsSection
+            onFilterChange={onFilterChange}
+            currentFilters={currentFilters}
+            dictionary={dictionary}
+          /> // Pass dictionary
         ))}
     </div>
   );

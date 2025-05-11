@@ -1,4 +1,5 @@
 import { diamondsApi } from '@/api'; // Import diamondsApi
+import { getDictionary } from '@/get-dictionary'; // Import getDictionary
 import React from 'react';
 import styled from 'styled-components';
 import DiamondsSection from './DiamondsSection';
@@ -43,9 +44,15 @@ interface MobileFilterProps {
   onClose: () => void;
   onFilterChange: (filterName: string, value: any) => void;
   currentFilters: Partial<diamondsApi.DiamondSearchParams>; // Add currentFilters prop
+  dictionary: Awaited<ReturnType<typeof getDictionary>>['diamondsSection'];
 }
 
-const MobileFilter: React.FC<MobileFilterProps> = ({ onClose, onFilterChange, currentFilters }) => {
+const MobileFilter: React.FC<MobileFilterProps> = ({
+  onClose,
+  onFilterChange,
+  currentFilters,
+  dictionary,
+}) => {
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose(); // Only close if the actual background (Aside) is clicked
@@ -55,8 +62,12 @@ const MobileFilter: React.FC<MobileFilterProps> = ({ onClose, onFilterChange, cu
   return (
     <Aside onClick={handleBackgroundClick}>
       <Filter onClick={(e) => e.stopPropagation()}>
-        {/* Pass onFilterChange and currentFilters to DiamondsSection */}
-        <DiamondsSection onFilterChange={onFilterChange} currentFilters={currentFilters} />
+        {/* Pass onFilterChange, currentFilters, and dictionary to DiamondsSection */}
+        <DiamondsSection
+          onFilterChange={onFilterChange}
+          currentFilters={currentFilters}
+          dictionary={dictionary}
+        />
       </Filter>
       <Close onClick={onClose}>×</Close>
     </Aside>

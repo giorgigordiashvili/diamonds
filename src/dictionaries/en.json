@@ -274,5 +274,114 @@
       "userPromoteFailed": "Failed to promote user: {error}",
       "userPromoteError": "An error occurred while promoting the user"
     }
+  },
+  "pageContent": {
+    "uniqueGift": {
+      "title": "ETERNAL JOY",
+      "heading": "A unique gift",
+      "paragraph1": "Present a gift that not only brings joy every time you see it, but is also eternally valuable and absolutely personal: a unique diamond in the cut of your choice, individually in a blister or incorporated into an enchanting piece of jewelry designed by you.",
+      "paragraph2": "If you initially decide on the individual stone, you always have the option of setting it later - for example, according to the wishes of the presentee - in a ring, necklace, bracelet or earrings. We will accompany and advise you individually in order to meet your exact ideas. Talk to us!",
+      "shopButton": "Shop the Solitaire collection"
+    },
+    "diamondQuality": {
+      "smallTitle": "QUALITY FEATURES",
+      "bigTitle": "Evaluate diamond quality",
+      "paragraph1": "If you want to buy diamonds, it is important that you can determine the quality of your investment or diamond jewelry. You can do this if you know what aspects to look for. The most common classification takes place according to the so-",
+      "paragraph2Part1": "called ",
+      "fourCs": "4Cs",
+      "paragraph2Part2": " which we explain in detail in our guide. In addition, there are other important criteria, such as the fifth C, the ",
+      "indispensableCertificate": "indispensable certificate",
+      "paragraph2Part3": ", as well as, for example, the indicators ",
+      "groundFinish": "Ground finish",
+      "paragraph2Part4": " for diamonds, which ",
+      "symmetry": "Symmetry",
+      "paragraph2Part5": ",",
+      "polish": "Polish ",
+      "paragraph3Part1": "and ",
+      "fluorescence": "Fluorescence",
+      "paragraph3Part2": ". Investment diamonds should also always be untreated. Here it quickly becomes clear: A diamond as an investment must necessarily meet other criteria than a pure jewelry stone."
+    },
+    "certifications": {
+      "title": "Quality promise",
+      "heading": "Your advantages with Brogle",
+      "paragraph1": "When selecting our gemstones, we place particular emphasis on quality criteria that go beyond the classic 4Cs, as well as on the essential certification already from 0.3ct. All our investment diamonds have a certificate from one of the worlds leading laboratories GIA (Gemological Institute of America), IGI (International Institute of Gemology) or HRD (Hooge Raad voor Diamant). Which one is right for you individually, we determine in the personal consultation.",
+      "paragraph2": "Your advantages at Brogle Through the certificate you not only have a confirmation of the authenticity and value of the diamond - only with a certificate that shows the quality of the diamond, you achieve a reasonable price when reselling. All offered stones are also pre-selected by us, so that you can rely on their quality and investability. If you wish, we can also offer you regular cleaning free of charge."
+    },
+    "contactForm": {
+      "smallTitle": "CUSTOM DIAMOND REQUEST",
+      "bigTitle": "Not found what you are looking for?",
+      "namePlaceholder": "Name *",
+      "emailPlaceholder": "E-Mail address *",
+      "telephonePlaceholder": "Telephone",
+      "compulsoryFields": "*Compulsory fields",
+      "submitButton": "Submit request",
+      "choiceHeading": "You have the choice:",
+      "choices": [
+        "Desired carat",
+        "Purity (FL / IF / VVS1 / VVS2 / VS1 / VS2 / SI1)",
+        "Form (z.B. Brilliant, Princess)",
+        "Cut (EX / VG)",
+        "Polishing (EX / VG)",
+        "Symmetry (EX / VG)",
+        "Color (D / E / F / G)",
+        "Your personal budget",
+        "Certified quality of various laboratories (GIA, IGI, HRD)"
+      ],
+      "choiceParagraph": "Of course, you can ask us for any desired variant, even those that you do not find in the configurator.",
+      "callUs": "Give us a call:",
+      "phoneNumber": "+49 (0) 711 217 268 20",
+      "advice": "We will be happy to advise you personally"
+    }
+  },
+  "diamondsFilter": {
+    "configureDiamond": "Configure diamond"
+  },
+  "diamondsList": {
+    "titleSuffix": "Diamonds",
+    "loading": "Loading diamonds...",
+    "errorPrefix": "Error loading diamonds:",
+    "priceSuffix": "incl. VAT",
+    "headers": {
+      "shape": "Shape",
+      "carat": "Carat",
+      "color": "Color",
+      "clarity": "Clarity",
+      "cut": "Cut",
+      "polish": "Polish",
+      "symmetry": "Symmetry",
+      "fluorescence": "Fluorescence",
+      "certificate": "Certificate",
+      "price": "Price"
+    }
+  },
+  "mobileFilter": {
+    "filterTitle": "Filter Diamonds",
+    "applyButton": "Apply Filters",
+    "resetButton": "Reset Filters",
+    "closeButton": "Close"
+  },
+  "diamondsSection": {
+    "configureDiamond": "Configure diamond",
+    "priceRange": "Price Range",
+    "caratRange": "Carat Range",
+    "shapesTitle": "Shapes",
+    "colorsTitle": "Colors",
+    "clarityTitle": "Clarity",
+    "cutTitle": "Cut",
+    "polishTitle": "Polish",
+    "symmetryTitle": "Symmetry",
+    "fluorescenceTitle": "Fluorescence",
+    "certificatesTitle": "Certificates",
+    "professionalTitle": "Professional",
+    "showResultsButton": "Show Results",
+    "resetFiltersButton": "Reset all filters"
+  },
+  "sortingDropdown": {
+    "sortBy": "Sort by:",
+    "relevance": "Relevance",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low",
+    "caratAsc": "Carat: Low to High",
+    "caratDesc": "Carat: High to Low"
   }
 }

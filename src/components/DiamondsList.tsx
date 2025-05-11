@@ -171,9 +171,14 @@ const StyledImageCard = styled.div`
 interface DiamondsListProps {
   filterParams: Partial<diamondsApi.DiamondSearchParams>;
   onFilterChange: (filterName: string, value: any) => void;
+  dictionary: any; // Added dictionary prop
 }
 
-const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChange }) => {
+const DiamondsList: React.FC<DiamondsListProps> = ({
+  filterParams,
+  onFilterChange,
+  dictionary,
+}) => {
   const { data, loading, error, execute: fetchDiamonds } = useApi(diamondsApi.getDiamonds);
   const [sortColumn, setSortColumn] = useState<string>(filterParams.sortBy || 'price');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(filterParams.sortOrder || 'asc');
@@ -197,7 +202,7 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
   const totalPages = Math.ceil(totalDiamonds / itemsPerPage);
 
   const formatPrice = (price: number) => {
-    return `€ ${price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} incl. VAT`;
+    return `€ ${price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${dictionary.priceSuffix}`;
   };
 
   const handleTableHeaderSort = (columnApiKey: string) => {
@@ -228,30 +233,58 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
   };
 
   if (loading) {
-    return <Page>Loading diamonds...</Page>;
+    return <Page>{dictionary.loading}</Page>;
   }
 
   if (error) {
-    return <Page>Error loading diamonds: {error.message}</Page>;
+    return (
+      <Page>
+        {dictionary.errorPrefix} {error.message}
+      </Page>
+    );
   }
 
   const tableHeaders = [
-    { label: 'Shape', key: 'image', sortable: false, apiKey: 'shape', symbol: '' },
-    { label: 'Carat', key: 'carat', sortable: true, apiKey: 'carat', symbol: '' },
-    { label: 'Color', key: 'color', sortable: true, apiKey: 'color', symbol: '' },
-    { label: 'Clarity', key: 'clarity', sortable: true, apiKey: 'clarity', symbol: '' },
-    { label: 'Cut', key: 'cut', sortable: true, apiKey: 'cut', symbol: '' },
-    { label: 'Polish', key: 'polish', sortable: true, apiKey: 'polish', symbol: '' },
-    { label: 'Symmetry', key: 'symmetry', sortable: true, apiKey: 'symmetry', symbol: '' },
+    { label: dictionary.headers.shape, key: 'image', sortable: false, apiKey: 'shape', symbol: '' },
+    { label: dictionary.headers.carat, key: 'carat', sortable: true, apiKey: 'carat', symbol: '' },
+    { label: dictionary.headers.color, key: 'color', sortable: true, apiKey: 'color', symbol: '' },
     {
-      label: 'Fluorescence',
+      label: dictionary.headers.clarity,
+      key: 'clarity',
+      sortable: true,
+      apiKey: 'clarity',
+      symbol: '',
+    },
+    { label: dictionary.headers.cut, key: 'cut', sortable: true, apiKey: 'cut', symbol: '' },
+    {
+      label: dictionary.headers.polish,
+      key: 'polish',
+      sortable: true,
+      apiKey: 'polish',
+      symbol: '',
+    },
+    {
+      label: dictionary.headers.symmetry,
+      key: 'symmetry',
+      sortable: true,
+      apiKey: 'symmetry',
+      symbol: '',
+    },
+    {
+      label: dictionary.headers.fluorescence,
       key: 'fluorescence',
       sortable: true,
       apiKey: 'fluorescence',
       symbol: '',
     },
-    { label: 'Certificate', key: 'certificate', sortable: true, apiKey: 'certificate', symbol: '' },
-    { label: 'Price', key: 'price', sortable: true, apiKey: 'price', symbol: '' },
+    {
+      label: dictionary.headers.certificate,
+      key: 'certificate',
+      sortable: true,
+      apiKey: 'certificate',
+      symbol: '',
+    },
+    { label: dictionary.headers.price, key: 'price', sortable: true, apiKey: 'price', symbol: '' },
   ];
 
   console.log('[DiamondsList Debug]', {
@@ -267,7 +300,9 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
   return (
     <Page>
       <Head>
-        <Title>{totalDiamonds.toLocaleString('de-DE')} Diamonds</Title>
+        <Title>
+          {totalDiamonds.toLocaleString('de-DE')} {dictionary.titleSuffix}
+        </Title>
         <Line>
           <SortingDropdown
             onSortSelect={handleSortDropdownChange}
