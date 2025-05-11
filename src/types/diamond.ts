@@ -40,7 +40,8 @@ export type Certificate = 'GIA' | 'IGI' | 'HRD' | 'AGS' | 'Other';
 export interface Diamond {
   _id?: ObjectId; // MongoDB ObjectId (only used server-side)
   id: string; // Always available string ID for client usage
-  name: string;
+  name_en: string; // Changed from name
+  name_ka: string; // Added
   shape: Shape;
   carat: number;
   color: Color;
@@ -53,7 +54,8 @@ export interface Diamond {
   certificateNumber?: string;
   price: number;
   image?: string;
-  description?: string;
+  description_en?: string; // Changed from description
+  description_ka?: string; // Added
   featured?: boolean;
   createdAt?: Date;
   updatedAt?: Date;

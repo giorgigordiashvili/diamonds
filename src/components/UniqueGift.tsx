@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
 import Image from 'next/image';
+import styled from 'styled-components';
 const Page = styled.div`
   width: 100%;
   display: grid;
@@ -85,26 +84,17 @@ const Shop = styled.div`
   vertical-align: middle;
 `;
 
-const UniqueGift = () => {
+const UniqueGift = ({ dictionary }: { dictionary: any }) => {
   return (
     <Page>
       <Pic>
         <Image src="/assets/diamonds/gift.png" alt="diamond" layout="fill" objectFit="cover" />
       </Pic>
       <Text>
-        <Title>ETERNAL JOY</Title>
-        <Head>A unique gift</Head>
-        <Parag>
-          Present a gift that not only brings joy every time you see it, but is also eternally
-          valuable and absolutely personal: a unique diamond in the cut of your choice, individually
-          in a blister or incorporated into an enchanting piece of jewelry designed by you.
-        </Parag>
-        <Parag>
-          If you initially decide on the individual stone, you always have the option of setting it
-          later - for example, according to the wishes of the presentee - in a ring, necklace,
-          bracelet or earrings. We will accompany and advise you individually in order to meet your
-          exact ideas. Talk to us!
-        </Parag>
+        <Title>{dictionary.title}</Title>
+        <Head>{dictionary.heading}</Head>
+        <Parag>{dictionary.paragraph1}</Parag>
+        <Parag>{dictionary.paragraph2}</Parag>
         <Pictures>
           <Picture>
             <Image src={'/assets/diamonds/gift1.png'} width={102} height={102} alt="gift1" />
@@ -113,7 +103,7 @@ const UniqueGift = () => {
             <Image src={'/assets/diamonds/gift2.png'} width={102} height={102} alt="gift1" />
           </Picture>
         </Pictures>
-        <Shop>Shop the Solitaire collection</Shop>
+        <Shop>{dictionary.shopButton}</Shop>
       </Text>
     </Page>
   );

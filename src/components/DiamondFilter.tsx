@@ -20,6 +20,7 @@ interface DiamondFilterProps {
     Symmetry: string;
     Fluorescence: string;
   };
+  dictionary: any;
 }
 
 const Container = styled.div`
@@ -93,9 +94,9 @@ const SectionComponent: React.FC<SectionComponentProps> = ({ title, options, act
       <OptionsRow>
         {options.map((opt) => (
           <OptionWrapper key={opt}>
-            {opt === activeValue && <Arrow>▼</Arrow>}
-            <Option active={opt === activeValue}>{opt}</Option>
-            {opt === activeValue && <Underline />}
+            {opt.toLowerCase() === activeValue.toLowerCase() && <Arrow>▼</Arrow>}
+            <Option active={opt.toLowerCase() === activeValue.toLowerCase()}>{opt}</Option>
+            {opt.toLowerCase() === activeValue.toLowerCase() && <Underline />}
           </OptionWrapper>
         ))}
       </OptionsRow>
@@ -103,36 +104,38 @@ const SectionComponent: React.FC<SectionComponentProps> = ({ title, options, act
   );
 };
 
-const DiamondFilter: React.FC<DiamondFilterProps> = ({ activeValues }) => {
+const DiamondFilter: React.FC<DiamondFilterProps> = ({ activeValues, dictionary }) => {
+  const filterDict = dictionary?.diamondFilter || {};
+  console.log(activeValues);
   return (
     <Container>
       <SectionComponent
-        title="Color"
+        title={filterDict.colorTitle || 'Color'}
         options={['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']}
         activeValue={activeValues.Color}
       />
       <SectionComponent
-        title="Clarity"
+        title={filterDict.clarityTitle || 'Clarity'}
         options={['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'SI3', 'I1']}
         activeValue={activeValues.Clarity}
       />
       <SectionComponent
-        title="Cut"
+        title={filterDict.cutTitle || 'Cut'}
         options={['MEDIUM', 'GOOD', 'VERY GOOD', 'EXCELLENT']}
         activeValue={activeValues.Cut}
       />
       <SectionComponent
-        title="Polish"
+        title={filterDict.polishTitle || 'Polish'}
         options={['MEDIUM', 'GOOD', 'VERY GOOD', 'EXCELLENT']}
         activeValue={activeValues.Polish}
       />
       <SectionComponent
-        title="Symmetry"
+        title={filterDict.symmetryTitle || 'Symmetry'}
         options={['MEDIUM', 'GOOD', 'VERY GOOD', 'EXCELLENT']}
         activeValue={activeValues.Symmetry}
       />
       <SectionComponent
-        title="Fluorescence"
+        title={filterDict.fluorescenceTitle || 'Fluorescence'}
         options={['NONE', 'VERY SLIGHT', 'SLIGHT', 'FAINT', 'MEDIUM', 'STRONG', 'VERY STRONG']}
         activeValue={activeValues.Fluorescence}
       />

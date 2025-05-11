@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -40,22 +42,18 @@ const Dash = styled.span`
   font-size: 16px;
 `;
 
-interface ClarityDropdownProps {
-  onClarityChange: (from: string | undefined, to: string | undefined) => void;
+interface CutDropdownProps {
+  onCutChange: (from: string | undefined, to: string | undefined) => void;
   initialMin?: string;
   initialMax?: string;
 }
 
-const ClarityDropwown = ({
-  onClarityChange,
-  initialMin = 'from',
-  initialMax = 'to',
-}: ClarityDropdownProps) => {
-  const options = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
+const CutDropdown = ({ onCutChange, initialMin = 'from', initialMax = 'to' }: CutDropdownProps) => {
+  const options = ['Excellent', 'Very Good', 'Good', 'Fair', 'Poor'];
   const [fromValue, setFromValue] = useState(initialMin);
   const [toValue, setToValue] = useState(initialMax);
 
-  const getClarityIndex = (clarity: string) => options.indexOf(clarity);
+  const getCutIndex = (cut: string) => options.indexOf(cut);
 
   const handleFromChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFromValue = e.target.value;
@@ -68,13 +66,13 @@ const ClarityDropwown = ({
     if (
       newFromValue !== 'from' &&
       currentToValue !== 'to' &&
-      getClarityIndex(newFromValue) > getClarityIndex(currentToValue)
+      getCutIndex(newFromValue) > getCutIndex(currentToValue)
     ) {
       setToValue(newFromValue);
       currentToValue = newFromValue;
     }
 
-    onClarityChange(
+    onCutChange(
       newFromValue === 'from' ? undefined : newFromValue,
       currentToValue === 'to' ? undefined : currentToValue
     );
@@ -91,13 +89,13 @@ const ClarityDropwown = ({
     if (
       newToValue !== 'to' &&
       currentFromValue !== 'from' &&
-      getClarityIndex(newToValue) < getClarityIndex(currentFromValue)
+      getCutIndex(newToValue) < getCutIndex(currentFromValue)
     ) {
       setFromValue(newToValue);
       currentFromValue = newToValue;
     }
 
-    onClarityChange(
+    onCutChange(
       currentFromValue === 'from' ? undefined : currentFromValue,
       newToValue === 'to' ? undefined : newToValue
     );
@@ -106,12 +104,12 @@ const ClarityDropwown = ({
   const fromOptions =
     toValue === 'to'
       ? options
-      : options.filter((option) => getClarityIndex(option) <= getClarityIndex(toValue));
+      : options.filter((option) => getCutIndex(option) <= getCutIndex(toValue));
 
   const toOptions =
     fromValue === 'from'
       ? options
-      : options.filter((option) => getClarityIndex(option) >= getClarityIndex(fromValue));
+      : options.filter((option) => getCutIndex(option) >= getCutIndex(fromValue));
 
   return (
     <Container>
@@ -136,4 +134,4 @@ const ClarityDropwown = ({
   );
 };
 
-export default ClarityDropwown;
+export default CutDropdown;

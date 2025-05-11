@@ -123,11 +123,11 @@ export default function DiamondListExample({ initialFilters = {} }: DiamondListP
             {diamond.image && (
               <img
                 src={diamond.image}
-                alt={diamond.name}
+                alt={diamond.name_en}
                 style={{ maxWidth: '100%', height: 'auto' }}
               />
             )}
-            <h3>{diamond.name}</h3>
+            <h3>{diamond.name_en}</h3>
             <p>
               {diamond.carat}ct {diamond.color} {diamond.clarity}
             </p>

@@ -1,6 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
 import Image from 'next/image';
+import styled from 'styled-components';
 const Page = styled.div`
   width: 100%;
   display: grid;
@@ -71,30 +70,17 @@ const Pictures = styled.div`
   position: relative;
 `;
 
-const Certifications = () => {
+const Certifications = ({ dictionary }: { dictionary: any }) => {
   return (
     <Page>
       <Pic>
         <Image src={'/assets/diamonds/cert.png'} alt="diamond" layout="fill" objectFit="cover" />
       </Pic>
       <Text>
-        <Title>Quality promise</Title>
-        <Head>Your advantages with Brogle</Head>
-        <Parag>
-          When selecting our gemstones, we place particular emphasis on quality criteria that go
-          beyond the classic 4Cs, as well as on the essential certification already from 0.3ct. All
-          our investment diamonds have a certificate from one of the worlds leading laboratories GIA
-          (Gemological Institute of America), IGI (International Institute of Gemology) or HRD
-          (Hooge Raad voor Diamant). Which one is right for you individually, we determine in the
-          personal consultation.
-        </Parag>
-        <Parag>
-          Your advantages at Brogle Through the certificate you not only have a confirmation of the
-          authenticity and value of the diamond - only with a certificate that shows the quality of
-          the diamond, you achieve a reasonable price when reselling. All offered stones are also
-          pre-selected by us, so that you can rely on their quality and investability. If you wish,
-          we can also offer you regular cleaning free of charge.
-        </Parag>
+        <Title>{dictionary.title}</Title>
+        <Head>{dictionary.heading}</Head>
+        <Parag>{dictionary.paragraph1}</Parag>
+        <Parag>{dictionary.paragraph2}</Parag>
         <Pictures>
           <Image src={'/assets/diamonds/Certs.png'} alt="gift1" layout="fill" objectFit="contain" />
         </Pictures>

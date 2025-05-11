@@ -1,5 +1,6 @@
 'use client';
 
+import { getDictionary } from '@/get-dictionary';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -52,6 +53,7 @@ const ErrorMessage = styled.p`
 
 interface AdminLoginProps {
   onLoginSuccess: (token: string) => void;
+  adminDict: Awaited<ReturnType<typeof getDictionary>>['admin'];
 }
 
 const AdminLogin = ({ onLoginSuccess }: AdminLoginProps) => {

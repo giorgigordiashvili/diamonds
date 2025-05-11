@@ -1,6 +1,6 @@
+import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
 
 const Main = styled.div`
   flex-wrap: wrap;
@@ -52,42 +52,48 @@ const Tsmall = styled.div`
   color: rgba(255, 255, 255, 1);
 `;
 
-const Links = () => {
+interface LinksProps {
+  dictionary: any;
+}
+
+const Links: React.FC<LinksProps> = ({ dictionary }) => {
   return (
     <Main>
       <Box>
         <Image src={'/assets/order/nature.png'} width={70} height={70} alt="photo"></Image>
         <Texts>
-          <Thead>nature diamonds</Thead>
-          <Tsmall>natural diamonds only</Tsmall>
+          <Thead>{dictionary.natureDiamondsTitle || 'nature diamonds'}</Thead>
+          <Tsmall>{dictionary.natureDiamondsSubtitle || 'natural diamonds only'}</Tsmall>
         </Texts>
       </Box>
       <Box>
         <Image src={'/assets/order/certificate.png'} width={70} height={70} alt="photo"></Image>
         <Texts>
-          <Thead>Certificates</Thead>
-          <Tsmall>independent institutes (GIA, IGI, HRD)</Tsmall>
+          <Thead>{dictionary.certificatesTitle || 'Certificates'}</Thead>
+          <Tsmall>
+            {dictionary.certificatesSubtitle || 'independent institutes (GIA, IGI, HRD)'}
+          </Tsmall>
         </Texts>
       </Box>
       <Box>
         <Image src={'/assets/order/diamond.png'} width={70} height={70} alt="photo"></Image>
         <Texts>
-          <Thead>100%</Thead>
-          <Tsmall>conflict-free diamonds</Tsmall>
+          <Thead>{dictionary.conflictFreeTitle || '100%'}</Thead>
+          <Tsmall>{dictionary.conflictFreeSubtitle || 'conflict-free diamonds'}</Tsmall>
         </Texts>
       </Box>
       <Box>
         <Image src={'/assets/order/price.png'} width={70} height={70} alt="photo"></Image>
         <Texts>
-          <Thead>Best Price Guarantee</Thead>
-          <Tsmall>with Brogle Diamonds</Tsmall>
+          <Thead>{dictionary.bestPriceTitle || 'Best Price Guarantee'}</Thead>
+          <Tsmall>{dictionary.bestPriceSubtitle || 'with Brogle Diamonds'}</Tsmall>
         </Texts>
       </Box>
       <Box>
         <Image src={'/assets/order/since.png'} width={70} height={70} alt="photo"></Image>
         <Texts>
-          <Thead>Since 1945</Thead>
-          <Tsmall>Experience and quality</Tsmall>
+          <Thead>{dictionary.since1945Title || 'Since 1945'}</Thead>
+          <Tsmall>{dictionary.since1945Subtitle || 'Experience and quality'}</Tsmall>
         </Texts>
       </Box>
     </Main>

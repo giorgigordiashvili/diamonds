@@ -1,4 +1,3 @@
-import React from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -67,32 +66,34 @@ const Span = styled.span`
   font-weight: 700;
 `;
 
-const DiamondQuality = () => {
+const DiamondQuality = ({ dictionary }: { dictionary: any }) => {
   return (
     <>
       <Title>
-        <Small>QUALITY FEATURES</Small>
-        <Big>Evaluate diamond quality</Big>
+        <Small>{dictionary.smallTitle}</Small>
+        <Big>{dictionary.bigTitle}</Big>
       </Title>
       <Pic>
         <Image src={'/assets/diamonds/Quality.png'} alt="" layout="fill" objectFit="cover" />
       </Pic>
       <Text>
+        <p>{dictionary.paragraph1}</p>
         <p>
-          If you want to buy diamonds, it is important that you can determine the quality of your
-          investment or diamond jewelry. You can do this if you know what aspects to look for. The
-          most common classification takes place according to the so-
+          {dictionary.paragraph2Part1}
+          <Span>{dictionary.fourCs}</Span>
+          {dictionary.paragraph2Part2}
+          <Span>{dictionary.indispensableCertificate}</Span>
+          {dictionary.paragraph2Part3}
+          <Span>{dictionary.groundFinish}</Span>
+          {dictionary.paragraph2Part4}
+          <Span>{dictionary.symmetry}</Span>
+          {dictionary.paragraph2Part5}
         </p>
         <p>
-          called <Span>4Cs</Span> which we explain in detail in our guide. In addition, there are
-          other important criteria, such as the fifth C, the<Span> indispensable certificate</Span>,
-          as well as, for example, the indicators<Span> Ground finish</Span> for diamonds, which
-          <Span>Symmetry</Span>,
-        </p>
-        <p>
-          <Span>Polish </Span>and <Span>Fluorescence</Span>. Investment diamonds should also always
-          be untreated. Here it quickly becomes clear: A diamond as an investment must necessarily
-          meet other criteria than a pure jewelry stone.
+          <Span>{dictionary.polish}</Span>
+          {dictionary.paragraph3Part1}
+          <Span>{dictionary.fluorescence}</Span>
+          {dictionary.paragraph3Part2}
         </p>
       </Text>
     </>

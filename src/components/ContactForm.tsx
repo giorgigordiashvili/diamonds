@@ -1,7 +1,7 @@
+import Image from 'next/image';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Checkbox from './Checkbox';
-import Image from 'next/image';
 const Title = styled.div`
   padding: 60px 0;
   display: flex;
@@ -205,7 +205,7 @@ const Num = styled.div`
   vertical-align: middle;
 `;
 
-const ContactForm = () => {
+const ContactForm = ({ dictionary }: { dictionary: any }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -235,8 +235,8 @@ const ContactForm = () => {
   return (
     <>
       <Title>
-        <Small>CUSTOM DIAMOND REQUEST</Small>
-        <Big>Not found what you are looking for?</Big>
+        <Small>{dictionary.smallTitle}</Small>
+        <Big>{dictionary.bigTitle}</Big>
       </Title>
       <Page>
         <Inputs>
@@ -244,7 +244,7 @@ const ContactForm = () => {
             type="text"
             name="name"
             id="name"
-            placeholder="Name *"
+            placeholder={dictionary.namePlaceholder}
             value={formData.name}
             onChange={handleInputChange}
           />
@@ -252,7 +252,7 @@ const ContactForm = () => {
             type="email"
             name="email"
             id="email"
-            placeholder="E-Mail address *"
+            placeholder={dictionary.emailPlaceholder}
             value={formData.email}
             onChange={handleInputChange}
           />
@@ -260,7 +260,7 @@ const ContactForm = () => {
             type="number"
             name="number"
             id="number"
-            placeholder="Telephone"
+            placeholder={dictionary.telephonePlaceholder}
             value={formData.number}
             onChange={handleInputChange}
           />
@@ -271,28 +271,19 @@ const ContactForm = () => {
               value={formData.compulsory}
               onChange={handleInputChange}
             />
-            <p>*Compulsory fields</p>
+            <p>{dictionary.compulsoryFields}</p>
           </Comp>
           <Checkbox checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} />
-          <Shop onClick={handleSubmit}>Submit request</Shop>
+          <Shop onClick={handleSubmit}>{dictionary.submitButton}</Shop>
         </Inputs>
         <Contacts>
-          <Heading>You have the choice:</Heading>
+          <Heading>{dictionary.choiceHeading}</Heading>
           <List>
-            <ListItem>Desired carat</ListItem>
-            <ListItem>Purity (FL / IF / VVS1 / VVS2 / VS1 / VS2 / SI1)</ListItem>
-            <ListItem>Form (z.B. Brilliant, Princess)</ListItem>
-            <ListItem>Cut (EX / VG)</ListItem>
-            <ListItem>Polishing (EX / VG)</ListItem>
-            <ListItem>Symmetry (EX / VG)</ListItem>
-            <ListItem>Color (D / E / F / G)</ListItem>
-            <ListItem>Your personal budget</ListItem>
-            <ListItem>Certified quality of various laboratories (GIA, IGI, HRD)</ListItem>
+            {dictionary.choices.map((choice: string, index: number) => (
+              <ListItem key={index}>{choice}</ListItem>
+            ))}
           </List>
-          <Paragraph>
-            Of course, you can ask us for any desired variant, even those that you do not find in
-            the configurator.
-          </Paragraph>
+          <Paragraph>{dictionary.choiceParagraph}</Paragraph>
           <ContactSection>
             <ContactImage>
               <Image src={'/assets/header/man.png'} width={70} height={70} alt="man" />
@@ -305,10 +296,10 @@ const ContactForm = () => {
                   height={15}
                   alt="phone"
                 ></Image>
-                <p>Give us a call:</p>
+                <p>{dictionary.callUs}</p>
               </PhoneNumber>
-              <Num> +49 (0) 711 217 268 20</Num>
-              <Adveice>We will be happy to advise you personally</Adveice>
+              <Num>{dictionary.phoneNumber}</Num>
+              <Adveice>{dictionary.advice}</Adveice>
             </ContactText>
           </ContactSection>
         </Contacts>

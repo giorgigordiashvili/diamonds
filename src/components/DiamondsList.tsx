@@ -2,6 +2,7 @@ import { diamondsApi } from '@/api';
 import { useApi } from '@/hooks/useApi';
 import { Diamond } from '@/types/diamond';
 import Image from 'next/image';
+import Link from 'next/link'; // Added Link import
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Scroll from './Scroll';
@@ -171,9 +172,14 @@ const StyledImageCard = styled.div`
 interface DiamondsListProps {
   filterParams: Partial<diamondsApi.DiamondSearchParams>;
   onFilterChange: (filterName: string, value: any) => void;
+  dictionary: any; // Added dictionary prop
 }
 
-const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChange }) => {
+const DiamondsList: React.FC<DiamondsListProps> = ({
+  filterParams,
+  onFilterChange,
+  dictionary,
+}) => {
   const { data, loading, error, execute: fetchDiamonds } = useApi(diamondsApi.getDiamonds);
   const [sortColumn, setSortColumn] = useState<string>(filterParams.sortBy || 'price');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>(filterParams.sortOrder || 'asc');
@@ -197,7 +203,7 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
   const totalPages = Math.ceil(totalDiamonds / itemsPerPage);
 
   const formatPrice = (price: number) => {
-    return `€ ${price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} incl. VAT`;
+    return `€ ${price.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${dictionary.priceSuffix}`;
   };
 
   const handleTableHeaderSort = (columnApiKey: string) => {
@@ -228,30 +234,58 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
   };
 
   if (loading) {
-    return <Page>Loading diamonds...</Page>;
+    return <Page>{dictionary.loading}</Page>;
   }
 
   if (error) {
-    return <Page>Error loading diamonds: {error.message}</Page>;
+    return (
+      <Page>
+        {dictionary.errorPrefix} {error.message}
+      </Page>
+    );
   }
 
   const tableHeaders = [
-    { label: 'Shape', key: 'image', sortable: false, apiKey: 'shape', symbol: '' },
-    { label: 'Carat', key: 'carat', sortable: true, apiKey: 'carat', symbol: '' },
-    { label: 'Color', key: 'color', sortable: true, apiKey: 'color', symbol: '' },
-    { label: 'Clarity', key: 'clarity', sortable: true, apiKey: 'clarity', symbol: '' },
-    { label: 'Cut', key: 'cut', sortable: true, apiKey: 'cut', symbol: '' },
-    { label: 'Polish', key: 'polish', sortable: true, apiKey: 'polish', symbol: '' },
-    { label: 'Symmetry', key: 'symmetry', sortable: true, apiKey: 'symmetry', symbol: '' },
+    { label: dictionary.headers.shape, key: 'image', sortable: false, apiKey: 'shape', symbol: '' },
+    { label: dictionary.headers.carat, key: 'carat', sortable: true, apiKey: 'carat', symbol: '' },
+    { label: dictionary.headers.color, key: 'color', sortable: true, apiKey: 'color', symbol: '' },
     {
-      label: 'Fluorescence',
+      label: dictionary.headers.clarity,
+      key: 'clarity',
+      sortable: true,
+      apiKey: 'clarity',
+      symbol: '',
+    },
+    { label: dictionary.headers.cut, key: 'cut', sortable: true, apiKey: 'cut', symbol: '' },
+    {
+      label: dictionary.headers.polish,
+      key: 'polish',
+      sortable: true,
+      apiKey: 'polish',
+      symbol: '',
+    },
+    {
+      label: dictionary.headers.symmetry,
+      key: 'symmetry',
+      sortable: true,
+      apiKey: 'symmetry',
+      symbol: '',
+    },
+    {
+      label: dictionary.headers.fluorescence,
       key: 'fluorescence',
       sortable: true,
       apiKey: 'fluorescence',
       symbol: '',
     },
-    { label: 'Certificate', key: 'certificate', sortable: true, apiKey: 'certificate', symbol: '' },
-    { label: 'Price', key: 'price', sortable: true, apiKey: 'price', symbol: '' },
+    {
+      label: dictionary.headers.certificate,
+      key: 'certificate',
+      sortable: true,
+      apiKey: 'certificate',
+      symbol: '',
+    },
+    { label: dictionary.headers.price, key: 'price', sortable: true, apiKey: 'price', symbol: '' },
   ];
 
   console.log('[DiamondsList Debug]', {
@@ -267,7 +301,9 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
   return (
     <Page>
       <Head>
-        <Title>{totalDiamonds.toLocaleString('de-DE')} Diamonds</Title>
+        <Title>
+          {totalDiamonds.toLocaleString('de-DE')} {dictionary.titleSuffix}
+        </Title>
         <Line>
           <SortingDropdown
             onSortSelect={handleSortDropdownChange}
@@ -294,29 +330,33 @@ const DiamondsList: React.FC<DiamondsListProps> = ({ filterParams, onFilterChang
           ))}
         </TableHeaderRow>
         {diamonds.map((diamond: Diamond) => (
-          <TableDataRow key={diamond.id}>
-            <TableDataCell className="col-image">
-              <StyledImageCard>
-                <Image
-                  src={diamond.image || '/assets/diamonds/Diamant.png'}
-                  alt={diamond.shape || 'diamond'}
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </StyledImageCard>
-            </TableDataCell>
-            <TableDataCell className="col-carat">{diamond.carat.toFixed(2)}</TableDataCell>
-            <TableDataCell className="col-color">{diamond.color}</TableDataCell>
-            <TableDataCell className="col-clarity">{diamond.clarity}</TableDataCell>
-            <TableDataCell className="col-cut">{diamond.cut || '-'}</TableDataCell>
-            <TableDataCell className="col-polish">{diamond.polish || '-'}</TableDataCell>
-            <TableDataCell className="col-symmetry">{diamond.symmetry || '-'}</TableDataCell>
-            <TableDataCell className="col-fluorescence">
-              {diamond.fluorescence || '-'}
-            </TableDataCell>
-            <TableDataCell className="col-certificate">{diamond.certificate || '-'}</TableDataCell>
-            <TableDataCell className="col-price">{formatPrice(diamond.price)}</TableDataCell>
-          </TableDataRow>
+          <Link href={`/diamond/${diamond.id}`} key={diamond.id} passHref>
+            <TableDataRow>
+              <TableDataCell className="col-image">
+                <StyledImageCard>
+                  <Image
+                    src={diamond.image || '/assets/diamonds/Diamant.png'}
+                    alt={diamond.shape || 'diamond'}
+                    fill
+                    style={{ objectFit: 'contain' }}
+                  />
+                </StyledImageCard>
+              </TableDataCell>
+              <TableDataCell className="col-carat">{diamond.carat.toFixed(2)}</TableDataCell>
+              <TableDataCell className="col-color">{diamond.color}</TableDataCell>
+              <TableDataCell className="col-clarity">{diamond.clarity}</TableDataCell>
+              <TableDataCell className="col-cut">{diamond.cut || '-'}</TableDataCell>
+              <TableDataCell className="col-polish">{diamond.polish || '-'}</TableDataCell>
+              <TableDataCell className="col-symmetry">{diamond.symmetry || '-'}</TableDataCell>
+              <TableDataCell className="col-fluorescence">
+                {diamond.fluorescence || '-'}
+              </TableDataCell>
+              <TableDataCell className="col-certificate">
+                {diamond.certificate || '-'}
+              </TableDataCell>
+              <TableDataCell className="col-price">{formatPrice(diamond.price)}</TableDataCell>
+            </TableDataRow>
+          </Link>
         ))}
       </TableContainer>
       {diamonds.length > 0 && totalPages > 0 && (
