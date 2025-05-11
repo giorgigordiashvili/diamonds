@@ -1,9 +1,9 @@
 'use client';
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Trash } from 'lucide-react';
+import { CartItem } from '@/types/cart';
+import { MinusCircle, PlusCircle, Trash } from 'lucide-react';
 import Image from 'next/image';
-import Checkbox from './Checkbox';
+import React from 'react';
+import styled from 'styled-components';
 
 const Main = styled.div`
   width: 100%;
@@ -34,7 +34,7 @@ const Head = styled.div`
   }
 `;
 
-const Diamond = styled.div`
+const DiamondStyled = styled.div`
   padding-bottom: 12px;
   border-bottom: 1px solid white;
 
@@ -75,8 +75,27 @@ const Moreinfo = styled.div`
   margin-top: 20px;
 `;
 
+const QuantityControl = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+
+  button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+  }
+`;
+
 const Quant = styled.div`
-  font-size: 20px;
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
 `;
 
 const Price = styled.div``;
@@ -92,56 +111,31 @@ const Tax = styled.div`
   font-size: 10px;
 `;
 
-const Wrap = styled.div`
-  font-weight: bold;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 16px;
-`;
-
-const Wrapfee = styled.div`
-  color: black;
-  background-color: white;
-  font-size: 12px;
-  font-weight: bold;
-  padding-inline: 4px;
-`;
-
 const Trashcan = styled.div`
   width: 20px;
   height: 20px;
   cursor: pointer;
 `;
 
-const sampleDiamond = {
-  id: crypto.randomUUID(),
-  name: 'Brilliant, 0.59 Carat, G, SI1, Very good',
-  description:
-    'Shape: Brilliant, Carat: 0.59, Color: G, Clarity: SI1, Cut: Very good, Polish: Good Item number: 166974277',
-  quantity: 1,
-  cost: '1.378,00 €',
-  checked: false,
-};
+interface CartitemsProps {
+  items: CartItem[];
+  removeFromCart: (diamondId: string) => void;
+  updateQuantity: (diamondId: string, quantity: number) => void;
+}
 
-const Cartitems = () => {
-  const [diamonds, setDiamonds] = useState([
-    sampleDiamond,
-    { ...sampleDiamond, id: crypto.randomUUID() },
-  ]);
-
-  const handleDelete = (id: string) => {
-    setDiamonds((prev) => prev.filter((d) => d.id !== id));
-  };
-
-  const handleCheck = (id: string, checked: boolean) => {
-    setDiamonds((prev) => prev.map((d) => (d.id === id ? { ...d, checked } : d)));
-    if (checked) {
-      console.log(`Checkbox for diamond ${id} checked`);
-    }
-  };
+const Cartitems: React.FC<CartitemsProps> = ({ items, removeFromCart, updateQuantity }) => {
+  if (!items || items.length === 0) {
+    return (
+      <Main>
+        <Head>
+          <div></div>
+          <p>Your Shopping Cart</p>
+          <div></div>
+        </Head>
+        <p style={{ textAlign: 'center', marginTop: '20px' }}>Your cart is currently empty.</p>
+      </Main>
+    );
+  }
 
   return (
     <Main>
@@ -151,36 +145,69 @@ const Cartitems = () => {
         <div></div>
       </Head>
 
-      {diamonds.map((diamond) => (
-        <Diamond key={diamond.id}>
-          <Item>
-            <Image src="/assets/order/sample.png" alt="diamond" width={70} height={70} />
-            <Desc>
-              <Name>{diamond.name}</Name>
-              <Description>{diamond.description}</Description>
-              <Moreinfo>
-                <Quant>{diamond.quantity}</Quant>
-                <Price>
-                  <Cost>{diamond.cost}</Cost>
-                  <Tax>incl. VAT, free insured shipping</Tax>
-                </Price>
-              </Moreinfo>
-            </Desc>
-            <Trashcan onClick={() => handleDelete(diamond.id)}>
-              <Trash style={{ maxWidth: '24px' }} color="white" size={16} />
-            </Trashcan>
-          </Item>
+      {items.map((item) => {
+        // Log item price and quantity to help debug NaN issues
+        console.log(
+          `CartItem: ID=${item.diamondId}, Price=${item.price}, Quantity=${item.quantity}`
+        );
 
-          <Wrap>
-            <Checkbox
-              checked={diamond.checked}
-              onChange={(e) => handleCheck(diamond.id, e.target.checked)}
-              labelText="Gift wrap"
-            />
-            <Wrapfee>Free of charge</Wrapfee>
-          </Wrap>
-        </Diamond>
-      ))}
+        console.log(item);
+
+        const totalPriceForItem = item.price * item.quantity;
+        // Check if totalPriceForItem is NaN and log if it is
+        if (isNaN(totalPriceForItem)) {
+          console.error('NaN detected for item:', item);
+        }
+
+        return (
+          <DiamondStyled key={item.diamondId}>
+            <Item>
+              <Image
+                src={item.diamond.image || '/assets/diamonds/Diamant.png'}
+                alt={item.diamond.name_en || 'Diamond'}
+                width={70}
+                height={70}
+                style={{ objectFit: 'cover', borderRadius: '4px' }}
+              />
+              <Desc>
+                <Name>{item.diamond.name_en}</Name>
+                <Description>
+                  {`Shape: ${item.diamond.shape}, Carat: ${item.diamond.carat.toFixed(2)}, Color: ${item.diamond.color}, Clarity: ${item.diamond.clarity}`}
+                </Description>
+                <Moreinfo>
+                  <QuantityControl>
+                    <button
+                      onClick={() => updateQuantity(item.diamondId, item.quantity - 1)}
+                      disabled={item.quantity <= 1}
+                    >
+                      <MinusCircle size={20} />
+                    </button>
+                    <Quant>{item.quantity}</Quant>
+                    <button onClick={() => updateQuantity(item.diamondId, item.quantity + 1)}>
+                      <PlusCircle size={20} />
+                    </button>
+                  </QuantityControl>
+                  <Price>
+                    {/* Display item price (price per unit * quantity) */}
+                    <Cost>
+                      {isNaN(totalPriceForItem)
+                        ? 'Error'
+                        : totalPriceForItem.toLocaleString('de-DE', {
+                            style: 'currency',
+                            currency: 'EUR',
+                          })}
+                    </Cost>
+                    <Tax>incl. VAT, free insured shipping</Tax>
+                  </Price>
+                </Moreinfo>
+              </Desc>
+              <Trashcan onClick={() => removeFromCart(item.diamondId)}>
+                <Trash style={{ maxWidth: '24px' }} color="white" size={16} />
+              </Trashcan>
+            </Item>
+          </DiamondStyled>
+        );
+      })}
     </Main>
   );
 };

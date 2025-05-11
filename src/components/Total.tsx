@@ -24,24 +24,38 @@ const Vat = styled.div`
   color: #7d7d7d;
 `;
 
-const Total = () => {
+// Define props interface
+interface TotalProps {
+  totalAmount: number;
+}
+
+const Total: React.FC<TotalProps> = ({ totalAmount }) => {
+  const shippingCost = 0; // Assuming shipping is free for now
+  const grandTotal = totalAmount + shippingCost;
+  const vatRate = 0.19; // 19% VAT
+  const vatIncluded = grandTotal - grandTotal / (1 + vatRate);
+
+  const formatCurrency = (amount: number) => {
+    return amount.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
+  };
+
   return (
     <Main>
       <Cost>
         <p>Total</p>
-        <p>10000 €</p>
+        <p>{formatCurrency(totalAmount)}</p>
       </Cost>
       <Shipping>
         <p>Shipping costs</p>
-        <p>0 €</p>
+        <p>{formatCurrency(shippingCost)}</p>
       </Shipping>
       <Grand>
         <p>Grand total</p>
-        <p>10000 €</p>
+        <p>{formatCurrency(grandTotal)}</p>
       </Grand>
       <Vat>
         <p>19% VAT. included:</p>
-        <p>333,06 €</p>
+        <p>{formatCurrency(vatIncluded)}</p>
       </Vat>
     </Main>
   );
