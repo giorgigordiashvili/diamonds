@@ -183,9 +183,16 @@ const Header = () => {
         <Left>
           <Image src={'/assets/header/logo.png'} height={22} width={115} alt="logo"></Image>
           <Tabs>
-            <Tab>Diamonds</Tab>
-            <Tab>Certificates</Tab>
-            <Tab>Request</Tab>
+            <Tab>
+              <Link href={'/'}>Diamonds</Link>
+            </Tab>
+            <Tab>
+              <Link href={'/'}>Certificates</Link>{' '}
+            </Tab>
+
+            <Tab>
+              <Link href={'/'}>Request</Link>{' '}
+            </Tab>
           </Tabs>
         </Left>
         <Contact>
