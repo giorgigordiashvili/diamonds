@@ -18,8 +18,8 @@ const Main = styled.div`
   width: 100%;
   max-width: 400px;
   height: auto;
-  @media screen and (max-width: 980px) {
-    max-width: unset;
+  @media screen and (max-width: 1151px) {
+    max-width: none;
   }
 `;
 const Filters = styled.div`
@@ -90,7 +90,7 @@ const ShowButton = styled.div`
   margin-top: 20px;
   background-color: white;
 
-  @media screen and (max-width: 980px) {
+  @media screen and (max-width: 1151px) {
     display: block;
   }
 `;

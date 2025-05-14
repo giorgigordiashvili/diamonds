@@ -16,7 +16,7 @@ const Head = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  @media screen and (max-width: 980px) {
+  @media screen and (max-width: 1150px) {
     margin-top: 24px;
   }
   @media screen and (max-width: 465px) {
@@ -81,22 +81,18 @@ const TableCellBase = styled.div`
   &.col-cut {
     flex: 1 1 90px;
     justify-content: flex-start;
-    min-width: 90px;
   }
   &.col-polish {
     flex: 1 1 90px;
     justify-content: flex-start;
-    min-width: 90px;
   }
   &.col-symmetry {
     flex: 1 1 90px;
     justify-content: flex-start;
-    min-width: 90px;
   }
   &.col-fluorescence {
     flex: 1 1 100px;
     justify-content: flex-start;
-    min-width: 100px;
   }
   &.col-certificate {
     flex: 0 0 70px;
@@ -151,7 +147,6 @@ const TableDataRow = styled.div`
 
 const TableDataCell = styled(TableCellBase)`
   color: #fff;
-
   &.col-price {
     font-weight: bold;
   }

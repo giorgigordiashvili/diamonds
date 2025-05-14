@@ -6,12 +6,19 @@ import styled from 'styled-components';
 import DiamondsSection from './DiamondsSection';
 import MobileFilter from './MobileFilter';
 
+const Main = styled.div`
+  min-width: 260px;
+  @media screen and (max-width: 1150px) {
+    min-width: unset;
+    width: 100%;
+  }
+`;
 const Head = styled.div`
   margin-bottom: 30px;
   font-weight: 700;
   font-size: 18px;
   line-height: 22px;
-  @media screen and (max-width: 980px) {
+  @media screen and (max-width: 1150px) {
     margin-inline: 16px;
     text-align: center;
     border: 2px solid rgba(255, 255, 255, 1);
@@ -36,14 +43,14 @@ const DiamondsFilter: React.FC<DiamondsFilterProps> = ({
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 980);
+    const checkMobile = () => setIsMobile(window.innerWidth <= 1150);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   return (
-    <div>
+    <Main>
       <Head onClick={() => setShowFilter((prev) => !prev)}>{dictionary.configureDiamond}</Head>
       {showFilter &&
         (isMobile ? (
@@ -60,7 +67,7 @@ const DiamondsFilter: React.FC<DiamondsFilterProps> = ({
             dictionary={dictionary}
           /> // Pass dictionary
         ))}
-    </div>
+    </Main>
   );
 };
 

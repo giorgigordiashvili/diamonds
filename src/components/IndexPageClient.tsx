@@ -14,8 +14,10 @@ import styles from '../app/page.module.css'; // Adjusted path
 
 const First = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  @media screen and (max-width: 980px) {
+  grid-template-columns: auto auto;
+  justify-content: space-around;
+  gap: 50px;
+  @media screen and (max-width: 1150px) {
     grid-template-columns: 1fr;
   }
 `;
