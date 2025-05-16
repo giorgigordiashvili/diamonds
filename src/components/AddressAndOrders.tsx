@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const Left = styled.div`
   padding: 0 16px;
@@ -17,7 +18,9 @@ const Left = styled.div`
 `;
 
 const StyledLink = styled(Link)<{ $active: boolean }>`
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 4px;
   width: 100%;
   font-weight: 700;
@@ -32,6 +35,7 @@ const StyledLink = styled(Link)<{ $active: boolean }>`
 `;
 
 const Logout = styled.p`
+  font-size: 14px;
   margin-top: 20px;
   padding-inline: 32px;
   width: fit-content;
@@ -82,10 +86,22 @@ const AddressAndOrders = () => {
 
       <StyledLink href="/address" $active={currentPage === 'address'}>
         My addresses
+        <Image
+          alt="arrow"
+          src={'/assets/diamonds/right-arrow-svgrepo-com.svg'}
+          width={12}
+          height={12}
+        />
       </StyledLink>
 
       <StyledLink href="/orders" $active={currentPage === 'orders'}>
         Orders
+        <Image
+          alt="arrow"
+          src={'/assets/diamonds/right-arrow-svgrepo-com.svg'}
+          width={12}
+          height={12}
+        />
       </StyledLink>
 
       <Logout>Log Out</Logout>

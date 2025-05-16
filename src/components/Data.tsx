@@ -49,14 +49,12 @@ const StyledForm = styled.div`
 
   input,
   select {
-    /* Apply original input styling */
     background-color: #262626;
     width: 100%;
     outline: none;
     border: none; /* Reverted: remove border */
     padding: 12px;
     color: #fff; /* Keep text color for visibility */
-    /* border-radius: 4px; */ /* Reverted: remove border-radius */
   }
 
   .full-width {

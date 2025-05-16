@@ -305,6 +305,8 @@ export default function Cart({ dictionary }: AdminDashboardClientProps) {
                       id="notes"
                       placeholder={cart.payment.placeholders.notes}
                       style={{
+                        marginTop: '12px',
+                        resize: 'none',
                         backgroundColor: '#262626',
                         width: '100%',
                         outline: 'none',
