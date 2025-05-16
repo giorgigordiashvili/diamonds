@@ -117,11 +117,9 @@ const Shop = styled.div`
 `;
 
 const Heading = styled.h3`
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 20px;
   margin-bottom: 10px;
   font-weight: 500;
-  font-size: 18.59px;
   line-height: 48px;
   letter-spacing: 0.2px;
   vertical-align: middle;
@@ -141,7 +139,7 @@ const ListItem = styled.li`
   padding-left: 20px;
 
   &:before {
-    content: '•';
+    content: '-';
     position: absolute;
     left: 0;
     color: white;

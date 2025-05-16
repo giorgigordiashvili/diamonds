@@ -8,6 +8,7 @@ import MobileFilter from './MobileFilter';
 
 const Main = styled.div`
   min-width: 260px;
+  justify-self: self-end;
   @media screen and (max-width: 1150px) {
     min-width: unset;
     width: 100%;

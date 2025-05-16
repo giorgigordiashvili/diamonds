@@ -15,14 +15,13 @@ import styles from '../app/page.module.css'; // Adjusted path
 const First = styled.div`
   display: grid;
   grid-template-columns: auto auto;
-  justify-content: space-around;
   gap: 50px;
   @media screen and (max-width: 1150px) {
     grid-template-columns: 1fr;
   }
 `;
 const Margin = styled.div`
-  margin-top: 280px;
+  margin-top: 60px;
   @media screen and (max-width: 1120px) {
     margin-top: 48px;
   }

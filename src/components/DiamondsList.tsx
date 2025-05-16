@@ -9,13 +9,15 @@ import Scroll from './Scroll';
 import SortingDropdown from './SortingDropdown';
 
 const Page = styled.div`
-  width: 100%;
+  width: fit-content;
+  justify-self: self-start;
 `;
 const Head = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+
   @media screen and (max-width: 1150px) {
     margin-top: 24px;
   }
@@ -108,7 +110,6 @@ const TableHeaderRow = styled.div`
   display: flex;
   width: 100%;
   border-bottom: 1px solid #555;
-  background-color: #1a1a1a;
 
   @media screen and (min-width: 981px) {
     display: grid;
@@ -241,7 +242,7 @@ const DiamondsList: React.FC<DiamondsListProps> = ({
   }
 
   const tableHeaders = [
-    { label: dictionary.headers.shape, key: 'image', sortable: false, apiKey: 'shape', symbol: '' },
+    { label: dictionary.headers.shape, key: 'image', sortable: true, apiKey: 'shape', symbol: '' },
     { label: dictionary.headers.carat, key: 'carat', sortable: true, apiKey: 'carat', symbol: '' },
     { label: dictionary.headers.color, key: 'color', sortable: true, apiKey: 'color', symbol: '' },
     {
@@ -315,8 +316,18 @@ const DiamondsList: React.FC<DiamondsListProps> = ({
               onClick={() => header.sortable && handleTableHeaderSort(header.apiKey)}
             >
               {header.sortable && (
-                <span>
-                  {sortColumn === header.apiKey ? (sortOrder === 'asc' ? '▲' : '▼') : '◆'}
+                <span style={{ marginRight: '4px' }}>
+                  {sortColumn === header.apiKey ? (
+                    sortOrder === 'asc' ? (
+                      '▲'
+                    ) : (
+                      '▼'
+                    )
+                  ) : (
+                    <>
+                      ▲<br />▼
+                    </>
+                  )}
                 </span>
               )}
               {!header.sortable && header.symbol && <span>{header.symbol}</span>}

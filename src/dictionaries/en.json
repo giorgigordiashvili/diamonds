@@ -543,8 +543,8 @@
   "diamondsSection": {
     "configureDiamond": "Configure diamond",
     "priceRange": "Price Range",
-    "caratRange": "Carat Range",
-    "shapesTitle": "Shapes",
+    "caratRange": "Carat",
+    "shapesTitle": "Diamonds shape",
     "colorsTitle": "Colors",
     "clarityTitle": "Clarity",
     "cutTitle": "Cut",

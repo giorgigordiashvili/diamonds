@@ -2,7 +2,8 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 const Title = styled.div`
-  padding: 60px 0;
+  margin-top: 150px;
+  margin-bottom: 52px;
   display: flex;
   flex-direction: column;
   gap: 16px;

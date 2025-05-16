@@ -51,7 +51,7 @@ const Head = styled.div`
 `;
 const Parag = styled.div`
   font-weight: 400;
-  font-size: 14.63px;
+  font-size: 16px;
   line-height: 24px;
   letter-spacing: 0.2px;
   vertical-align: middle;
